@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PartexAI - KI App Builder</title>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -36,9 +42,115 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+        }
+
+        /* Auth Screens */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--background), var(--surface));
+        }
+
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .auth-input {
+            width: 100%;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-size: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .auth-toggle {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .auth-toggle a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            background: var(--background);
         }
 
         /* Header */
@@ -49,6 +161,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .nav {
@@ -98,6 +211,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            animation: pulse 2s infinite;
         }
 
         .avatar {
@@ -110,58 +224,25 @@
             justify-content: center;
             font-weight: 600;
             color: white;
+            cursor: pointer;
         }
 
         /* Main Content */
-        .main {
-            padding: 60px 0;
-            min-height: calc(100vh - 200px);
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            padding: 40px 0;
+            min-height: calc(100vh - 80px);
         }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--text-primary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .credit-info {
-            background: var(--surface-light);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .credit-info h3 {
-            color: var(--credits);
-            margin-bottom: 8px;
-        }
-
-        .chat-container {
+        .chat-section {
             background: var(--surface);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid var(--border);
             overflow: hidden;
-            max-width: 800px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-header {
@@ -181,18 +262,18 @@
         }
 
         .chat-messages {
-            height: 400px;
+            flex: 1;
             overflow-y: auto;
             padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .message {
             display: flex;
             gap: 12px;
-            animation: fadeIn 0.3s ease-in;
+            animation: messageSlide 0.4s ease-out;
         }
 
         .message.user {
@@ -200,8 +281,8 @@
         }
 
         .message-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--primary);
             display: flex;
@@ -219,9 +300,10 @@
         .message-content {
             background: var(--surface-light);
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 16px;
             max-width: 70%;
             border: 1px solid var(--border);
+            animation: messagePop 0.3s ease-out;
         }
 
         .message.user .message-content {
@@ -233,7 +315,7 @@
         .message-actions {
             display: flex;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
 
@@ -245,12 +327,13 @@
             border-radius: 20px;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .action-btn:hover {
             background: var(--surface-light);
             border-color: var(--primary);
+            transform: translateY(-1px);
         }
 
         .action-btn.credits {
@@ -276,116 +359,118 @@
             flex: 1;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 16px;
             color: var(--text-primary);
             font-size: 16px;
             resize: none;
             min-height: 60px;
             max-height: 120px;
+            transition: all 0.3s ease;
         }
 
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
         .send-btn {
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 16px 24px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
         }
 
         .send-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .send-btn:disabled {
             background: var(--border);
             cursor: not-allowed;
-        }
-
-        /* App Templates */
-        .templates-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .template-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .template-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.1);
-        }
-
-        .template-card.insufficient {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .template-card.insufficient:hover {
             transform: none;
-            border-color: var(--border);
-            box-shadow: none;
         }
 
-        .template-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--surface-light);
-            border-radius: 12px;
+        /* Phone Preview */
+        .phone-preview {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 30px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-            font-size: 20px;
         }
 
-        .template-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .phone-device {
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 40px;
+            padding: 20px;
+            position: relative;
+            border: 8px solid #333;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: phoneGlow 3s ease-in-out infinite;
         }
 
-        .template-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.5;
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .template-cost {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: var(--credits);
-            color: #000;
-            padding: 4px 12px;
+        .app-preview {
+            width: 100%;
+            height: 100%;
+            background: var(--surface);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .preview-item {
+            background: var(--surface-light);
+            padding: 15px;
             border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
+            border: 1px solid var(--border);
+            animation: itemSlide 0.5s ease-out;
         }
 
-        /* Progress */
+        .preview-placeholder {
+            background: linear-gradient(90deg, var(--surface-light), var(--border), var(--surface-light));
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            height: 100px;
+            border-radius: 12px;
+        }
+
+        /* Progress Section */
         .progress-container {
-            margin-top: 40px;
+            margin-top: 30px;
+            width: 100%;
         }
 
         .progress-header {
@@ -406,346 +491,340 @@
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        /* Code Preview */
-        .code-preview {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-top: 24px;
-            overflow: hidden;
-        }
-
-        .code-header {
-            background: var(--surface-light);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .code-tabs {
-            display: flex;
-            gap: 8px;
-        }
-
-        .code-tab {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .code-tab.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        .code-content {
-            padding: 24px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            max-height: 400px;
-            overflow-y: auto;
-            background: #1E1E1E;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover {
-            color: var(--text-primary);
-        }
-
-        .copyright {
-            color: var(--text-secondary);
-            font-size: 14px;
+            transition: width 0.5s ease;
+            width: 0%;
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .loading {
-            animation: pulse 2s infinite;
+        @keyframes messagePop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes phoneGlow {
+            0%, 100% { box-shadow: 0 20px 60px rgba(124, 58, 237, 0.3); }
+            50% { box-shadow: 0 20px 80px rgba(124, 58, 237, 0.6); }
+        }
+
+        @keyframes itemSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes loading {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .templates-grid {
+        @media (max-width: 1024px) {
+            .main-content {
                 grid-template-columns: 1fr;
             }
             
-            .message-content {
-                max-width: 85%;
+            .phone-preview {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <div class="logo">PartexAI</div>
-                <div class="nav-links">
-                    <a href="#" class="nav-link">Dashboard</a>
-                    <a href="#" class="nav-link">Projekte</a>
-                    <a href="#" class="nav-link">Vorlagen</a>
-                    <a href="#" class="nav-link">Dokumentation</a>
+    <!-- Auth Screens -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1>PartexAI</h1>
+                <p>KI App Builder Plattform</p>
+            </div>
+            
+            <!-- Login -->
+            <div id="loginDiv">
+                <div id="loginError" class="error-message"></div>
+                <input type="email" id="loginEmail" class="auth-input" placeholder="Deine Email">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Dein Passwort">
+                <button class="auth-btn" onclick="login()">Einloggen</button>
+                <div class="auth-toggle">
+                    <p>Noch keinen Account? <a onclick="showRegister()">Hier registrieren</a></p>
                 </div>
-                <div class="user-section">
-                    <div class="credits-badge" id="creditsDisplay">
-                        <span>⚡</span>
-                        <span id="creditsCount">400</span> Credits
-                    </div>
-                    <div class="avatar">U</div>
-                </div>
-            </nav>
-        </div>
-    </header>
+            </div>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <!-- Hero Section -->
-            <section class="hero">
-                <h1>Was möchtest du erstellen?</h1>
-                <p>Beschreibe deine App-Idee und unsere KI erstellt sie für dich</p>
-            </section>
-
-            <!-- Credit Info -->
-            <section class="credit-info">
-                <h3>⚡ Credit System</h3>
-                <p>Jede App kostet 40 Credits • Tägliches Reset auf 400 Credits • Kosten: 0€</p>
-                <p><strong id="remainingApps">Noch 10 Apps heute möglich</strong></p>
-            </section>
-
-            <!-- Chat Interface -->
-            <section class="chat-container">
-                <div class="chat-header">
-                    <h2>Frag PartexAI...</h2>
-                    <p>Beschreibe deine App oder wähle eine Vorlage (40 Credits pro App)</p>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message">
-                        <div class="message-avatar">AI</div>
-                        <div class="message-content">
-                            <p>Hallo! Ich bin PartexAI. Was für eine App möchtest du heute erstellen? 🚀</p>
-                            <p><strong>Kosten: 40 Credits pro App</strong></p>
-                            <div class="message-actions">
-                                <button class="action-btn credits" onclick="selectTemplate('social')">
-                                    Social Media App - 40 Credits
-                                </button>
-                                <button class="action-btn credits" onclick="selectTemplate('recipe')">
-                                    Rezept App - 40 Credits
-                                </button>
-                                <button class="action-btn credits" onclick="selectTemplate('news')">
-                                    News Reader - 40 Credits
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chat-input-container">
-                    <div class="chat-input">
-                        <textarea 
-                            class="input-field" 
-                            id="messageInput" 
-                            placeholder="Beschreibe deine App-Idee... (Kostet 40 Credits)"
-                            rows="3"
-                        ></textarea>
-                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                            Erstellen (40 Credits)
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- App Templates -->
-            <section class="templates-grid">
-                <div class="template-card" onclick="selectTemplate('social')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">📱</div>
-                    <h3>Social Media App</h3>
-                    <p>Moderne Social Feed mit Stories, Posts und Interaktionen</p>
-                </div>
-                <div class="template-card" onclick="selectTemplate('recipe')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">🍳</div>
-                    <h3>Rezept App</h3>
-                    <p>Rezeptsammlung mit Kategorien, Favoriten und Einkaufsliste</p>
-                </div>
-                <div class="template-card" onclick="selectTemplate('news')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">📰</div>
-                    <h3>News Reader</h3>
-                    <p>Personalisierte Nachrichten mit Kategorien und Lesezeichen</p>
-                </div>
-                <div class="template-card" onclick="selectTemplate('onboarding')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">🎯</div>
-                    <h3>Onboarding Flow</h3>
-                    <p>Spielerischer Einführungsprozess für neue Benutzer</p>
-                </div>
-                <div class="template-card" onclick="selectTemplate('productivity')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">📊</div>
-                    <h3>Produktivität App</h3>
-                    <p>Minimalistische Task-Management App mit Analytics</p>
-                </div>
-                <div class="template-card" onclick="selectTemplate('fitness')">
-                    <div class="template-cost">40 Credits</div>
-                    <div class="template-icon">💪</div>
-                    <h3>Fitness Tracker</h3>
-                    <p>Trainingsplanung, Fortschritts-Tracking und Statistiken</p>
-                </div>
-            </section>
-
-            <!-- Progress Section -->
-            <section class="progress-container" id="progressSection" style="display: none;">
-                <div class="progress-header">
-                    <h3>Deine App wird erstellt...</h3>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-            </section>
-
-            <!-- Code Preview -->
-            <section class="code-preview" id="codePreview" style="display: none;">
-                <div class="code-header">
-                    <div class="code-tabs">
-                        <button class="code-tab active" onclick="showTab('frontend')">Frontend</button>
-                        <button class="code-tab" onclick="showTab('backend')">Backend</button>
-                        <button class="code-tab" onclick="showTab('database')">Datenbank</button>
-                    </div>
-                    <button class="action-btn" onclick="downloadProject()">📥 Projekt exportieren</button>
-                </div>
-                <div class="code-content" id="frontendTab">
-                    <pre id="frontendCode">// Dein Frontend Code erscheint hier...</pre>
-                </div>
-                <div class="code-content" id="backendTab" style="display: none;">
-                    <pre id="backendCode">// Dein Backend Code erscheint hier...</pre>
-                </div>
-                <div class="code-content" id="databaseTab" style="display: none;">
-                    <pre id="databaseCode">// Dein Datenbank Schema erscheint hier...</pre>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Impressum</a>
-                    <a href="#" class="footer-link">Datenschutz</a>
-                    <a href="#" class="footer-link">Nutzungsbedingungen</a>
-                    <a href="#" class="footer-link">Support</a>
-                </div>
-                <div class="copyright">
-                    © 2025 PartexAI Labs, Inc. Alle Rechte vorbehalten.
+            <!-- Register -->
+            <div id="registerDiv" style="display: none;">
+                <div id="registerError" class="error-message"></div>
+                <input type="text" id="registerUsername" class="auth-input" placeholder="Username">
+                <input type="email" id="registerEmail" class="auth-input" placeholder="Email">
+                <input type="password" id="registerPassword" class="auth-input" placeholder="Passwort">
+                <button class="auth-btn" onclick="register()">Account erstellen</button>
+                <div class="auth-toggle">
+                    <p>Bereits Account? <a onclick="showLogin()">Zum Login</a></p>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" class="app-container" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <nav class="nav">
+                    <div class="logo">PartexAI</div>
+                    <div class="nav-links">
+                        <a href="#" class="nav-link">Dashboard</a>
+                        <a href="#" class="nav-link">Projekte</a>
+                        <a href="#" class="nav-link">Vorlagen</a>
+                        <a href="#" class="nav-link">Dokumentation</a>
+                    </div>
+                    <div class="user-section">
+                        <div class="credits-badge" id="creditsDisplay">
+                            <span>⚡</span>
+                            <span id="creditsCount">400</span> Credits
+                        </div>
+                        <div class="avatar" onclick="logout()">U</div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="main-content">
+                <!-- Chat Section -->
+                <section class="chat-section">
+                    <div class="chat-header">
+                        <h2>Frag PartexAI...</h2>
+                        <p>Beschreibe deine App - KI erstellt sie Schritt für Schritt</p>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message">
+                            <div class="message-avatar">AI</div>
+                            <div class="message-content">
+                                <p>👋 Hallo! Ich bin PartexAI. Was für eine App möchtest du heute erstellen?</p>
+                                <p><strong>⚡ Kosten: 40 Credits pro App</strong></p>
+                                <div class="message-actions">
+                                    <button class="action-btn credits" onclick="selectTemplate('social')">
+                                        📱 Social Media App
+                                    </button>
+                                    <button class="action-btn credits" onclick="selectTemplate('recipe')">
+                                        🍳 Rezept App
+                                    </button>
+                                    <button class="action-btn credits" onclick="selectTemplate('news')">
+                                        📰 News Reader
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input">
+                            <textarea 
+                                class="input-field" 
+                                id="messageInput" 
+                                placeholder="Beschreibe deine App-Idee... (40 Credits)"
+                                rows="3"
+                            ></textarea>
+                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                                Erstellen (40⚡)
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Phone Preview -->
+                <section class="phone-preview">
+                    <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Vorschau</h3>
+                    <div class="phone-device">
+                        <div class="phone-screen">
+                            <div class="app-preview" id="appPreview">
+                                <div class="preview-header">
+                                    <h4>Deine App</h4>
+                                    <p style="color: var(--text-secondary); font-size: 12px;">Wird live generiert...</p>
+                                </div>
+                                <div class="preview-content">
+                                    <div class="preview-placeholder"></div>
+                                    <div class="preview-placeholder"></div>
+                                    <div class="preview-placeholder"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress -->
+                    <div class="progress-container" id="progressSection" style="display: none;">
+                        <div class="progress-header">
+                            <h4>KI arbeitet...</h4>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const GEMINI_API_KEY = 'AIzaSyBagVVTYXMpCIFoU1QO7eMS9ZoUsgK1Nac';
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCC3sXBJl3ej2lgUBbi2vh_YjJc-P9q2xQ",
+            authDomain: "partexai.firebaseapp.com",
+            databaseURL: "https://partexai-default-rtdb.firebaseio.com",
+            projectId: "partexai",
+            storageBucket: "partexai.firebasestorage.app",
+            messagingSenderId: "539986724179",
+            appId: "1:539986724179:web:3f0bfc9cb124305d4b8da6"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // App Constants
         const APP_COST = 40;
         const DAILY_CREDITS = 400;
         
         let userCredits = 400;
-        let currentProject = null;
+        let currentUser = null;
 
-        // Credits im Local Storage speichern/laden
-        function initializeCredits() {
-            const today = new Date().toDateString();
-            const lastReset = localStorage.getItem('lastReset');
-            const savedCredits = localStorage.getItem('userCredits');
+        // Auth Functions
+        function showRegister() {
+            document.getElementById('loginDiv').style.display = 'none';
+            document.getElementById('registerDiv').style.display = 'block';
+        }
 
-            if (lastReset !== today) {
-                // Tägliches Reset
-                userCredits = DAILY_CREDITS;
-                localStorage.setItem('userCredits', userCredits);
-                localStorage.setItem('lastReset', today);
-            } else if (savedCredits) {
-                userCredits = parseInt(savedCredits);
+        function showLogin() {
+            document.getElementById('registerDiv').style.display = 'none';
+            document.getElementById('loginDiv').style.display = 'block';
+        }
+
+        function showError(type, message) {
+            const errorDiv = document.getElementById(type + 'Error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 5000);
+        }
+
+        async function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!username || !email || !password) {
+                showError('register', 'Bitte fülle alle Felder aus!');
+                return;
             }
 
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // User in Database speichern
+                await database.ref('users/' + user.uid).set({
+                    username: username,
+                    email: email,
+                    credits: DAILY_CREDITS,
+                    createdAt: new Date().toISOString(),
+                    lastReset: new Date().toDateString()
+                });
+
+                console.log('User registered:', user);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showError('register', 'Fehler: ' + error.message);
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showError('login', 'Bitte Email und Passwort eingeben!');
+                return;
+            }
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('login', 'Login fehlgeschlagen: ' + error.message);
+            }
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        // Auth State Listener
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+            } else {
+                currentUser = null;
+                document.getElementById('authContainer').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            }
+        });
+
+        // User Data Management
+        async function loadUserData() {
+            const userRef = database.ref('users/' + currentUser.uid);
+            const snapshot = await userRef.once('value');
+            const userData = snapshot.val();
+            
+            if (userData) {
+                // Tägliches Credit Reset prüfen
+                const today = new Date().toDateString();
+                if (userData.lastReset !== today) {
+                    userCredits = DAILY_CREDITS;
+                    await userRef.update({
+                        credits: DAILY_CREDITS,
+                        lastReset: today
+                    });
+                } else {
+                    userCredits = userData.credits || DAILY_CREDITS;
+                }
+                
+                updateCreditsDisplay();
+            }
+        }
+
+        async function updateCredits(change) {
+            userCredits += change;
+            await database.ref('users/' + currentUser.uid).update({
+                credits: userCredits
+            });
             updateCreditsDisplay();
         }
 
         function updateCreditsDisplay() {
             document.getElementById('creditsCount').textContent = userCredits;
-            const remainingApps = Math.floor(userCredits / APP_COST);
-            document.getElementById('remainingApps').textContent = 
-                `Noch ${remainingApps} App${remainingApps !== 1 ? 's' : ''} heute möglich`;
         }
 
-        function deductCredits() {
-            if (userCredits >= APP_COST) {
-                userCredits -= APP_COST;
-                localStorage.setItem('userCredits', userCredits);
-                updateCreditsDisplay();
-                return true;
-            }
-            return false;
-        }
-
-        // Template Auswahl
+        // AI App Generation
         function selectTemplate(templateType) {
             if (userCredits < APP_COST) {
                 showInsufficientCredits();
@@ -755,10 +834,7 @@
             const templates = {
                 'social': 'Erstelle eine moderne Social Media App mit Stories, Posts, Likes und Kommentaren. Mit dunklem Design und responsiver Oberfläche.',
                 'recipe': 'Erstelle eine Rezept-App mit Kategorien, Favoriten, Einkaufsliste und Suchfunktion. Inklusive Nährwertangaben.',
-                'news': 'Erstelle einen News Reader mit personalisierten Feeds, Kategorien, Lesezeichen und Offline-Funktionalität.',
-                'onboarding': 'Erstelle einen spielerischen Onboarding-Flow mit Progress-Bar, Tutorial-Screens und Benutzerprofil-Erstellung.',
-                'productivity': 'Erstelle eine minimalistisch Produktivitäts-App mit Task-Management, Analytics und Dark Mode.',
-                'fitness': 'Erstelle einen Fitness-Tracker mit Trainingsplänen, Fortschritts-Tracking und Statistiken.'
+                'news': 'Erstelle einen News Reader mit personalisierten Feeds, Kategorien, Lesezeichen und Offline-Funktionalität.'
             };
             
             document.getElementById('messageInput').value = templates[templateType];
@@ -767,10 +843,9 @@
         }
 
         function showInsufficientCredits() {
-            addMessage(`Nicht genügend Credits! Du hast nur noch ${userCredits} Credits. Jede App kostet 40 Credits. Täglich reset auf 400 Credits.`, 'ai');
+            addMessage(`❌ Nicht genügend Credits! Du hast nur noch ${userCredits} Credits. Jede App kostet 40 Credits. Täglich reset auf 400 Credits.`, 'ai');
         }
 
-        // Nachricht senden
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -778,54 +853,146 @@
             if (!message) return;
 
             // Credits prüfen
-            if (!deductCredits()) {
+            if (userCredits < APP_COST) {
                 showInsufficientCredits();
                 return;
             }
 
             // UI zurücksetzen
             input.value = '';
-            document.getElementById('sendBtn').disabled = true;
-            document.getElementById('sendBtn').textContent = 'Erstellt...';
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Erstellt...';
 
             // Benutzernachricht hinzufügen
             addMessage(message, 'user');
+
+            // Credits abziehen
+            await updateCredits(-APP_COST);
 
             // Progress anzeigen
             showProgress();
 
             try {
-                // Simuliere KI-Verarbeitung (ersetz mit echter Gemini API)
+                // KI-Verarbeitung starten
                 await simulateAIProcessing(message);
                 
             } catch (error) {
                 console.error('Error:', error);
-                addMessage('Entschuldigung, es gab einen Fehler bei der Erstellung deiner App. Deine Credits wurden zurückerstattet.', 'ai');
+                addMessage('❌ Entschuldigung, es gab einen Fehler. Deine Credits wurden zurückerstattet.', 'ai');
                 // Credits zurückerstatten
-                userCredits += APP_COST;
-                localStorage.setItem('userCredits', userCredits);
-                updateCreditsDisplay();
+                await updateCredits(APP_COST);
             } finally {
-                document.getElementById('sendBtn').disabled = false;
-                document.getElementById('sendBtn').textContent = `Erstellen (${APP_COST} Credits)`;
+                sendBtn.disabled = false;
+                sendBtn.textContent = `Erstellen (${APP_COST}⚡)`;
             }
         }
 
         async function simulateAIProcessing(message) {
-            // Progress simulieren
-            for (let i = 0; i <= 100; i += 10) {
-                updateProgress(i);
-                await new Promise(resolve => setTimeout(resolve, 300));
+            const steps = [
+                "📋 Analysiere App-Anforderungen...",
+                "🛠️ Erstelle Datenbank-Schema...", 
+                "🎨 Designe Benutzeroberfläche...",
+                "⚡ Implementiere Backend-Funktionen...",
+                "🔧 Teste App-Funktionalität...",
+                "✅ App erfolgreich generiert!"
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                const progress = Math.floor((i / steps.length) * 100);
+                updateProgress(progress);
+                addMessage(steps[i], 'ai');
+                
+                // Live Preview aktualisieren
+                updateLivePreview(i, message);
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
             }
 
-            // Erfolgsnachricht
-            addMessage(`✅ App erfolgreich erstellt! (${APP_COST} Credits abgezogen)\n\nDeine App "${message.substring(0, 30)}..." wurde generiert. Du kannst jetzt den Code herunterladen.`, 'ai');
+            // Finale Nachricht
+            addMessage(`🎉 Deine App wurde erfolgreich generiert! Du kannst sie jetzt im Live Preview sehen. (${APP_COST} Credits verwendet)`, 'ai');
+        }
 
-            // Code generieren
-            generateSampleCode(message);
+        function updateProgress(percent) {
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = percent + '%';
+        }
+
+        function showProgress() {
+            document.getElementById('progressSection').style.display = 'block';
+        }
+
+        function updateLivePreview(step, message) {
+            const preview = document.getElementById('appPreview');
+            const appName = message.split(' ').slice(0, 3).join(' ');
             
-            // Code Preview anzeigen
-            document.getElementById('codePreview').style.display = 'block';
+            const previews = [
+                `<div class="preview-header">
+                    <h4>${appName}</h4>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Wird analysiert...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-placeholder"></div>
+                </div>`,
+
+                `<div class="preview-header">
+                    <h4>${appName}</h4>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Datenbank wird erstellt...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">📊 Datenbank-Schema</div>
+                    <div class="preview-placeholder"></div>
+                </div>`,
+
+                `<div class="preview-header">
+                    <h4>${appName}</h4>
+                    <p style="color: var(--text-secondary); font-size: 12px;">UI Design in Arbeit...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">🎨 Header-Komponente</div>
+                    <div class="preview-item">📱 Navigation</div>
+                    <div class="preview-placeholder"></div>
+                </div>`,
+
+                `<div class="preview-header">
+                    <h4>${appName}</h4>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Backend wird implementiert...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">🎨 Header</div>
+                    <div class="preview-item">📱 Navigation</div>
+                    <div class="preview-item">⚡ API-Endpoints</div>
+                    <div class="preview-item">🔐 Authentifizierung</div>
+                </div>`,
+
+                `<div class="preview-header">
+                    <h4>${appName}</h4>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Testing läuft...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">🎨 Header</div>
+                    <div class="preview-item">📱 Navigation</div>
+                    <div class="preview-item">⚡ API-Endpoints</div>
+                    <div class="preview-item">🔐 Authentifizierung</div>
+                    <div class="preview-item">✅ Funktionstests</div>
+                </div>`,
+
+                `<div class="preview-header">
+                    <h4 style="color: var(--success);">${appName} ✅</h4>
+                    <p style="color: var(--success); font-size: 12px;">App ist bereit!</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">🎨 Moderne UI</div>
+                    <div class="preview-item">📱 Responsive Design</div>
+                    <div class="preview-item">⚡ Schnelle API</div>
+                    <div class="preview-item">🔐 Sichere Auth</div>
+                    <div class="preview-item">📊 Analytics</div>
+                    <div class="preview-item">🌙 Dark Mode</div>
+                </div>`
+            ];
+
+            preview.innerHTML = previews[step];
         }
 
         function addMessage(text, sender) {
@@ -843,128 +1010,6 @@
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-
-        function showProgress() {
-            document.getElementById('progressSection').style.display = 'block';
-        }
-
-        function updateProgress(percent) {
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progressText').textContent = percent + '%';
-        }
-
-        function generateSampleCode(description) {
-            const appName = description.split(' ').slice(0, 3).join(' ');
-            
-            // Frontend Code
-            document.getElementById('frontendCode').textContent = `// ${appName} - Frontend
-import React from 'react';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>${appName}</h1>
-        <p>Erstellt mit PartexAI</p>
-      </header>
-      <main>
-        <div className="features">
-          <div className="feature-card">Feature 1</div>
-          <div className="feature-card">Feature 2</div>
-          <div className="feature-card">Feature 3</div>
-        </div>
-      </main>
-    </div>
-  );
-}
-
-export default App;`;
-
-            // Backend Code
-            document.getElementById('backendCode').textContent = `// ${appName} - Backend
-const express = require('express');
-const app = express();
-
-app.use(express.json());
-
-// API Routes
-app.get('/api/data', (req, res) => {
-  res.json({ message: 'Data from ${appName}' });
-});
-
-app.post('/api/data', (req, res) => {
-  const { data } = req.body;
-  res.json({ success: true, received: data });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log('${appName} Server running on port', PORT);
-});`;
-
-            // Database Schema
-            document.getElementById('databaseCode').textContent = `-- ${appName} - Database Schema
-
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE posts (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE likes (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  post_id INTEGER REFERENCES posts(id),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);`;
-        }
-
-        function showTab(tabName) {
-            // Tabs ausblenden
-            document.querySelectorAll('.code-content').forEach(tab => {
-                tab.style.display = 'none';
-            });
-            document.querySelectorAll('.code-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Gewählten Tab anzeigen
-            document.getElementById(tabName + 'Tab').style.display = 'block';
-            event.target.classList.add('active');
-        }
-
-        function downloadProject() {
-            const frontendCode = document.getElementById('frontendCode').textContent;
-            const backendCode = document.getElementById('backendCode').textContent;
-            const databaseCode = document.getElementById('databaseCode').textContent;
-            
-            const projectData = {
-                frontend: frontendCode,
-                backend: backendCode,
-                database: databaseCode,
-                timestamp: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'partexai-project.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Initialisierung
-        initializeCredits();
     </script>
 </body>
 </html>
