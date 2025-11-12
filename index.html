@@ -495,6 +495,55 @@
             width: 0%;
         }
 
+        /* History Section */
+        .history-section {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .history-item {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .history-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .history-item p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .history-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
         /* Animations */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -647,36 +696,50 @@
                     </div>
                 </section>
 
-                <!-- Phone Preview -->
-                <section class="phone-preview">
-                    <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Preview</h3>
-                    <div class="phone-device">
-                        <div class="phone-screen">
-                            <div class="app-preview" id="appPreview">
-                                <div class="preview-header">
-                                    <h4>Your App</h4>
-                                    <p style="color: var(--text-secondary); font-size: 12px;">Being generated live...</p>
-                                </div>
-                                <div class="preview-content">
-                                    <div class="preview-placeholder"></div>
-                                    <div class="preview-placeholder"></div>
-                                    <div class="preview-placeholder"></div>
+                <!-- Right Panel -->
+                <div class="right-panel">
+                    <!-- Phone Preview -->
+                    <section class="phone-preview">
+                        <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Preview</h3>
+                        <div class="phone-device">
+                            <div class="phone-screen">
+                                <div class="app-preview" id="appPreview">
+                                    <div class="preview-header">
+                                        <h4>Your App</h4>
+                                        <p style="color: var(--text-secondary); font-size: 12px;">Being generated live...</p>
+                                    </div>
+                                    <div class="preview-content">
+                                        <div class="preview-placeholder"></div>
+                                        <div class="preview-placeholder"></div>
+                                        <div class="preview-placeholder"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Progress -->
-                    <div class="progress-container" id="progressSection" style="display: none;">
-                        <div class="progress-header">
-                            <h4>AI working...</h4>
-                            <span id="progressText">0%</span>
+                        
+                        <!-- Progress -->
+                        <div class="progress-container" id="progressSection" style="display: none;">
+                            <div class="progress-header">
+                                <h4>AI working...</h4>
+                                <span id="progressText">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
+                    </section>
+
+                    <!-- History Section -->
+                    <section class="history-section">
+                        <div class="history-header">
+                            <h3>📚 Project History</h3>
+                            <button class="action-btn" onclick="clearHistory()">Clear</button>
                         </div>
-                    </div>
-                </section>
+                        <div id="historyList">
+                            <!-- History items will be added here -->
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
@@ -704,6 +767,7 @@
         
         let userCredits = 400;
         let currentUser = null;
+        let userHistory = [];
 
         // Auth Functions
         function showRegister() {
@@ -743,7 +807,8 @@
                     email: email,
                     credits: DAILY_CREDITS,
                     createdAt: new Date().toISOString(),
-                    lastReset: new Date().toDateString()
+                    lastReset: new Date().toDateString(),
+                    history: []
                 });
 
                 console.log('User registered:', user);
@@ -808,6 +873,9 @@
                     userCredits = userData.credits || DAILY_CREDITS;
                 }
                 
+                // Load history
+                userHistory = userData.history || [];
+                updateHistoryDisplay();
                 updateCreditsDisplay();
             }
         }
@@ -822,6 +890,70 @@
 
         function updateCreditsDisplay() {
             document.getElementById('creditsCount').textContent = userCredits;
+        }
+
+        // History Management
+        async function addToHistory(appDescription) {
+            const historyItem = {
+                id: Date.now(),
+                description: appDescription,
+                date: new Date().toISOString(),
+                completed: true
+            };
+            
+            userHistory.unshift(historyItem);
+            
+            // Keep only last 10 items
+            if (userHistory.length > 10) {
+                userHistory = userHistory.slice(0, 10);
+            }
+            
+            await database.ref('users/' + currentUser.uid).update({
+                history: userHistory
+            });
+            
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            
+            if (userHistory.length === 0) {
+                historyList.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No projects yet</p>';
+                return;
+            }
+            
+            userHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.onclick = () => loadHistoryItem(item);
+                
+                const date = new Date(item.date).toLocaleDateString();
+                const description = item.description.length > 50 ? 
+                    item.description.substring(0, 50) + '...' : item.description;
+                
+                historyItem.innerHTML = `
+                    <h4>${description}</h4>
+                    <p>✅ Completed</p>
+                    <div class="history-date">${date}</div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function loadHistoryItem(item) {
+            document.getElementById('messageInput').value = item.description;
+            addMessage(`Loaded project: "${item.description}"`, 'ai');
+        }
+
+        async function clearHistory() {
+            userHistory = [];
+            await database.ref('users/' + currentUser.uid).update({
+                history: []
+            });
+            updateHistoryDisplay();
         }
 
         // AI App Generation
@@ -877,6 +1009,9 @@
                 // Start AI processing
                 await simulateAIProcessing(message);
                 
+                // Add to history
+                await addToHistory(message);
+                
             } catch (error) {
                 console.error('Error:', error);
                 addMessage('❌ Sorry, there was an error. Your credits have been refunded.', 'ai');
@@ -890,18 +1025,18 @@
 
         async function simulateAIProcessing(message) {
             const steps = [
-                "📋 Analyzing app requirements...",
-                "🛠️ Creating database schema...", 
-                "🎨 Designing user interface...",
-                "⚡ Implementing backend functions...",
-                "🔧 Testing app functionality...",
-                "✅ App successfully generated!"
+                { progress: 0, text: "📋 Analyzing app requirements..." },
+                { progress: 20, text: "🛠️ Creating database schema..." },
+                { progress: 40, text: "🎨 Designing user interface..." },
+                { progress: 60, text: "⚡ Implementing backend functions..." },
+                { progress: 80, text: "🔧 Testing app functionality..." },
+                { progress: 100, text: "✅ App successfully generated!" }
             ];
 
             for (let i = 0; i < steps.length; i++) {
-                const progress = Math.floor((i / steps.length) * 100);
-                updateProgress(progress);
-                addMessage(steps[i], 'ai');
+                const step = steps[i];
+                updateProgress(step.progress);
+                addMessage(step.text, 'ai');
                 
                 // Update live preview
                 updateLivePreview(i, message);
