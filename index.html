@@ -435,7 +435,16 @@
             height: 100%;
             background: var(--surface);
             overflow-y: auto;
-            padding: 20px;
+            padding: 0;
+        }
+
+        .generated-app {
+            width: 100%;
+            height: 100%;
+            background: white;
+            color: #000;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
         }
 
         .preview-header {
@@ -542,6 +551,26 @@
             color: var(--text-secondary);
             font-size: 12px;
             margin-top: 8px;
+        }
+
+        /* Download Button */
+        .download-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
         }
 
         /* Animations */
@@ -727,6 +756,11 @@
                                 <div class="progress-fill" id="progressFill"></div>
                             </div>
                         </div>
+
+                        <!-- Download Button -->
+                        <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadApp()">
+                            📥 Download App
+                        </button>
                     </section>
 
                     <!-- History Section -->
@@ -768,6 +802,7 @@
         let userCredits = 400;
         let currentUser = null;
         let userHistory = [];
+        let currentGeneratedApp = null;
 
         // Auth Functions
         function showRegister() {
@@ -893,10 +928,11 @@
         }
 
         // History Management
-        async function addToHistory(appDescription) {
+        async function addToHistory(appDescription, appCode) {
             const historyItem = {
                 id: Date.now(),
                 description: appDescription,
+                code: appCode,
                 date: new Date().toISOString(),
                 completed: true
             };
@@ -945,6 +981,7 @@
 
         function loadHistoryItem(item) {
             document.getElementById('messageInput').value = item.description;
+            displayGeneratedApp(item.code);
             addMessage(`Loaded project: "${item.description}"`, 'ai');
         }
 
@@ -1007,10 +1044,10 @@
 
             try {
                 // Start AI processing
-                await simulateAIProcessing(message);
+                const generatedApp = await simulateAIProcessing(message);
                 
                 // Add to history
-                await addToHistory(message);
+                await addToHistory(message, generatedApp);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1044,8 +1081,304 @@
                 await new Promise(resolve => setTimeout(resolve, 1500));
             }
 
+            // Generate actual app HTML
+            const generatedApp = generateActualApp(message);
+            displayGeneratedApp(generatedApp);
+            
+            // Show download button
+            document.getElementById('downloadBtn').style.display = 'block';
+
             // Final message
-            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview. (${APP_COST} credits used)`, 'ai');
+            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download it. (${APP_COST} credits used)`, 'ai');
+
+            return generatedApp;
+        }
+
+        function generateActualApp(description) {
+            const appName = description.split(' ').slice(0, 3).join(' ');
+            const isSocial = description.toLowerCase().includes('social');
+            const isRecipe = description.toLowerCase().includes('recipe');
+            const isNews = description.toLowerCase().includes('news');
+
+            if (isSocial) {
+                return generateSocialMediaApp(appName);
+            } else if (isRecipe) {
+                return generateRecipeApp(appName);
+            } else if (isNews) {
+                return generateNewsApp(appName);
+            } else {
+                return generateGenericApp(appName, description);
+            }
+        }
+
+        function generateSocialMediaApp(appName) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #0f0f0f; color: white; }
+        .header { background: #1a1a1a; padding: 20px; border-bottom: 1px solid #333; }
+        .stories { display: flex; gap: 15px; padding: 20px; overflow-x: auto; }
+        .story { width: 80px; text-align: center; }
+        .story-circle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(45deg, #7C3AED, #10B981); margin: 0 auto 8px; }
+        .feed { padding: 20px; }
+        .post { background: #1a1a1a; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #7C3AED; }
+        .post-content { margin-bottom: 15px; }
+        .post-actions { display: flex; gap: 20px; color: #a1a1aa; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>${appName}</h1>
+    </div>
+    <div class="stories">
+        <div class="story"><div class="story-circle"></div><small>Your Story</small></div>
+        <div class="story"><div class="story-circle"></div><small>Alex</small></div>
+        <div class="story"><div class="story-circle"></div><small>Sarah</small></div>
+        <div class="story"><div class="story-circle"></div><small>Mike</small></div>
+    </div>
+    <div class="feed">
+        <div class="post">
+            <div class="post-header">
+                <div class="avatar"></div>
+                <div>
+                    <strong>Alex Johnson</strong>
+                    <div style="font-size: 12px; color: #a1a1aa;">2 hours ago</div>
+                </div>
+            </div>
+            <div class="post-content">
+                Just launched my new app! 🚀 So excited to share this with everyone!
+            </div>
+            <div class="post-actions">
+                <span>❤️ 124</span>
+                <span>💬 23</span>
+                <span>🔄 8</span>
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-header">
+                <div class="avatar"></div>
+                <div>
+                    <strong>Sarah Miller</strong>
+                    <div style="font-size: 12px; color: #a1a1aa;">4 hours ago</div>
+                </div>
+            </div>
+            <div class="post-content">
+                Beautiful sunset today! 🌅 Never forget to appreciate the little things in life.
+            </div>
+            <div class="post-actions">
+                <span>❤️ 89</span>
+                <span>💬 12</span>
+                <span>🔄 3</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function generateRecipeApp(appName) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #f8f8f8; color: #333; }
+        .header { background: white; padding: 25px 20px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .search { padding: 20px; background: white; margin: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .search input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+        .categories { display: flex; gap: 10px; padding: 0 20px; overflow-x: auto; }
+        .category { padding: 10px 20px; background: white; border-radius: 20px; border: 1px solid #e0e0e0; white-space: nowrap; }
+        .recipes { padding: 20px; }
+        .recipe-card { background: white; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .recipe-image { height: 200px; background: linear-gradient(45deg, #10B981, #7C3AED); }
+        .recipe-content { padding: 20px; }
+        .recipe-meta { display: flex; gap: 15px; margin: 10px 0; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="color: #10B981;">${appName}</h1>
+        <p style="color: #666;">Delicious recipes for every occasion</p>
+    </div>
+    <div class="search">
+        <input type="text" placeholder="🔍 Search for recipes...">
+    </div>
+    <div class="categories">
+        <div class="category" style="background: #10B981; color: white;">Breakfast</div>
+        <div class="category">Lunch</div>
+        <div class="category">Dinner</div>
+        <div class="category">Dessert</div>
+        <div class="category">Vegetarian</div>
+    </div>
+    <div class="recipes">
+        <div class="recipe-card">
+            <div class="recipe-image"></div>
+            <div class="recipe-content">
+                <h3>Avocado Toast with Poached Eggs</h3>
+                <div class="recipe-meta">
+                    <span>⏱️ 15 min</span>
+                    <span>👥 2 servings</span>
+                    <span>⭐ 4.8</span>
+                </div>
+                <p>Healthy and delicious breakfast with creamy avocado and perfectly poached eggs.</p>
+            </div>
+        </div>
+        <div class="recipe-card">
+            <div class="recipe-image"></div>
+            <div class="recipe-content">
+                <h3>Vegetable Stir Fry</h3>
+                <div class="recipe-meta">
+                    <span>⏱️ 20 min</span>
+                    <span>👥 4 servings</span>
+                    <span>⭐ 4.6</span>
+                </div>
+                <p>Quick and colorful vegetable stir fry with tofu and sesame sauce.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function generateNewsApp(appName) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: white; color: #333; }
+        .header { background: #1a1a1a; color: white; padding: 25px 20px; }
+        .categories { display: flex; gap: 15px; padding: 20px; overflow-x: auto; border-bottom: 1px solid #e0e0e0; }
+        .category { padding: 10px 20px; border-radius: 20px; background: #f0f0f0; white-space: nowrap; }
+        .category.active { background: #7C3AED; color: white; }
+        .news-feed { padding: 20px; }
+        .news-card { margin-bottom: 25px; border-bottom: 1px solid #e0e0e0; padding-bottom: 20px; }
+        .news-image { height: 200px; background: linear-gradient(45deg, #7C3AED, #10B981); border-radius: 10px; margin-bottom: 15px; }
+        .news-source { color: #7C3AED; font-weight: 600; margin-bottom: 5px; }
+        .news-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; line-height: 1.4; }
+        .news-meta { color: #666; font-size: 14px; display: flex; gap: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>${appName}</h1>
+        <p style="color: #a1a1aa;">Stay informed with the latest news</p>
+    </div>
+    <div class="categories">
+        <div class="category active">Top Stories</div>
+        <div class="category">Technology</div>
+        <div class="category">Business</div>
+        <div class="category">Sports</div>
+        <div class="category">Entertainment</div>
+    </div>
+    <div class="news-feed">
+        <div class="news-card">
+            <div class="news-image"></div>
+            <div class="news-source">TECH NEWS</div>
+            <div class="news-title">New AI Breakthrough Revolutionizes Healthcare Industry</div>
+            <div class="news-meta">
+                <span>📅 2 hours ago</span>
+                <span>👁️ 2.4K views</span>
+            </div>
+        </div>
+        <div class="news-card">
+            <div class="news-image"></div>
+            <div class="news-source">BUSINESS DAILY</div>
+            <div class="news-title">Global Markets Reach All-Time High Amid Economic Recovery</div>
+            <div class="news-meta">
+                <span>📅 5 hours ago</span>
+                <span>👁️ 1.8K views</span>
+            </div>
+        </div>
+        <div class="news-card">
+            <div class="news-image"></div>
+            <div class="news-source">SPORTS NETWORK</div>
+            <div class="news-title">Championship Finals Break Viewership Records Worldwide</div>
+            <div class="news-meta">
+                <span>📅 8 hours ago</span>
+                <span>👁️ 3.2K views</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function generateGenericApp(appName, description) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .feature-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .feature-icon { font-size: 40px; margin-bottom: 20px; }
+        .cta { text-align: center; margin-top: 50px; }
+        .cta-button { background: white; color: #667eea; padding: 15px 40px; border-radius: 25px; text-decoration: none; font-weight: 600; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="font-size: 3em; margin-bottom: 20px;">${appName}</h1>
+            <p style="font-size: 1.2em; opacity: 0.9;">${description}</p>
+        </div>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Fast Performance</h3>
+                <p>Lightning-fast loading times and smooth user experience</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Beautiful Design</h3>
+                <p>Modern and intuitive interface designed for users</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Powerful Features</h3>
+                <p>All the tools you need in one place</p>
+            </div>
+        </div>
+        <div class="cta">
+            <a href="#" class="cta-button">Get Started Now</a>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function displayGeneratedApp(appHtml) {
+            const preview = document.getElementById('appPreview');
+            preview.innerHTML = `
+                <div class="generated-app">
+                    ${appHtml}
+                </div>
+            `;
+            currentGeneratedApp = appHtml;
         }
 
         function updateProgress(percent) {
@@ -1059,75 +1392,72 @@
         }
 
         function updateLivePreview(step, message) {
-            const preview = document.getElementById('appPreview');
-            const appName = message.split(' ').slice(0, 3).join(' ');
+            if (step < 5) {
+                const preview = document.getElementById('appPreview');
+                const appName = message.split(' ').slice(0, 3).join(' ');
+                
+                const previews = [
+                    `<div class="preview-header">
+                        <h4>${appName}</h4>
+                        <p style="color: var(--text-secondary); font-size: 12px;">Analyzing requirements...</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-placeholder"></div>
+                    </div>`,
+                    `<div class="preview-header">
+                        <h4>${appName}</h4>
+                        <p style="color: var(--text-secondary); font-size: 12px;">Creating database...</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-item">📊 Database Schema</div>
+                        <div class="preview-placeholder"></div>
+                    </div>`,
+                    `<div class="preview-header">
+                        <h4>${appName}</h4>
+                        <p style="color: var(--text-secondary); font-size: 12px;">Designing UI...</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-item">🎨 Header Component</div>
+                        <div class="preview-item">📱 Navigation</div>
+                        <div class="preview-placeholder"></div>
+                    </div>`,
+                    `<div class="preview-header">
+                        <h4>${appName}</h4>
+                        <p style="color: var(--text-secondary); font-size: 12px;">Implementing backend...</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-item">🎨 Header</div>
+                        <div class="preview-item">📱 Navigation</div>
+                        <div class="preview-item">⚡ API Endpoints</div>
+                        <div class="preview-item">🔐 Authentication</div>
+                    </div>`,
+                    `<div class="preview-header">
+                        <h4>${appName}</h4>
+                        <p style="color: var(--text-secondary); font-size: 12px;">Running tests...</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-item">🎨 Header</div>
+                        <div class="preview-item">📱 Navigation</div>
+                        <div class="preview-item">⚡ API Endpoints</div>
+                        <div class="preview-item">🔐 Authentication</div>
+                        <div class="preview-item">✅ Function Tests</div>
+                    </div>`
+                ];
+
+                preview.innerHTML = previews[step];
+            }
+        }
+
+        function downloadApp() {
+            if (!currentGeneratedApp) return;
             
-            const previews = [
-                `<div class="preview-header">
-                    <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Analyzing requirements...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-placeholder"></div>
-                </div>`,
-
-                `<div class="preview-header">
-                    <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Creating database...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">📊 Database Schema</div>
-                    <div class="preview-placeholder"></div>
-                </div>`,
-
-                `<div class="preview-header">
-                    <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Designing UI...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">🎨 Header Component</div>
-                    <div class="preview-item">📱 Navigation</div>
-                    <div class="preview-placeholder"></div>
-                </div>`,
-
-                `<div class="preview-header">
-                    <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Implementing backend...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">🎨 Header</div>
-                    <div class="preview-item">📱 Navigation</div>
-                    <div class="preview-item">⚡ API Endpoints</div>
-                    <div class="preview-item">🔐 Authentication</div>
-                </div>`,
-
-                `<div class="preview-header">
-                    <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Running tests...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">🎨 Header</div>
-                    <div class="preview-item">📱 Navigation</div>
-                    <div class="preview-item">⚡ API Endpoints</div>
-                    <div class="preview-item">🔐 Authentication</div>
-                    <div class="preview-item">✅ Function Tests</div>
-                </div>`,
-
-                `<div class="preview-header">
-                    <h4 style="color: var(--success);">${appName} ✅</h4>
-                    <p style="color: var(--success); font-size: 12px;">App is ready!</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">🎨 Modern UI</div>
-                    <div class="preview-item">📱 Responsive Design</div>
-                    <div class="preview-item">⚡ Fast API</div>
-                    <div class="preview-item">🔐 Secure Auth</div>
-                    <div class="preview-item">📊 Analytics</div>
-                    <div class="preview-item">🌙 Dark Mode</div>
-                </div>`
-            ];
-
-            preview.innerHTML = previews[step];
+            const blob = new Blob([currentGeneratedApp], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-app.html';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function addMessage(text, sender) {
