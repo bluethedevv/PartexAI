@@ -445,6 +445,8 @@
             color: #000;
             overflow-y: auto;
             font-family: 'Inter', sans-serif;
+            transform-origin: top left;
+            transition: transform 0.3s ease;
         }
 
         .preview-header {
@@ -571,6 +573,36 @@
         .download-btn:hover {
             background: #0da271;
             transform: translateY(-2px);
+        }
+
+        /* Scale Controls */
+        .scale-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .scale-btn {
+            flex: 1;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .scale-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .scale-btn.active {
+            background: var(--primary);
+            color: white;
         }
 
         /* Animations */
@@ -705,6 +737,9 @@
                                     <button class="action-btn credits" onclick="selectTemplate('news')">
                                         📰 News Reader
                                     </button>
+                                    <button class="action-btn credits" onclick="selectTemplate('pinterest')">
+                                        📌 Pinterest Clone
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -757,6 +792,13 @@
                             </div>
                         </div>
 
+                        <!-- Scale Controls -->
+                        <div class="scale-controls" id="scaleControls" style="display: none;">
+                            <button class="scale-btn active" onclick="setScale(1)">100%</button>
+                            <button class="scale-btn" onclick="setScale(0.8)">80%</button>
+                            <button class="scale-btn" onclick="setScale(0.6)">60%</button>
+                        </div>
+
                         <!-- Download Button -->
                         <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadApp()">
                             📥 Download App
@@ -803,6 +845,7 @@
         let currentUser = null;
         let userHistory = [];
         let currentGeneratedApp = null;
+        let currentScale = 1;
 
         // Auth Functions
         function showRegister() {
@@ -993,6 +1036,25 @@
             updateHistoryDisplay();
         }
 
+        // Scale Controls
+        function setScale(scale) {
+            currentScale = scale;
+            const appPreview = document.getElementById('appPreview');
+            const generatedApp = appPreview.querySelector('.generated-app');
+            
+            if (generatedApp) {
+                generatedApp.style.transform = `scale(${scale})`;
+                generatedApp.style.width = `${100/scale}%`;
+                generatedApp.style.height = `${100/scale}%`;
+            }
+            
+            // Update active button
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
         // AI App Generation
         function selectTemplate(templateType) {
             if (userCredits < APP_COST) {
@@ -1003,7 +1065,8 @@
             const templates = {
                 'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
                 'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
-                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.'
+                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.',
+                'pinterest': 'Create a Pinterest-like app with image pins, boards, and discovery features.'
             };
             
             document.getElementById('messageInput').value = templates[templateType];
@@ -1085,8 +1148,9 @@
             const generatedApp = generateActualApp(message);
             displayGeneratedApp(generatedApp);
             
-            // Show download button
+            // Show download button and scale controls
             document.getElementById('downloadBtn').style.display = 'block';
+            document.getElementById('scaleControls').style.display = 'flex';
 
             // Final message
             addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download it. (${APP_COST} credits used)`, 'ai');
@@ -1099,6 +1163,7 @@
             const isSocial = description.toLowerCase().includes('social');
             const isRecipe = description.toLowerCase().includes('recipe');
             const isNews = description.toLowerCase().includes('news');
+            const isPinterest = description.toLowerCase().includes('pinterest');
 
             if (isSocial) {
                 return generateSocialMediaApp(appName);
@@ -1106,9 +1171,98 @@
                 return generateRecipeApp(appName);
             } else if (isNews) {
                 return generateNewsApp(appName);
+            } else if (isPinterest) {
+                return generatePinterestApp(appName);
             } else {
                 return generateGenericApp(appName, description);
             }
+        }
+
+        function generatePinterestApp(appName) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName} - Pinterest Clone</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: white; color: #333; }
+        .header { background: white; padding: 16px 20px; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 100; }
+        .nav { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 24px; font-weight: 700; color: #e60023; }
+        .search { flex: 1; max-width: 800px; }
+        .search input { width: 100%; padding: 12px 20px; border: none; background: #efefef; border-radius: 24px; font-size: 16px; }
+        .nav-icons { display: flex; gap: 20px; }
+        .nav-icon { width: 24px; height: 24px; background: #666; border-radius: 50%; }
+        .masonry-grid { columns: 4 240px; column-gap: 16px; padding: 20px; }
+        .pin { break-inside: avoid; margin-bottom: 16px; border-radius: 16px; overflow: hidden; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .pin-image { width: 100%; height: auto; display: block; background: linear-gradient(45deg, #e60023, #ff6b6b); aspect-ratio: 1/1.5; }
+        .pin-content { padding: 12px; }
+        .pin-title { font-weight: 600; margin-bottom: 8px; }
+        .pin-meta { display: flex; justify-content: space-between; color: #666; font-size: 14px; }
+        .save-btn { background: #e60023; color: white; padding: 8px 16px; border-radius: 24px; border: none; font-weight: 600; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">${appName}</div>
+            <div class="search">
+                <input type="text" placeholder="🔍 Search for ideas...">
+            </div>
+            <div class="nav-icons">
+                <div class="nav-icon"></div>
+                <div class="nav-icon"></div>
+                <div class="nav-icon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="masonry-grid">
+        <div class="pin">
+            <div class="pin-image"></div>
+            <div class="pin-content">
+                <div class="pin-title">Minimalist Home Office Setup</div>
+                <div class="pin-meta">
+                    <span>📌 2.4k saves</span>
+                    <button class="save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="pin">
+            <div class="pin-image"></div>
+            <div class="pin-content">
+                <div class="pin-title">Healthy Breakfast Recipes</div>
+                <div class="pin-meta">
+                    <span>📌 1.8k saves</span>
+                    <button class="save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="pin">
+            <div class="pin-image"></div>
+            <div class="pin-content">
+                <div class="pin-title">Travel Photography Tips</div>
+                <div class="pin-meta">
+                    <span>📌 3.2k saves</span>
+                    <button class="save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="pin">
+            <div class="pin-image"></div>
+            <div class="pin-content">
+                <div class="pin-title">DIY Home Decor Ideas</div>
+                <div class="pin-meta">
+                    <span>📌 1.5k saves</span>
+                    <button class="save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
         }
 
         function generateSocialMediaApp(appName) {
@@ -1162,23 +1316,6 @@
                 <span>🔄 8</span>
             </div>
         </div>
-        <div class="post">
-            <div class="post-header">
-                <div class="avatar"></div>
-                <div>
-                    <strong>Sarah Miller</strong>
-                    <div style="font-size: 12px; color: #a1a1aa;">4 hours ago</div>
-                </div>
-            </div>
-            <div class="post-content">
-                Beautiful sunset today! 🌅 Never forget to appreciate the little things in life.
-            </div>
-            <div class="post-actions">
-                <span>❤️ 89</span>
-                <span>💬 12</span>
-                <span>🔄 3</span>
-            </div>
-        </div>
     </div>
 </body>
 </html>`;
@@ -1219,8 +1356,6 @@
         <div class="category" style="background: #10B981; color: white;">Breakfast</div>
         <div class="category">Lunch</div>
         <div class="category">Dinner</div>
-        <div class="category">Dessert</div>
-        <div class="category">Vegetarian</div>
     </div>
     <div class="recipes">
         <div class="recipe-card">
@@ -1232,19 +1367,6 @@
                     <span>👥 2 servings</span>
                     <span>⭐ 4.8</span>
                 </div>
-                <p>Healthy and delicious breakfast with creamy avocado and perfectly poached eggs.</p>
-            </div>
-        </div>
-        <div class="recipe-card">
-            <div class="recipe-image"></div>
-            <div class="recipe-content">
-                <h3>Vegetable Stir Fry</h3>
-                <div class="recipe-meta">
-                    <span>⏱️ 20 min</span>
-                    <span>👥 4 servings</span>
-                    <span>⭐ 4.6</span>
-                </div>
-                <p>Quick and colorful vegetable stir fry with tofu and sesame sauce.</p>
             </div>
         </div>
     </div>
@@ -1284,8 +1406,6 @@
         <div class="category active">Top Stories</div>
         <div class="category">Technology</div>
         <div class="category">Business</div>
-        <div class="category">Sports</div>
-        <div class="category">Entertainment</div>
     </div>
     <div class="news-feed">
         <div class="news-card">
@@ -1295,24 +1415,6 @@
             <div class="news-meta">
                 <span>📅 2 hours ago</span>
                 <span>👁️ 2.4K views</span>
-            </div>
-        </div>
-        <div class="news-card">
-            <div class="news-image"></div>
-            <div class="news-source">BUSINESS DAILY</div>
-            <div class="news-title">Global Markets Reach All-Time High Amid Economic Recovery</div>
-            <div class="news-meta">
-                <span>📅 5 hours ago</span>
-                <span>👁️ 1.8K views</span>
-            </div>
-        </div>
-        <div class="news-card">
-            <div class="news-image"></div>
-            <div class="news-source">SPORTS NETWORK</div>
-            <div class="news-title">Championship Finals Break Viewership Records Worldwide</div>
-            <div class="news-meta">
-                <span>📅 8 hours ago</span>
-                <span>👁️ 3.2K views</span>
             </div>
         </div>
     </div>
@@ -1357,11 +1459,6 @@
                 <h3>Beautiful Design</h3>
                 <p>Modern and intuitive interface designed for users</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Powerful Features</h3>
-                <p>All the tools you need in one place</p>
-            </div>
         </div>
         <div class="cta">
             <a href="#" class="cta-button">Get Started Now</a>
@@ -1374,7 +1471,7 @@
         function displayGeneratedApp(appHtml) {
             const preview = document.getElementById('appPreview');
             preview.innerHTML = `
-                <div class="generated-app">
+                <div class="generated-app" style="transform: scale(${currentScale}); width: ${100/currentScale}%; height: ${100/currentScale}%;">
                     ${appHtml}
                 </div>
             `;
