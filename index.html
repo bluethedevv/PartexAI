@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PartexAI - KI App Builder</title>
+    <title>PartexAI - AI App Builder</title>
     
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -549,17 +549,17 @@
         <div class="auth-card">
             <div class="auth-logo">
                 <h1>PartexAI</h1>
-                <p>KI App Builder Plattform</p>
+                <p>AI App Builder Platform</p>
             </div>
             
             <!-- Login -->
             <div id="loginDiv">
                 <div id="loginError" class="error-message"></div>
-                <input type="email" id="loginEmail" class="auth-input" placeholder="Deine Email">
-                <input type="password" id="loginPassword" class="auth-input" placeholder="Dein Passwort">
-                <button class="auth-btn" onclick="login()">Einloggen</button>
+                <input type="email" id="loginEmail" class="auth-input" placeholder="Your Email">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Your Password">
+                <button class="auth-btn" onclick="login()">Login</button>
                 <div class="auth-toggle">
-                    <p>Noch keinen Account? <a onclick="showRegister()">Hier registrieren</a></p>
+                    <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
                 </div>
             </div>
 
@@ -568,10 +568,10 @@
                 <div id="registerError" class="error-message"></div>
                 <input type="text" id="registerUsername" class="auth-input" placeholder="Username">
                 <input type="email" id="registerEmail" class="auth-input" placeholder="Email">
-                <input type="password" id="registerPassword" class="auth-input" placeholder="Passwort">
-                <button class="auth-btn" onclick="register()">Account erstellen</button>
+                <input type="password" id="registerPassword" class="auth-input" placeholder="Password">
+                <button class="auth-btn" onclick="register()">Create Account</button>
                 <div class="auth-toggle">
-                    <p>Bereits Account? <a onclick="showLogin()">Zum Login</a></p>
+                    <p>Already have an account? <a onclick="showLogin()">Login here</a></p>
                 </div>
             </div>
         </div>
@@ -586,9 +586,9 @@
                     <div class="logo">PartexAI</div>
                     <div class="nav-links">
                         <a href="#" class="nav-link">Dashboard</a>
-                        <a href="#" class="nav-link">Projekte</a>
-                        <a href="#" class="nav-link">Vorlagen</a>
-                        <a href="#" class="nav-link">Dokumentation</a>
+                        <a href="#" class="nav-link">Projects</a>
+                        <a href="#" class="nav-link">Templates</a>
+                        <a href="#" class="nav-link">Documentation</a>
                     </div>
                     <div class="user-section">
                         <div class="credits-badge" id="creditsDisplay">
@@ -607,22 +607,22 @@
                 <!-- Chat Section -->
                 <section class="chat-section">
                     <div class="chat-header">
-                        <h2>Frag PartexAI...</h2>
-                        <p>Beschreibe deine App - KI erstellt sie Schritt für Schritt</p>
+                        <h2>Ask PartexAI...</h2>
+                        <p>Describe your app - AI builds it step by step</p>
                     </div>
 
                     <div class="chat-messages" id="chatMessages">
                         <div class="message">
                             <div class="message-avatar">AI</div>
                             <div class="message-content">
-                                <p>👋 Hallo! Ich bin PartexAI. Was für eine App möchtest du heute erstellen?</p>
-                                <p><strong>⚡ Kosten: 40 Credits pro App</strong></p>
+                                <p>👋 Hello! I'm PartexAI. What kind of app would you like to create today?</p>
+                                <p><strong>⚡ Cost: 40 Credits per app</strong></p>
                                 <div class="message-actions">
                                     <button class="action-btn credits" onclick="selectTemplate('social')">
                                         📱 Social Media App
                                     </button>
                                     <button class="action-btn credits" onclick="selectTemplate('recipe')">
-                                        🍳 Rezept App
+                                        🍳 Recipe App
                                     </button>
                                     <button class="action-btn credits" onclick="selectTemplate('news')">
                                         📰 News Reader
@@ -637,11 +637,11 @@
                             <textarea 
                                 class="input-field" 
                                 id="messageInput" 
-                                placeholder="Beschreibe deine App-Idee... (40 Credits)"
+                                placeholder="Describe your app idea... (40 Credits)"
                                 rows="3"
                             ></textarea>
                             <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                                Erstellen (40⚡)
+                                Create (40⚡)
                             </button>
                         </div>
                     </div>
@@ -649,13 +649,13 @@
 
                 <!-- Phone Preview -->
                 <section class="phone-preview">
-                    <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Vorschau</h3>
+                    <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Preview</h3>
                     <div class="phone-device">
                         <div class="phone-screen">
                             <div class="app-preview" id="appPreview">
                                 <div class="preview-header">
-                                    <h4>Deine App</h4>
-                                    <p style="color: var(--text-secondary); font-size: 12px;">Wird live generiert...</p>
+                                    <h4>Your App</h4>
+                                    <p style="color: var(--text-secondary); font-size: 12px;">Being generated live...</p>
                                 </div>
                                 <div class="preview-content">
                                     <div class="preview-placeholder"></div>
@@ -669,7 +669,7 @@
                     <!-- Progress -->
                     <div class="progress-container" id="progressSection" style="display: none;">
                         <div class="progress-header">
-                            <h4>KI arbeitet...</h4>
+                            <h4>AI working...</h4>
                             <span id="progressText">0%</span>
                         </div>
                         <div class="progress-bar">
@@ -729,7 +729,7 @@
             const password = document.getElementById('registerPassword').value;
             
             if (!username || !email || !password) {
-                showError('register', 'Bitte fülle alle Felder aus!');
+                showError('register', 'Please fill all fields!');
                 return;
             }
 
@@ -737,7 +737,7 @@
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                // User in Database speichern
+                // Save user to Database
                 await database.ref('users/' + user.uid).set({
                     username: username,
                     email: email,
@@ -750,7 +750,7 @@
                 
             } catch (error) {
                 console.error('Registration error:', error);
-                showError('register', 'Fehler: ' + error.message);
+                showError('register', 'Error: ' + error.message);
             }
         }
 
@@ -759,7 +759,7 @@
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                showError('login', 'Bitte Email und Passwort eingeben!');
+                showError('login', 'Please enter email and password!');
                 return;
             }
 
@@ -767,7 +767,7 @@
                 await auth.signInWithEmailAndPassword(email, password);
             } catch (error) {
                 console.error('Login error:', error);
-                showError('login', 'Login fehlgeschlagen: ' + error.message);
+                showError('login', 'Login failed: ' + error.message);
             }
         }
 
@@ -796,7 +796,7 @@
             const userData = snapshot.val();
             
             if (userData) {
-                // Tägliches Credit Reset prüfen
+                // Check daily credit reset
                 const today = new Date().toDateString();
                 if (userData.lastReset !== today) {
                     userCredits = DAILY_CREDITS;
@@ -832,9 +832,9 @@
             }
 
             const templates = {
-                'social': 'Erstelle eine moderne Social Media App mit Stories, Posts, Likes und Kommentaren. Mit dunklem Design und responsiver Oberfläche.',
-                'recipe': 'Erstelle eine Rezept-App mit Kategorien, Favoriten, Einkaufsliste und Suchfunktion. Inklusive Nährwertangaben.',
-                'news': 'Erstelle einen News Reader mit personalisierten Feeds, Kategorien, Lesezeichen und Offline-Funktionalität.'
+                'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
+                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
+                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.'
             };
             
             document.getElementById('messageInput').value = templates[templateType];
@@ -843,7 +843,7 @@
         }
 
         function showInsufficientCredits() {
-            addMessage(`❌ Nicht genügend Credits! Du hast nur noch ${userCredits} Credits. Jede App kostet 40 Credits. Täglich reset auf 400 Credits.`, 'ai');
+            addMessage(`❌ Insufficient credits! You only have ${userCredits} credits. Each app costs 40 credits. Daily reset to 400 credits.`, 'ai');
         }
 
         async function sendMessage() {
@@ -852,50 +852,50 @@
             
             if (!message) return;
 
-            // Credits prüfen
+            // Check credits
             if (userCredits < APP_COST) {
                 showInsufficientCredits();
                 return;
             }
 
-            // UI zurücksetzen
+            // Reset UI
             input.value = '';
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
-            sendBtn.textContent = 'Erstellt...';
+            sendBtn.textContent = 'Creating...';
 
-            // Benutzernachricht hinzufügen
+            // Add user message
             addMessage(message, 'user');
 
-            // Credits abziehen
+            // Deduct credits
             await updateCredits(-APP_COST);
 
-            // Progress anzeigen
+            // Show progress
             showProgress();
 
             try {
-                // KI-Verarbeitung starten
+                // Start AI processing
                 await simulateAIProcessing(message);
                 
             } catch (error) {
                 console.error('Error:', error);
-                addMessage('❌ Entschuldigung, es gab einen Fehler. Deine Credits wurden zurückerstattet.', 'ai');
-                // Credits zurückerstatten
+                addMessage('❌ Sorry, there was an error. Your credits have been refunded.', 'ai');
+                // Refund credits
                 await updateCredits(APP_COST);
             } finally {
                 sendBtn.disabled = false;
-                sendBtn.textContent = `Erstellen (${APP_COST}⚡)`;
+                sendBtn.textContent = `Create (${APP_COST}⚡)`;
             }
         }
 
         async function simulateAIProcessing(message) {
             const steps = [
-                "📋 Analysiere App-Anforderungen...",
-                "🛠️ Erstelle Datenbank-Schema...", 
-                "🎨 Designe Benutzeroberfläche...",
-                "⚡ Implementiere Backend-Funktionen...",
-                "🔧 Teste App-Funktionalität...",
-                "✅ App erfolgreich generiert!"
+                "📋 Analyzing app requirements...",
+                "🛠️ Creating database schema...", 
+                "🎨 Designing user interface...",
+                "⚡ Implementing backend functions...",
+                "🔧 Testing app functionality...",
+                "✅ App successfully generated!"
             ];
 
             for (let i = 0; i < steps.length; i++) {
@@ -903,14 +903,14 @@
                 updateProgress(progress);
                 addMessage(steps[i], 'ai');
                 
-                // Live Preview aktualisieren
+                // Update live preview
                 updateLivePreview(i, message);
                 
                 await new Promise(resolve => setTimeout(resolve, 1500));
             }
 
-            // Finale Nachricht
-            addMessage(`🎉 Deine App wurde erfolgreich generiert! Du kannst sie jetzt im Live Preview sehen. (${APP_COST} Credits verwendet)`, 'ai');
+            // Final message
+            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview. (${APP_COST} credits used)`, 'ai');
         }
 
         function updateProgress(percent) {
@@ -930,7 +930,7 @@
             const previews = [
                 `<div class="preview-header">
                     <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Wird analysiert...</p>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Analyzing requirements...</p>
                 </div>
                 <div class="preview-content">
                     <div class="preview-placeholder"></div>
@@ -938,55 +938,55 @@
 
                 `<div class="preview-header">
                     <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Datenbank wird erstellt...</p>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Creating database...</p>
                 </div>
                 <div class="preview-content">
-                    <div class="preview-item">📊 Datenbank-Schema</div>
+                    <div class="preview-item">📊 Database Schema</div>
                     <div class="preview-placeholder"></div>
                 </div>`,
 
                 `<div class="preview-header">
                     <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">UI Design in Arbeit...</p>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Designing UI...</p>
                 </div>
                 <div class="preview-content">
-                    <div class="preview-item">🎨 Header-Komponente</div>
+                    <div class="preview-item">🎨 Header Component</div>
                     <div class="preview-item">📱 Navigation</div>
                     <div class="preview-placeholder"></div>
                 </div>`,
 
                 `<div class="preview-header">
                     <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Backend wird implementiert...</p>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Implementing backend...</p>
                 </div>
                 <div class="preview-content">
                     <div class="preview-item">🎨 Header</div>
                     <div class="preview-item">📱 Navigation</div>
-                    <div class="preview-item">⚡ API-Endpoints</div>
-                    <div class="preview-item">🔐 Authentifizierung</div>
+                    <div class="preview-item">⚡ API Endpoints</div>
+                    <div class="preview-item">🔐 Authentication</div>
                 </div>`,
 
                 `<div class="preview-header">
                     <h4>${appName}</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Testing läuft...</p>
+                    <p style="color: var(--text-secondary); font-size: 12px;">Running tests...</p>
                 </div>
                 <div class="preview-content">
                     <div class="preview-item">🎨 Header</div>
                     <div class="preview-item">📱 Navigation</div>
-                    <div class="preview-item">⚡ API-Endpoints</div>
-                    <div class="preview-item">🔐 Authentifizierung</div>
-                    <div class="preview-item">✅ Funktionstests</div>
+                    <div class="preview-item">⚡ API Endpoints</div>
+                    <div class="preview-item">🔐 Authentication</div>
+                    <div class="preview-item">✅ Function Tests</div>
                 </div>`,
 
                 `<div class="preview-header">
                     <h4 style="color: var(--success);">${appName} ✅</h4>
-                    <p style="color: var(--success); font-size: 12px;">App ist bereit!</p>
+                    <p style="color: var(--success); font-size: 12px;">App is ready!</p>
                 </div>
                 <div class="preview-content">
-                    <div class="preview-item">🎨 Moderne UI</div>
+                    <div class="preview-item">🎨 Modern UI</div>
                     <div class="preview-item">📱 Responsive Design</div>
-                    <div class="preview-item">⚡ Schnelle API</div>
-                    <div class="preview-item">🔐 Sichere Auth</div>
+                    <div class="preview-item">⚡ Fast API</div>
+                    <div class="preview-item">🔐 Secure Auth</div>
                     <div class="preview-item">📊 Analytics</div>
                     <div class="preview-item">🌙 Dark Mode</div>
                 </div>`
