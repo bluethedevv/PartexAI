@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartexAI - KI App Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --secondary: #10B981;
+            --background: #0F0F0F;
+            --surface: #1A1A1A;
+            --surface-light: #262626;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --border: #374151;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --credits: #F59E0B;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .credits-badge {
+            background: var(--credits);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .credit-info {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .credit-info h3 {
+            color: var(--credits);
+            margin-bottom: 8px;
+        }
+
+        .chat-container {
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-light);
+        }
+
+        .chat-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .chat-header p {
+            color: var(--text-secondary);
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--secondary);
+        }
+
+        .message-content {
+            background: var(--surface-light);
+            padding: 16px;
+            border-radius: 12px;
+            max-width: 70%;
+            border: 1px solid var(--border);
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+        }
+
+        .action-btn.credits {
+            background: var(--credits);
+            color: #000;
+            border: none;
+            font-weight: 600;
+        }
+
+        .chat-input-container {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            background: var(--surface-light);
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-size: 16px;
+            resize: none;
+            min-height: 60px;
+            max-height: 120px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .send-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* App Templates */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .template-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.1);
+        }
+
+        .template-card.insufficient {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .template-card.insufficient:hover {
+            transform: none;
+            border-color: var(--border);
+            box-shadow: none;
+        }
+
+        .template-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--surface-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .template-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .template-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .template-cost {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--credits);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Progress */
+        .progress-container {
+            margin-top: 40px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--surface-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Code Preview */
+        .code-preview {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 24px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: var(--surface-light);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-tab {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .code-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .code-content {
+            padding: 24px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1E1E1E;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">PartexAI</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Dashboard</a>
+                    <a href="#" class="nav-link">Projekte</a>
+                    <a href="#" class="nav-link">Vorlagen</a>
+                    <a href="#" class="nav-link">Dokumentation</a>
+                </div>
+                <div class="user-section">
+                    <div class="credits-badge" id="creditsDisplay">
+                        <span>⚡</span>
+                        <span id="creditsCount">400</span> Credits
+                    </div>
+                    <div class="avatar">U</div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Was möchtest du erstellen?</h1>
+                <p>Beschreibe deine App-Idee und unsere KI erstellt sie für dich</p>
+            </section>
+
+            <!-- Credit Info -->
+            <section class="credit-info">
+                <h3>⚡ Credit System</h3>
+                <p>Jede App kostet 40 Credits • Tägliches Reset auf 400 Credits • Kosten: 0€</p>
+                <p><strong id="remainingApps">Noch 10 Apps heute möglich</strong></p>
+            </section>
+
+            <!-- Chat Interface -->
+            <section class="chat-container">
+                <div class="chat-header">
+                    <h2>Frag PartexAI...</h2>
+                    <p>Beschreibe deine App oder wähle eine Vorlage (40 Credits pro App)</p>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <p>Hallo! Ich bin PartexAI. Was für eine App möchtest du heute erstellen? 🚀</p>
+                            <p><strong>Kosten: 40 Credits pro App</strong></p>
+                            <div class="message-actions">
+                                <button class="action-btn credits" onclick="selectTemplate('social')">
+                                    Social Media App - 40 Credits
+                                </button>
+                                <button class="action-btn credits" onclick="selectTemplate('recipe')">
+                                    Rezept App - 40 Credits
+                                </button>
+                                <button class="action-btn credits" onclick="selectTemplate('news')">
+                                    News Reader - 40 Credits
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input">
+                        <textarea 
+                            class="input-field" 
+                            id="messageInput" 
+                            placeholder="Beschreibe deine App-Idee... (Kostet 40 Credits)"
+                            rows="3"
+                        ></textarea>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                            Erstellen (40 Credits)
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- App Templates -->
+            <section class="templates-grid">
+                <div class="template-card" onclick="selectTemplate('social')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">📱</div>
+                    <h3>Social Media App</h3>
+                    <p>Moderne Social Feed mit Stories, Posts und Interaktionen</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate('recipe')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">🍳</div>
+                    <h3>Rezept App</h3>
+                    <p>Rezeptsammlung mit Kategorien, Favoriten und Einkaufsliste</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate('news')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">📰</div>
+                    <h3>News Reader</h3>
+                    <p>Personalisierte Nachrichten mit Kategorien und Lesezeichen</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate('onboarding')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">🎯</div>
+                    <h3>Onboarding Flow</h3>
+                    <p>Spielerischer Einführungsprozess für neue Benutzer</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate('productivity')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">📊</div>
+                    <h3>Produktivität App</h3>
+                    <p>Minimalistische Task-Management App mit Analytics</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate('fitness')">
+                    <div class="template-cost">40 Credits</div>
+                    <div class="template-icon">💪</div>
+                    <h3>Fitness Tracker</h3>
+                    <p>Trainingsplanung, Fortschritts-Tracking und Statistiken</p>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-container" id="progressSection" style="display: none;">
+                <div class="progress-header">
+                    <h3>Deine App wird erstellt...</h3>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </section>
+
+            <!-- Code Preview -->
+            <section class="code-preview" id="codePreview" style="display: none;">
+                <div class="code-header">
+                    <div class="code-tabs">
+                        <button class="code-tab active" onclick="showTab('frontend')">Frontend</button>
+                        <button class="code-tab" onclick="showTab('backend')">Backend</button>
+                        <button class="code-tab" onclick="showTab('database')">Datenbank</button>
+                    </div>
+                    <button class="action-btn" onclick="downloadProject()">📥 Projekt exportieren</button>
+                </div>
+                <div class="code-content" id="frontendTab">
+                    <pre id="frontendCode">// Dein Frontend Code erscheint hier...</pre>
+                </div>
+                <div class="code-content" id="backendTab" style="display: none;">
+                    <pre id="backendCode">// Dein Backend Code erscheint hier...</pre>
+                </div>
+                <div class="code-content" id="databaseTab" style="display: none;">
+                    <pre id="databaseCode">// Dein Datenbank Schema erscheint hier...</pre>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Impressum</a>
+                    <a href="#" class="footer-link">Datenschutz</a>
+                    <a href="#" class="footer-link">Nutzungsbedingungen</a>
+                    <a href="#" class="footer-link">Support</a>
+                </div>
+                <div class="copyright">
+                    © 2025 PartexAI Labs, Inc. Alle Rechte vorbehalten.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const GEMINI_API_KEY = 'AIzaSyBagVVTYXMpCIFoU1QO7eMS9ZoUsgK1Nac';
+        const APP_COST = 40;
+        const DAILY_CREDITS = 400;
+        
+        let userCredits = 400;
+        let currentProject = null;
+
+        // Credits im Local Storage speichern/laden
+        function initializeCredits() {
+            const today = new Date().toDateString();
+            const lastReset = localStorage.getItem('lastReset');
+            const savedCredits = localStorage.getItem('userCredits');
+
+            if (lastReset !== today) {
+                // Tägliches Reset
+                userCredits = DAILY_CREDITS;
+                localStorage.setItem('userCredits', userCredits);
+                localStorage.setItem('lastReset', today);
+            } else if (savedCredits) {
+                userCredits = parseInt(savedCredits);
+            }
+
+            updateCreditsDisplay();
+        }
+
+        function updateCreditsDisplay() {
+            document.getElementById('creditsCount').textContent = userCredits;
+            const remainingApps = Math.floor(userCredits / APP_COST);
+            document.getElementById('remainingApps').textContent = 
+                `Noch ${remainingApps} App${remainingApps !== 1 ? 's' : ''} heute möglich`;
+        }
+
+        function deductCredits() {
+            if (userCredits >= APP_COST) {
+                userCredits -= APP_COST;
+                localStorage.setItem('userCredits', userCredits);
+                updateCreditsDisplay();
+                return true;
+            }
+            return false;
+        }
+
+        // Template Auswahl
+        function selectTemplate(templateType) {
+            if (userCredits < APP_COST) {
+                showInsufficientCredits();
+                return;
+            }
+
+            const templates = {
+                'social': 'Erstelle eine moderne Social Media App mit Stories, Posts, Likes und Kommentaren. Mit dunklem Design und responsiver Oberfläche.',
+                'recipe': 'Erstelle eine Rezept-App mit Kategorien, Favoriten, Einkaufsliste und Suchfunktion. Inklusive Nährwertangaben.',
+                'news': 'Erstelle einen News Reader mit personalisierten Feeds, Kategorien, Lesezeichen und Offline-Funktionalität.',
+                'onboarding': 'Erstelle einen spielerischen Onboarding-Flow mit Progress-Bar, Tutorial-Screens und Benutzerprofil-Erstellung.',
+                'productivity': 'Erstelle eine minimalistisch Produktivitäts-App mit Task-Management, Analytics und Dark Mode.',
+                'fitness': 'Erstelle einen Fitness-Tracker mit Trainingsplänen, Fortschritts-Tracking und Statistiken.'
+            };
+            
+            document.getElementById('messageInput').value = templates[templateType];
+            addMessage(templates[templateType], 'user');
+            sendMessage();
+        }
+
+        function showInsufficientCredits() {
+            addMessage(`Nicht genügend Credits! Du hast nur noch ${userCredits} Credits. Jede App kostet 40 Credits. Täglich reset auf 400 Credits.`, 'ai');
+        }
+
+        // Nachricht senden
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Credits prüfen
+            if (!deductCredits()) {
+                showInsufficientCredits();
+                return;
+            }
+
+            // UI zurücksetzen
+            input.value = '';
+            document.getElementById('sendBtn').disabled = true;
+            document.getElementById('sendBtn').textContent = 'Erstellt...';
+
+            // Benutzernachricht hinzufügen
+            addMessage(message, 'user');
+
+            // Progress anzeigen
+            showProgress();
+
+            try {
+                // Simuliere KI-Verarbeitung (ersetz mit echter Gemini API)
+                await simulateAIProcessing(message);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Entschuldigung, es gab einen Fehler bei der Erstellung deiner App. Deine Credits wurden zurückerstattet.', 'ai');
+                // Credits zurückerstatten
+                userCredits += APP_COST;
+                localStorage.setItem('userCredits', userCredits);
+                updateCreditsDisplay();
+            } finally {
+                document.getElementById('sendBtn').disabled = false;
+                document.getElementById('sendBtn').textContent = `Erstellen (${APP_COST} Credits)`;
+            }
+        }
+
+        async function simulateAIProcessing(message) {
+            // Progress simulieren
+            for (let i = 0; i <= 100; i += 10) {
+                updateProgress(i);
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            // Erfolgsnachricht
+            addMessage(`✅ App erfolgreich erstellt! (${APP_COST} Credits abgezogen)\n\nDeine App "${message.substring(0, 30)}..." wurde generiert. Du kannst jetzt den Code herunterladen.`, 'ai');
+
+            // Code generieren
+            generateSampleCode(message);
+            
+            // Code Preview anzeigen
+            document.getElementById('codePreview').style.display = 'block';
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${sender === 'user' ? 'U' : 'AI'}</div>
+                <div class="message-content">
+                    <p>${text.replace(/\n/g, '<br>')}</p>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showProgress() {
+            document.getElementById('progressSection').style.display = 'block';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = percent + '%';
+        }
+
+        function generateSampleCode(description) {
+            const appName = description.split(' ').slice(0, 3).join(' ');
+            
+            // Frontend Code
+            document.getElementById('frontendCode').textContent = `// ${appName} - Frontend
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>${appName}</h1>
+        <p>Erstellt mit PartexAI</p>
+      </header>
+      <main>
+        <div className="features">
+          <div className="feature-card">Feature 1</div>
+          <div className="feature-card">Feature 2</div>
+          <div className="feature-card">Feature 3</div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;`;
+
+            // Backend Code
+            document.getElementById('backendCode').textContent = `// ${appName} - Backend
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// API Routes
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'Data from ${appName}' });
+});
+
+app.post('/api/data', (req, res) => {
+  const { data } = req.body;
+  res.json({ success: true, received: data });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log('${appName} Server running on port', PORT);
+});`;
+
+            // Database Schema
+            document.getElementById('databaseCode').textContent = `-- ${appName} - Database Schema
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE likes (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  post_id INTEGER REFERENCES posts(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`;
+        }
+
+        function showTab(tabName) {
+            // Tabs ausblenden
+            document.querySelectorAll('.code-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Gewählten Tab anzeigen
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function downloadProject() {
+            const frontendCode = document.getElementById('frontendCode').textContent;
+            const backendCode = document.getElementById('backendCode').textContent;
+            const databaseCode = document.getElementById('databaseCode').textContent;
+            
+            const projectData = {
+                frontend: frontendCode,
+                backend: backendCode,
+                database: databaseCode,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'partexai-project.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisierung
+        initializeCredits();
+    </script>
+</body>
+</html>
