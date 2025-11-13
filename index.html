@@ -21,28 +21,63 @@
         :root {
             --primary: #7C3AED;
             --primary-dark: #6D28D9;
+            --primary-light: #8B5CF6;
             --secondary: #10B981;
+            --secondary-dark: #0D946E;
+            --secondary-light: #34D399;
             --background: #0F0F0F;
+            --background-light: #1A1A1A;
+            --background-lighter: #262626;
             --surface: #1A1A1A;
             --surface-light: #262626;
+            --surface-lighter: #374151;
             --text-primary: #FFFFFF;
             --text-secondary: #A1A1AA;
+            --text-tertiary: #71717A;
             --border: #374151;
+            --border-light: #4B5563;
+            --border-lighter: #6B7280;
             --success: #10B981;
+            --success-dark: #0D946E;
+            --warning: #F59E0B;
+            --warning-dark: #D97706;
             --error: #EF4444;
+            --error-dark: #DC2626;
+            --info: #3B82F6;
             --credits: #F59E0B;
+            --credits-dark: #D97706;
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-secondary: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+            --gradient-surface: linear-gradient(135deg, var(--surface), var(--surface-light));
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             background: var(--background);
             color: var(--text-primary);
             min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 2rem;
         }
 
         /* Auth Screens */
@@ -51,70 +86,139 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--background), var(--surface));
+            background: var(--gradient-surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 10s ease-in-out infinite;
         }
 
         .auth-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: var(--radius-2xl);
+            padding: 3rem;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 28rem;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(20px);
+            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .auth-logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2.5rem;
         }
 
         .auth-logo h1 {
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .auth-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
         }
 
         .auth-input {
             width: 100%;
             background: var(--surface-light);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
             color: var(--text-primary);
-            font-size: 16px;
-            margin-bottom: 16px;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: var(--transition);
+            outline: none;
         }
 
         .auth-input:focus {
-            outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background: var(--surface-lighter);
+        }
+
+        .auth-input::placeholder {
+            color: var(--text-tertiary);
         }
 
         .auth-btn {
             width: 100%;
-            background: var(--primary);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 16px;
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 16px;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition-slow);
         }
 
         .auth-btn:hover {
-            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
         }
 
         .auth-toggle {
             text-align: center;
             color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         .auth-toggle a {
@@ -122,17 +226,24 @@
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-toggle a:hover {
+            color: var(--primary-light);
         }
 
         .error-message {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid var(--error);
             color: var(--error);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             display: none;
+            animation: shake 0.5s ease-in-out;
         }
 
         /* Main App */
@@ -140,16 +251,32 @@
             display: none;
             min-height: 100vh;
             background: var(--background);
+            position: relative;
+        }
+
+        .app-container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Header */
         .header {
-            background: var(--surface);
+            background: rgba(26, 26, 26, 0.8);
             border-bottom: 1px solid var(--border);
-            padding: 16px 0;
+            padding: 1rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .nav {
@@ -159,91 +286,190 @@
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
         }
 
         .user-section {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 1.5rem;
         }
 
         .credits-badge {
             background: var(--credits);
             color: #000;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .credits-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--credits-dark);
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 3rem;
+            height: 3rem;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            font-weight: 700;
             color: white;
             cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            border: 2px solid transparent;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
         }
 
         /* Main Content */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-            padding: 40px 0;
-            min-height: calc(100vh - 80px);
+            grid-template-columns: 1fr 26rem;
+            gap: 3rem;
+            padding: 3rem 0;
+            min-height: calc(100vh - 5rem);
+            position: relative;
+            z-index: 1;
         }
 
+        /* Chat Section */
         .chat-section {
             background: var(--surface);
-            border-radius: 20px;
+            border-radius: var(--radius-2xl);
             border: 1px solid var(--border);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition);
+        }
+
+        .chat-section:hover {
+            box-shadow: var(--shadow-2xl);
         }
 
         .chat-header {
-            padding: 24px;
+            padding: 2rem 2.5rem;
             border-bottom: 1px solid var(--border);
             background: var(--surface-light);
         }
 
         .chat-header h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .chat-header p {
             color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 24px;
+            padding: 2rem 2.5rem;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            max-height: 500px;
+            gap: 1.5rem;
+            max-height: 35rem;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--surface-light);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--border-lighter);
         }
 
         .message {
             display: flex;
-            gap: 12px;
+            gap: 1rem;
+            animation: messageSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .message.user {
@@ -251,386 +477,309 @@
         }
 
         .message-avatar {
-            width: 36px;
-            height: 36px;
+            width: 2.75rem;
+            height: 2.75rem;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 0.875rem;
+            font-weight: 700;
             flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
         }
 
         .message.user .message-avatar {
-            background: var(--secondary);
+            background: var(--gradient-secondary);
+        }
+
+        .message-avatar:hover {
+            transform: scale(1.1);
         }
 
         .message-content {
             background: var(--surface-light);
-            padding: 16px;
-            border-radius: 16px;
-            max-width: 70%;
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius-xl);
+            max-width: 75%;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            animation: messagePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: var(--transition);
+        }
+
+        .message-content:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .message.user .message-content {
             background: var(--primary);
             color: white;
             border: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .message.user .message-content:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .message-text {
+            line-height: 1.6;
+            font-size: 0.95rem;
+            font-weight: 400;
         }
 
         .message-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 0.75rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
         }
 
         .action-btn {
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             color: var(--text-primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .action-btn:hover {
             background: var(--surface-light);
             border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .action-btn.credits {
             background: var(--credits);
             color: #000;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
+        }
+
+        .action-btn.credits:hover {
+            background: var(--credits-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .action-btn.secondary {
-            background: var(--surface-light);
+            background: transparent;
             border-color: var(--secondary);
             color: var(--secondary);
         }
 
+        .action-btn.secondary:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
         .chat-input-container {
-            padding: 24px;
+            padding: 2rem 2.5rem;
             border-top: 1px solid var(--border);
             background: var(--surface-light);
         }
 
         .chat-input {
             display: flex;
-            gap: 12px;
+            gap: 1rem;
             align-items: flex-end;
         }
 
         .input-field {
             flex: 1;
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 1.25rem 1.5rem;
             color: var(--text-primary);
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 400;
             resize: none;
-            min-height: 60px;
-            max-height: 120px;
+            min-height: 4rem;
+            max-height: 8rem;
+            transition: var(--transition);
+            outline: none;
+            line-height: 1.5;
         }
 
         .input-field:focus {
-            outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background: var(--surface-lighter);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-tertiary);
         }
 
         .send-btn {
-            background: var(--primary);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            border-radius: 16px;
-            padding: 16px 24px;
-            font-size: 16px;
+            border-radius: var(--radius-xl);
+            padding: 1.25rem 2rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-md);
         }
 
         .send-btn:hover {
-            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
         }
 
         .send-btn:disabled {
             background: var(--border);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         /* Custom Input Section */
         .custom-input-section {
             background: var(--surface-light);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 16px;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin: 1.5rem 2.5rem;
             border: 1px solid var(--border);
             display: none;
+            animation: slideDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .custom-input-section h4 {
-            margin-bottom: 12px;
+            margin-bottom: 1.5rem;
             color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .custom-input-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .custom-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .custom-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
         .custom-input {
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
         }
 
         .custom-input:focus {
-            outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
         .custom-select {
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 0.95rem;
             cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .custom-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .color-input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .color-picker {
-            width: 100%;
-            height: 40px;
+            width: 3.5rem;
+            height: 3.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-lg);
             cursor: pointer;
             background: var(--surface);
+            border: 1.5px solid var(--border);
+            transition: var(--transition);
         }
 
-        /* Phone Preview */
-        .phone-preview {
-            background: var(--surface);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .color-picker:hover {
+            transform: scale(1.05);
         }
 
-        .phone-device {
-            width: 300px;
-            height: 600px;
-            background: #000;
-            border-radius: 40px;
-            padding: 20px;
-            position: relative;
-            border: 8px solid #333;
+        .color-picker:focus {
+            outline: 2px solid var(--primary);
         }
 
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .app-preview {
-            width: 100%;
-            height: 100%;
-            background: var(--surface);
-            overflow-y: auto;
-        }
-
-        .generated-app {
-            width: 100%;
-            height: 100%;
-            background: white;
-            color: #000;
-        }
-
-        .preview-header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .preview-content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .preview-item {
-            background: var(--surface-light);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .preview-placeholder {
-            background: var(--surface-light);
-            height: 100px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        /* Progress Section */
-        .progress-container {
-            margin-top: 30px;
-            width: 100%;
-            display: none;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: var(--surface-light);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 4px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        /* History Section */
-        .history-section {
-            background: var(--surface);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            padding: 24px;
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .history-item {
-            background: var(--surface-light);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .history-item:hover {
-            border-color: var(--primary);
-        }
-
-        .history-item h4 {
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .history-item p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .history-date {
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-top: 8px;
-        }
-
-        /* Download Button */
-        .download-btn {
-            background: var(--success);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            width: 100%;
-            display: none;
-        }
-
-        .download-btn:hover {
-            background: #0da271;
-        }
-
-        /* Scale Controls */
-        .scale-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            width: 100%;
-            display: none;
-        }
-
-        .scale-btn {
-            flex: 1;
-            background: var(--surface-light);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .scale-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Feature Toggle */
         .feature-toggle {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 10px 0;
-            font-size: 14px;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .feature-toggle:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 20px;
+            width: 3.5rem;
+            height: 2rem;
         }
 
         .toggle-switch input {
@@ -647,20 +796,21 @@
             right: 0;
             bottom: 0;
             background-color: var(--border);
-            transition: .4s;
-            border-radius: 20px;
+            transition: var(--transition);
+            border-radius: 2rem;
         }
 
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
+            height: 1.5rem;
+            width: 1.5rem;
+            left: 0.25rem;
+            bottom: 0.25rem;
             background-color: white;
-            transition: .4s;
+            transition: var(--transition);
             border-radius: 50%;
+            box-shadow: var(--shadow-sm);
         }
 
         input:checked + .toggle-slider {
@@ -668,17 +818,581 @@
         }
 
         input:checked + .toggle-slider:before {
-            transform: translateX(20px);
+            transform: translateX(1.5rem);
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
+        /* Phone Preview */
+        .phone-preview {
+            background: var(--surface);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition);
+        }
+
+        .phone-preview:hover {
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .phone-device {
+            width: 20rem;
+            height: 42rem;
+            background: #1a1a1a;
+            border-radius: 3rem;
+            padding: 1.5rem;
+            position: relative;
+            border: 0.75rem solid #2a2a2a;
+            box-shadow: var(--shadow-2xl);
+            transition: var(--transition);
+        }
+
+        .phone-device:hover {
+            transform: translateY(-5px);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 2rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .app-preview {
+            width: 100%;
+            height: 100%;
+            background: var(--surface);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .generated-app {
+            width: 100%;
+            height: 100%;
+            background: white;
+            color: #000;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+            transform-origin: top left;
+            transition: var(--transition-slow);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, #7C3AED, #10B981);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .preview-header h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .preview-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .preview-item {
+            background: var(--surface-light);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            animation: itemSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .preview-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-placeholder {
+            background: linear-gradient(90deg, var(--surface-light), var(--border), var(--surface-light));
+            background-size: 200% 100%;
+            animation: loading 2s ease-in-out infinite;
+            height: 6rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+        }
+
+        /* Progress Section */
+        .progress-container {
+            margin-top: 2.5rem;
+            width: 100%;
+            display: none;
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .progress-header h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .progress-text {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 0.75rem;
+            background: var(--surface-light);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 1rem;
+            transition: var(--transition-slow);
+            width: 0%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* History Section */
+        .history-section {
+            background: var(--surface);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-top: 2rem;
+            max-height: 25rem;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition);
+        }
+
+        .history-section:hover {
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .history-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-section::-webkit-scrollbar-track {
+            background: var(--surface-light);
+            border-radius: 3px;
+        }
+
+        .history-section::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 3px;
+        }
+
+        .history-section::-webkit-scrollbar-thumb:hover {
+            background: var(--border-lighter);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .history-header h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-item {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            animation: itemSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .history-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .history-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-item p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-date {
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Download Button */
+        .download-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1.5rem;
+            width: 100%;
+            display: none;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: var(--success-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Scale Controls */
+        .scale-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            width: 100%;
+            display: none;
+            animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .scale-btn {
+            flex: 1;
+            background: var(--surface-light);
+            border: 1.5px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .scale-btn:hover {
+            background: var(--surface-lighter);
+            border-color: var(--primary-light);
+        }
+
+        .scale-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes messagePop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes itemSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(-10px, -10px) scale(1.02);
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-5px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
             
             .phone-preview {
                 display: none;
+            }
+            
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .auth-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .chat-header,
+            .chat-messages,
+            .chat-input-container {
+                padding: 1.5rem;
+            }
+            
+            .custom-input-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-device {
+                width: 18rem;
+                height: 38rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
+            }
+            
+            .chat-section {
+                border-radius: var(--radius-xl);
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .phone-device {
+                width: 16rem;
+                height: 34rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gradient {
+            background: var(--gradient-primary);
+        }
+
+        .shadow-glow {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+
+        .smooth-transition {
+            transition: var(--transition);
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Focus States */
+        .focus-visible:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(124, 58, 237, 0.3);
+            color: white;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header,
+            .chat-input-container,
+            .phone-preview,
+            .history-section {
+                display: none;
+            }
+            
+            .chat-section {
+                box-shadow: none;
+                border: none;
             }
         }
     </style>
@@ -695,23 +1409,42 @@
             <!-- Login -->
             <div id="loginDiv">
                 <div id="loginError" class="error-message"></div>
-                <input type="email" id="loginEmail" class="auth-input" placeholder="Your Email">
-                <input type="password" id="loginPassword" class="auth-input" placeholder="Your Password">
-                <button class="auth-btn" onclick="login()">Login</button>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="auth-input" placeholder="Enter your email" value="demo@partexai.com">
+                </div>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="auth-input" placeholder="Enter your password" value="demopassword123">
+                </div>
+                <button class="auth-btn" onclick="login()">
+                    <span>Sign In</span>
+                </button>
                 <div class="auth-toggle">
-                    <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
+                    <p>Don't have an account? <a onclick="showRegister()">Create one here</a></p>
                 </div>
             </div>
 
             <!-- Register -->
             <div id="registerDiv" style="display: none;">
                 <div id="registerError" class="error-message"></div>
-                <input type="text" id="registerUsername" class="auth-input" placeholder="Username">
-                <input type="email" id="registerEmail" class="auth-input" placeholder="Email">
-                <input type="password" id="registerPassword" class="auth-input" placeholder="Password">
-                <button class="auth-btn" onclick="register()">Create Account</button>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" class="auth-input" placeholder="Choose a username">
+                </div>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" class="auth-input" placeholder="Enter your email">
+                </div>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" class="auth-input" placeholder="Create a password">
+                </div>
+                <button class="auth-btn" onclick="register()">
+                    <span>Create Account</span>
+                </button>
                 <div class="auth-toggle">
-                    <p>Already have an account? <a onclick="showLogin()">Login here</a></p>
+                    <p>Already have an account? <a onclick="showLogin()">Sign in here</a></p>
                 </div>
             </div>
         </div>
@@ -724,12 +1457,19 @@
             <div class="container">
                 <nav class="nav">
                     <div class="logo">PartexAI</div>
+                    <div class="nav-links">
+                        <a href="#" class="nav-link active">Dashboard</a>
+                        <a href="#" class="nav-link">Projects</a>
+                        <a href="#" class="nav-link">Templates</a>
+                        <a href="#" class="nav-link">Documentation</a>
+                        <a href="#" class="nav-link">Support</a>
+                    </div>
                     <div class="user-section">
-                        <div class="credits-badge">
+                        <div class="credits-badge" id="creditsDisplay">
                             <span>⚡</span>
                             <span id="creditsCount">400</span> Credits
                         </div>
-                        <div class="avatar" onclick="logout()">U</div>
+                        <div class="avatar" id="userAvatar" onclick="logout()">U</div>
                     </div>
                 </nav>
             </div>
@@ -749,23 +1489,28 @@
                         <div class="message">
                             <div class="message-avatar">AI</div>
                             <div class="message-content">
-                                <p>👋 Hello! I'm PartexAI. What kind of app would you like to create today?</p>
-                                <p><strong>⚡ Cost: 40 Credits per app | 5 Credits for normal chat</strong></p>
+                                <p class="message-text">👋 Hello! I'm PartexAI. What kind of app would you like to create today?</p>
+                                <p class="message-text"><strong>⚡ Cost: 40 Credits per app | 5 Credits for normal chat</strong></p>
                                 <div class="message-actions">
                                     <button class="action-btn credits" onclick="selectTemplate('social')">
-                                        📱 Social Media App
+                                        <span>📱</span>
+                                        <span>Social Media App</span>
                                     </button>
                                     <button class="action-btn credits" onclick="selectTemplate('recipe')">
-                                        🍳 Recipe App
+                                        <span>🍳</span>
+                                        <span>Recipe App</span>
                                     </button>
                                     <button class="action-btn credits" onclick="selectTemplate('news')">
-                                        📰 News Reader
+                                        <span>📰</span>
+                                        <span>News Reader</span>
                                     </button>
                                     <button class="action-btn credits" onclick="selectTemplate('pinterest')">
-                                        📌 Pinterest Clone
+                                        <span>📌</span>
+                                        <span>Pinterest Clone</span>
                                     </button>
                                     <button class="action-btn secondary" onclick="showCustomInput()">
-                                        ⚙️ Custom App
+                                        <span>⚙️</span>
+                                        <span>Custom App</span>
                                     </button>
                                 </div>
                             </div>
@@ -776,56 +1521,106 @@
                     <div class="custom-input-section" id="customInputSection">
                         <h4>🎨 Customize Your App</h4>
                         <div class="custom-input-row">
-                            <input type="text" id="appName" class="custom-input" placeholder="App Name" value="My Awesome App">
-                            <select id="appType" class="custom-select">
-                                <option value="social">Social Media</option>
-                                <option value="business">Business</option>
-                                <option value="portfolio">Portfolio</option>
-                                <option value="ecommerce">E-commerce</option>
-                                <option value="blog">Blog</option>
-                                <option value="dashboard">Dashboard</option>
-                            </select>
+                            <div class="custom-input-group">
+                                <label class="custom-label">App Name</label>
+                                <input type="text" id="appName" class="custom-input" placeholder="My Awesome App" value="My Awesome App">
+                            </div>
+                            <div class="custom-input-group">
+                                <label class="custom-label">App Type</label>
+                                <select id="appType" class="custom-select">
+                                    <option value="social">Social Media</option>
+                                    <option value="business">Business</option>
+                                    <option value="portfolio">Portfolio</option>
+                                    <option value="ecommerce">E-commerce</option>
+                                    <option value="blog">Blog</option>
+                                    <option value="dashboard">Dashboard</option>
+                                    <option value="education">Education</option>
+                                    <option value="health">Health & Fitness</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="custom-input-row">
-                            <input type="text" id="primaryColor" class="custom-input" placeholder="Primary Color" value="#7C3AED">
-                            <input type="color" id="colorPicker" class="color-picker" value="#7C3AED">
+                            <div class="custom-input-group">
+                                <label class="custom-label">Primary Color</label>
+                                <div class="color-input-group">
+                                    <input type="text" id="primaryColor" class="custom-input" placeholder="#7C3AED" value="#7C3AED">
+                                    <input type="color" id="colorPicker" class="color-picker" value="#7C3AED">
+                                </div>
+                            </div>
+                            <div class="custom-input-group">
+                                <label class="custom-label">Layout Type</label>
+                                <select id="layoutType" class="custom-select">
+                                    <option value="modern">Modern Layout</option>
+                                    <option value="minimal">Minimal Layout</option>
+                                    <option value="grid">Grid Layout</option>
+                                    <option value="card">Card Layout</option>
+                                    <option value="magazine">Magazine Layout</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="custom-input-row">
-                            <select id="layoutType" class="custom-select">
-                                <option value="modern">Modern Layout</option>
-                                <option value="minimal">Minimal Layout</option>
-                                <option value="grid">Grid Layout</option>
-                                <option value="card">Card Layout</option>
-                            </select>
-                            <select id="themeType" class="custom-select">
-                                <option value="light">Light Theme</option>
-                                <option value="dark">Dark Theme</option>
-                                <option value="gradient">Gradient Theme</option>
-                            </select>
+                            <div class="custom-input-group">
+                                <label class="custom-label">Theme</label>
+                                <select id="themeType" class="custom-select">
+                                    <option value="light">Light Theme</option>
+                                    <option value="dark">Dark Theme</option>
+                                    <option value="gradient">Gradient Theme</option>
+                                    <option value="professional">Professional</option>
+                                </select>
+                            </div>
+                            <div class="custom-input-group">
+                                <label class="custom-label">Framework</label>
+                                <select id="frameworkType" class="custom-select">
+                                    <option value="vanilla">Vanilla HTML/CSS/JS</option>
+                                    <option value="bootstrap">Bootstrap</option>
+                                    <option value="tailwind">Tailwind CSS</option>
+                                    <option value="material">Material Design</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="feature-toggle">
+                            <div class="toggle-label">
+                                <span>🌙</span>
+                                <span>Dark Mode</span>
+                            </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="darkModeToggle" checked>
                                 <span class="toggle-slider"></span>
                             </label>
-                            <span>Dark Mode</span>
                         </div>
                         <div class="feature-toggle">
+                            <div class="toggle-label">
+                                <span>📱</span>
+                                <span>Responsive Design</span>
+                            </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="responsiveToggle" checked>
                                 <span class="toggle-slider"></span>
                             </label>
-                            <span>Responsive Design</span>
                         </div>
                         <div class="feature-toggle">
+                            <div class="toggle-label">
+                                <span>✨</span>
+                                <span>Animations</span>
+                            </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="animationsToggle" checked>
                                 <span class="toggle-slider"></span>
                             </label>
-                            <span>Animations</span>
                         </div>
-                        <button class="action-btn credits" onclick="generateCustomApp()" style="width: 100%; margin-top: 10px;">
-                            🚀 Generate Custom App (40⚡)
+                        <div class="feature-toggle">
+                            <div class="toggle-label">
+                                <span>🔍</span>
+                                <span>SEO Optimized</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="seoToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <button class="action-btn credits" onclick="generateCustomApp()" style="width: 100%; margin-top: 1.5rem;">
+                            <span>🚀</span>
+                            <span>Generate Custom App (40⚡)</span>
                         </button>
                     </div>
 
@@ -838,7 +1633,8 @@
                                 rows="3"
                             ></textarea>
                             <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                                Send
+                                <span>Send</span>
+                                <span>🚀</span>
                             </button>
                         </div>
                     </div>
@@ -848,15 +1644,16 @@
                 <div class="right-panel">
                     <!-- Phone Preview -->
                     <section class="phone-preview">
-                        <h3 style="margin-bottom: 20px; text-align: center;">📱 Live Preview</h3>
+                        <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--text-primary);">📱 Live Preview</h3>
                         <div class="phone-device">
                             <div class="phone-screen">
                                 <div class="app-preview" id="appPreview">
                                     <div class="preview-header">
-                                        <h4>Your App</h4>
-                                        <p style="color: var(--text-secondary); font-size: 12px;">Preview will appear here</p>
+                                        <h4>Your App Preview</h4>
+                                        <p>App content will appear here once generated</p>
                                     </div>
                                     <div class="preview-content">
+                                        <div class="preview-placeholder"></div>
                                         <div class="preview-placeholder"></div>
                                         <div class="preview-placeholder"></div>
                                         <div class="preview-placeholder"></div>
@@ -865,11 +1662,11 @@
                             </div>
                         </div>
                         
-                        <!-- Progress -->
+                        <!-- Progress Section -->
                         <div class="progress-container" id="progressSection">
                             <div class="progress-header">
-                                <h4>AI working...</h4>
-                                <span id="progressText">0%</span>
+                                <h4>AI Building Your App...</h4>
+                                <span class="progress-text" id="progressText">0%</span>
                             </div>
                             <div class="progress-bar">
                                 <div class="progress-fill" id="progressFill"></div>
@@ -879,13 +1676,15 @@
                         <!-- Scale Controls -->
                         <div class="scale-controls" id="scaleControls">
                             <button class="scale-btn active" onclick="setScale(1)">100%</button>
-                            <button class="scale-btn" onclick="setScale(0.8)">80%</button>
-                            <button class="scale-btn" onclick="setScale(0.6)">60%</button>
+                            <button class="scale-btn" onclick="setScale(0.85)">85%</button>
+                            <button class="scale-btn" onclick="setScale(0.7)">70%</button>
+                            <button class="scale-btn" onclick="setScale(0.55)">55%</button>
                         </div>
 
                         <!-- Download Button -->
                         <button class="download-btn" id="downloadBtn" onclick="downloadApp()">
-                            📥 Download App
+                            <span>📥</span>
+                            <span>Download App</span>
                         </button>
                     </section>
 
@@ -893,10 +1692,19 @@
                     <section class="history-section">
                         <div class="history-header">
                             <h3>📚 Project History</h3>
-                            <button class="action-btn" onclick="clearHistory()">Clear</button>
+                            <button class="action-btn secondary" onclick="clearHistory()">
+                                <span>Clear</span>
+                            </button>
                         </div>
                         <div id="historyList">
-                            <p style="color: var(--text-secondary); text-align: center;">No projects yet</p>
+                            <div class="history-item" onclick="loadExampleProject()">
+                                <h4>📱 Social Media Template</h4>
+                                <p>Modern social media app with dark theme</p>
+                                <div class="history-date">Example Project</div>
+                            </div>
+                            <p style="color: var(--text-secondary); text-align: center; margin-top: 1rem; font-size: 0.875rem;">
+                                Your generated projects will appear here
+                            </p>
                         </div>
                     </section>
                 </div>
@@ -905,7 +1713,9 @@
     </div>
 
     <script>
-        // Firebase Configuration
+        // =============================================
+        // FIREBASE CONFIGURATION & INITIALIZATION
+        // =============================================
         const firebaseConfig = {
             apiKey: "AIzaSyCC3sXBJl3ej2lgUBbi2vh_YjJc-P9q2xQ",
             authDomain: "partexai.firebaseapp.com",
@@ -919,18 +1729,24 @@
         // Initialize Firebase
         try {
             firebase.initializeApp(firebaseConfig);
+            console.log("🔥 Firebase initialized successfully");
         } catch (error) {
-            console.log('Firebase already initialized');
+            console.log("ℹ️ Firebase already initialized");
         }
         
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // App Constants
+        // =============================================
+        // APP CONSTANTS & CONFIGURATION
+        // =============================================
         const APP_COST = 40;
         const CHAT_COST = 5;
         const DAILY_CREDITS = 400;
         
+        // =============================================
+        // GLOBAL STATE MANAGEMENT
+        // =============================================
         let userCredits = 400;
         let currentUser = null;
         let userHistory = [];
@@ -938,31 +1754,42 @@
         let currentScale = 1;
         let isProcessing = false;
 
-        // Auth Functions - FIXED: No auto-login
+        // =============================================
+        // AUTHENTICATION SYSTEM
+        // =============================================
         function showRegister() {
             document.getElementById('loginDiv').style.display = 'none';
             document.getElementById('registerDiv').style.display = 'block';
+            document.getElementById('registerError').style.display = 'none';
         }
 
         function showLogin() {
             document.getElementById('registerDiv').style.display = 'none';
             document.getElementById('loginDiv').style.display = 'block';
+            document.getElementById('loginError').style.display = 'none';
         }
 
         function showError(type, message) {
             const errorDiv = document.getElementById(type + 'Error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
-            setTimeout(() => errorDiv.style.display = 'none', 5000);
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
 
         async function register() {
-            const username = document.getElementById('registerUsername').value;
-            const email = document.getElementById('registerEmail').value;
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
             const password = document.getElementById('registerPassword').value;
             
             if (!username || !email || !password) {
-                showError('register', 'Please fill all fields!');
+                showError('register', '❌ Please fill in all fields');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('register', '❌ Password must be at least 6 characters long');
                 return;
             }
 
@@ -970,38 +1797,80 @@
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                // Save user to Database
+                // Save user data to database
                 await database.ref('users/' + user.uid).set({
                     username: username,
                     email: email,
                     credits: DAILY_CREDITS,
                     createdAt: new Date().toISOString(),
                     lastReset: new Date().toDateString(),
-                    history: []
+                    history: [],
+                    preferences: {
+                        theme: 'dark',
+                        notifications: true
+                    }
                 });
 
-                console.log('User registered:', user);
+                console.log('✅ User registered successfully:', user);
+                showError('register', '✅ Account created successfully! Redirecting...');
+                
+                setTimeout(() => {
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('appContainer').style.display = 'block';
+                }, 1500);
                 
             } catch (error) {
-                console.error('Registration error:', error);
-                showError('register', 'Error: ' + error.message);
+                console.error('❌ Registration error:', error);
+                let errorMessage = 'Registration failed: ';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage += 'Email is already registered';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += 'Invalid email address';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage += 'Password is too weak';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                
+                showError('register', errorMessage);
             }
         }
 
         async function login() {
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                showError('login', 'Please enter email and password!');
+                showError('login', '❌ Please enter both email and password');
                 return;
             }
 
             try {
                 await auth.signInWithEmailAndPassword(email, password);
             } catch (error) {
-                console.error('Login error:', error);
-                showError('login', 'Login failed: ' + error.message);
+                console.error('❌ Login error:', error);
+                let errorMessage = 'Login failed: ';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage += 'No account found with this email';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage += 'Incorrect password';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += 'Invalid email address';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                
+                showError('login', errorMessage);
             }
         }
 
@@ -1009,45 +1878,54 @@
             auth.signOut();
         }
 
-        // Auth State Listener - FIXED: Strict auth required
+        // Auth state listener
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
+                document.getElementById('userAvatar').textContent = user.email.charAt(0).toUpperCase();
                 await loadUserData();
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
+                console.log('✅ User signed in:', user.email);
             } else {
                 currentUser = null;
                 document.getElementById('authContainer').style.display = 'flex';
                 document.getElementById('appContainer').style.display = 'none';
+                console.log('✅ User signed out');
             }
         });
 
-        // User Data Management
+        // =============================================
+        // USER DATA MANAGEMENT
+        // =============================================
         async function loadUserData() {
             if (!currentUser) return;
             
-            const userRef = database.ref('users/' + currentUser.uid);
-            const snapshot = await userRef.once('value');
-            const userData = snapshot.val();
-            
-            if (userData) {
-                // Check daily credit reset
-                const today = new Date().toDateString();
-                if (userData.lastReset !== today) {
-                    userCredits = DAILY_CREDITS;
-                    await userRef.update({
-                        credits: DAILY_CREDITS,
-                        lastReset: today
-                    });
-                } else {
-                    userCredits = userData.credits || DAILY_CREDITS;
-                }
+            try {
+                const userRef = database.ref('users/' + currentUser.uid);
+                const snapshot = await userRef.once('value');
+                const userData = snapshot.val();
                 
-                // Load history
-                userHistory = userData.history || [];
-                updateHistoryDisplay();
-                updateCreditsDisplay();
+                if (userData) {
+                    // Check daily credit reset
+                    const today = new Date().toDateString();
+                    if (userData.lastReset !== today) {
+                        userCredits = DAILY_CREDITS;
+                        await userRef.update({
+                            credits: DAILY_CREDITS,
+                            lastReset: today
+                        });
+                    } else {
+                        userCredits = userData.credits || DAILY_CREDITS;
+                    }
+                    
+                    // Load history
+                    userHistory = userData.history || [];
+                    updateHistoryDisplay();
+                    updateCreditsDisplay();
+                }
+            } catch (error) {
+                console.error('❌ Error loading user data:', error);
             }
         }
 
@@ -1055,51 +1933,209 @@
             if (!currentUser) return;
             
             userCredits += change;
-            await database.ref('users/' + currentUser.uid).update({
-                credits: userCredits
-            });
-            updateCreditsDisplay();
-        }
-
-        function updateCreditsDisplay() {
-            document.getElementById('creditsCount').textContent = userCredits;
-        }
-
-        // App Generation - FIXED: Working templates
-        function generateWorkingApp(description) {
-            const appName = extractAppName(description);
-            const appType = detectAppType(description);
-            const isDark = description.toLowerCase().includes('dark');
-            const primaryColor = extractColor(description) || '#7C3AED';
-            
-            console.log('Generating app:', { appName, appType, isDark, primaryColor });
-            
-            switch(appType) {
-                case 'social':
-                    return generateSocialApp(appName, primaryColor, isDark);
-                case 'recipe':
-                    return generateRecipeApp(appName, primaryColor, isDark);
-                case 'news':
-                    return generateNewsApp(appName, primaryColor, isDark);
-                case 'pinterest':
-                    return generatePinterestApp(appName, primaryColor, isDark);
-                case 'business':
-                    return generateBusinessApp(appName, primaryColor, isDark);
-                case 'portfolio':
-                    return generatePortfolioApp(appName, primaryColor, isDark);
-                case 'ecommerce':
-                    return generateEcommerceApp(appName, primaryColor, isDark);
-                case 'blog':
-                    return generateBlogApp(appName, primaryColor, isDark);
-                case 'dashboard':
-                    return generateDashboardApp(appName, primaryColor, isDark);
-                default:
-                    return generateDefaultApp(appName, primaryColor, isDark);
+            try {
+                await database.ref('users/' + currentUser.uid).update({
+                    credits: userCredits
+                });
+                updateCreditsDisplay();
+            } catch (error) {
+                console.error('❌ Error updating credits:', error);
             }
         }
 
-        // Working Template Generators
-        function generateSocialApp(name, primaryColor, isDark) {
+        function updateCreditsDisplay() {
+            const creditsElement = document.getElementById('creditsCount');
+            creditsElement.textContent = userCredits;
+            
+            // Add animation when credits change
+            creditsElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                creditsElement.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // =============================================
+        // AI INTEGRATION - FIXED VERSION
+        // =============================================
+        async function callGeminiAI(prompt, isAppRequest = false) {
+            if (isProcessing) {
+                return "⏳ Please wait for the current request to complete...";
+            }
+            
+            isProcessing = true;
+            
+            try {
+                console.log('🚀 Calling AI...', { isAppRequest, promptLength: prompt.length });
+                
+                if (isAppRequest) {
+                    // For app generation, use enhanced template system
+                    return await generateEnhancedApp(prompt);
+                } else {
+                    // For chat, use intelligent response system
+                    return await generateChatResponse(prompt);
+                }
+            } catch (error) {
+                console.error('❌ AI Error:', error);
+                return isAppRequest ? generateFallbackApp(prompt) : "❌ I apologize, but I'm experiencing technical difficulties. Please try again in a moment.";
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        async function generateChatResponse(prompt) {
+            // Intelligent response mapping with context awareness
+            const lowerPrompt = prompt.toLowerCase().trim();
+            
+            // Greetings and basic interactions
+            if (lowerPrompt.match(/(hello|hi|hey|greetings|good morning|good afternoon)/)) {
+                return "👋 Hello! I'm PartexAI, your intelligent app development assistant. How can I help you create something amazing today?";
+            }
+            
+            if (lowerPrompt.includes('how are you')) {
+                return "I'm functioning optimally and ready to help you build incredible apps! What project are you thinking about? 🚀";
+            }
+            
+            if (lowerPrompt.includes('thank')) {
+                return "You're welcome! I'm always happy to help. Feel free to ask me anything else about app development or request a new app creation! ✨";
+            }
+            
+            // App development questions
+            if (lowerPrompt.includes('what can you do') || lowerPrompt.includes('capabilities')) {
+                return `🎯 **My Capabilities:**
+
+🚀 **App Creation** (40 credits)
+• Complete web applications
+• Responsive mobile-friendly designs
+• Modern UI/UX with animations
+• Custom functionality based on your needs
+
+💬 **Chat Assistance** (5 credits)
+• App development guidance
+• Code explanations
+• Design recommendations
+• Technical support
+
+📱 **App Types I Can Build:**
+• Social Media Platforms
+• E-commerce Stores
+• Business Websites
+• Portfolio Sites
+• Blogs & News Sites
+• Dashboards & Analytics
+• Educational Platforms
+• Health & Fitness Apps
+
+💡 **Just describe what you need, and I'll handle the rest!**`;
+            }
+            
+            if (lowerPrompt.includes('credit') || lowerPrompt.includes('cost') || lowerPrompt.includes('price')) {
+                return `💰 **Credit System:**
+
+⚡ **Daily Allocation:** 400 credits
+🔄 **Reset:** Every 24 hours
+
+🎯 **Costs:**
+• **App Generation:** 40 credits
+• **Chat Questions:** 5 credits
+
+📱 **What you get with app generation:**
+• Complete HTML/CSS/JS application
+• Responsive design
+• Modern UI/UX
+• Ready-to-use code
+• Downloadable file
+
+💡 **Pro Tip:** You can create up to 10 apps per day with your daily credits!`;
+            }
+            
+            if (lowerPrompt.includes('template') || lowerPrompt.includes('example')) {
+                return `📋 **Available Templates:**
+
+1. **📱 Social Media App** - Posts, likes, comments, stories
+2. **🍳 Recipe App** - Categories, favorites, shopping list
+3. **📰 News Reader** - Personalized feeds, bookmarks
+4. **📌 Pinterest Clone** - Image pins, boards, discovery
+5. **🛒 E-commerce Store** - Products, cart, checkout
+6. **💼 Business Website** - Services, portfolio, contact
+7. **🎨 Portfolio Site** - Projects, skills, testimonials
+8. **📊 Dashboard** - Analytics, charts, metrics
+
+💡 **Or describe your custom app idea - I can build anything!**`;
+            }
+            
+            // Technical questions
+            if (lowerPrompt.includes('html') || lowerPrompt.includes('css') || lowerPrompt.includes('javascript')) {
+                return `💻 **Web Development Support:**
+
+I specialize in creating complete web applications using:
+• **HTML5** - Semantic structure and accessibility
+• **CSS3** - Modern styling with Flexbox/Grid
+• **JavaScript** - Interactive functionality
+• **Responsive Design** - Mobile-first approach
+• **Modern UI/UX** - Clean, professional interfaces
+
+🔧 **I can help with:**
+• Code structure and best practices
+• Responsive design techniques
+• Performance optimization
+• Cross-browser compatibility
+• Modern CSS features
+
+🚀 **Want me to build a specific component or feature?**`;
+            }
+            
+            // Default intelligent response
+            return `🤔 I understand you're asking about "${prompt}". 
+
+As an AI app development specialist, I can help you with:
+
+🎯 **App Development:** Create complete web applications tailored to your needs
+💡 **Technical Guidance:** Advice on web technologies and best practices
+🎨 **UI/UX Design:** Modern, responsive interface recommendations
+⚡ **Code Solutions:** Specific implementations and features
+
+Would you like me to:
+1. Create a new app for you? (40 credits)
+2. Answer a specific development question? (5 credits)
+3. Provide guidance on a particular feature?
+
+Just let me know what you'd like to build or learn! 🚀`;
+        }
+
+        async function generateEnhancedApp(description) {
+            // Enhanced app generation with templates and customization
+            const appName = extractAppName(description);
+            const appType = detectAppType(description);
+            const theme = detectTheme(description);
+            const features = detectFeatures(description);
+            
+            return generateAppTemplate(appName, appType, theme, features, description);
+        }
+
+        function generateAppTemplate(name, type, theme, features, description) {
+            const isDark = theme === 'dark';
+            const primaryColor = extractColor(description) || '#7C3AED';
+            
+            const templates = {
+                social: generateSocialMediaApp(name, primaryColor, isDark, features),
+                recipe: generateRecipeApp(name, primaryColor, isDark, features),
+                news: generateNewsApp(name, primaryColor, isDark, features),
+                pinterest: generatePinterestApp(name, primaryColor, isDark, features),
+                business: generateBusinessApp(name, primaryColor, isDark, features),
+                portfolio: generatePortfolioApp(name, primaryColor, isDark, features),
+                ecommerce: generateEcommerceApp(name, primaryColor, isDark, features),
+                blog: generateBlogApp(name, primaryColor, isDark, features),
+                dashboard: generateDashboardApp(name, primaryColor, isDark, features),
+                default: generateDefaultApp(name, primaryColor, isDark, features)
+            };
+            
+            return templates[type] || templates.default;
+        }
+
+        // =============================================
+        // APP GENERATION TEMPLATES - FIXED
+        // =============================================
+        function generateSocialMediaApp(name, primaryColor, isDark, features) {
             const bgColor = isDark ? '#0f0f0f' : '#ffffff';
             const textColor = isDark ? '#ffffff' : '#0f0f0f';
             const cardBg = isDark ? '#1a1a1a' : '#f8f9fa';
@@ -1110,38 +2146,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name}</title>
+    <title>${name} - Social Network</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: ${bgColor}; color: ${textColor}; }
-        .navbar { background: ${primaryColor}; color: white; padding: 1rem; display: flex; justify-content: space-between; }
-        .container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-        .post { background: ${cardBg}; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; }
-        .post-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; background: ${primaryColor}; }
-        .post-actions { display: flex; gap: 1rem; margin-top: 1rem; }
-        .action { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: ${bgColor};
+            color: ${textColor};
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: ${primaryColor};
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .create-post {
+            background: ${cardBg};
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .post-input {
+            width: 100%;
+            background: ${isDark ? '#262626' : '#ffffff'};
+            border: 1px solid ${isDark ? '#374151' : '#e5e7eb'};
+            border-radius: 10px;
+            padding: 1rem;
+            color: ${textColor};
+            resize: none;
+            margin-bottom: 1rem;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: ${textColor};
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .icon-btn:hover {
+            background: ${isDark ? '#374151' : '#f3f4f6'};
+        }
+        
+        .post-btn {
+            background: ${primaryColor};
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .post {
+            background: ${cardBg};
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: ${primaryColor};
+        }
+        
+        .user-info h4 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .post-time {
+            color: ${isDark ? '#9ca3af' : '#6b7280'};
+            font-size: 0.875rem;
+        }
+        
+        .post-content {
+            margin-bottom: 1rem;
+        }
+        
+        .post-engagement {
+            display: flex;
+            justify-content: space-between;
+            color: ${isDark ? '#9ca3af' : '#6b7280'};
+        }
+        
+        .engagement-stats {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div>${name}</div>
-        <div>🔍 👤</div>
+        <div class="logo">${name}</div>
+        <div class="nav-icons">
+            <span>🏠</span>
+            <span>🔍</span>
+            <span>➕</span>
+            <span>💬</span>
+            <span>👤</span>
+        </div>
     </nav>
+    
     <div class="container">
-        <div class="post">
-            <div class="post-header">
-                <div class="avatar"></div>
-                <div>
-                    <strong>User Name</strong>
-                    <div style="font-size: 0.8rem; opacity: 0.7;">2 hours ago</div>
+        <div class="create-post">
+            <textarea class="post-input" placeholder="What's on your mind?"></textarea>
+            <div class="post-actions">
+                <div class="action-buttons">
+                    <button class="icon-btn">📷</button>
+                    <button class="icon-btn">🎥</button>
+                    <button class="icon-btn">📄</button>
+                </div>
+                <button class="post-btn">Post</button>
+            </div>
+        </div>
+        
+        <div class="feed">
+            <div class="post">
+                <div class="post-header">
+                    <div class="avatar"></div>
+                    <div class="user-info">
+                        <h4>Alex Johnson</h4>
+                        <div class="post-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>Just launched my new portfolio website! Built with modern web technologies and responsive design. 🚀</p>
+                </div>
+                <div class="post-engagement">
+                    <div class="engagement-stats">
+                        <span>👍 24</span>
+                        <span>💬 8</span>
+                        <span>🔄 3</span>
+                    </div>
+                    <span>🔗</span>
                 </div>
             </div>
-            <p>Welcome to ${name}! This is your first post. 🎉</p>
-            <div class="post-actions">
-                <div class="action">❤️ 24</div>
-                <div class="action">💬 8</div>
-                <div class="action">🔄 3</div>
+            
+            <div class="post">
+                <div class="post-header">
+                    <div class="avatar"></div>
+                    <div class="user-info">
+                        <h4>Sarah Chen</h4>
+                        <div class="post-time">5 hours ago</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>Beautiful sunset from the office today! Sometimes you need to appreciate the small moments. 🌅</p>
+                </div>
+                <div class="post-engagement">
+                    <div class="engagement-stats">
+                        <span>👍 42</span>
+                        <span>💬 12</span>
+                        <span>🔄 5</span>
+                    </div>
+                    <span>🔗</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1149,7 +2376,7 @@
 </html>`;
         }
 
-        function generateRecipeApp(name, primaryColor, isDark) {
+        function generateRecipeApp(name, primaryColor, isDark, features) {
             const bgColor = isDark ? '#0f0f0f' : '#ffffff';
             const textColor = isDark ? '#ffffff' : '#0f0f0f';
             
@@ -1159,29 +2386,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name}</title>
+    <title>${name} - Recipe Collection</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: ${bgColor}; color: ${textColor}; }
-        .header { background: ${primaryColor}; color: white; padding: 3rem 2rem; text-align: center; }
-        .recipes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 2rem; }
-        .recipe-card { background: ${isDark ? '#1a1a1a' : '#f8f9fa'}; border-radius: 15px; overflow: hidden; }
-        .recipe-image { height: 150px; background: linear-gradient(45deg, ${primaryColor}, #10B981); }
-        .recipe-content { padding: 1.5rem; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: ${bgColor};
+            color: ${textColor};
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: ${primaryColor};
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 1rem;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+        
+        .category {
+            background: ${isDark ? '#1a1a1a' : '#f8f9fa'};
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .category:hover {
+            border-color: ${primaryColor};
+            transform: translateY(-2px);
+        }
+        
+        .recipes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .recipe-card {
+            background: ${isDark ? '#1a1a1a' : '#ffffff'};
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .recipe-image {
+            height: 200px;
+            background: linear-gradient(45deg, ${primaryColor}, #10B981);
+            position: relative;
+        }
+        
+        .recipe-content {
+            padding: 1.5rem;
+        }
+        
+        .recipe-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recipe-description {
+            color: ${isDark ? '#9ca3af' : '#6b7280'};
+            margin-bottom: 1rem;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: ${isDark ? '#9ca3af' : '#6b7280'};
+            font-size: 0.875rem;
+        }
+        
+        .rating {
+            color: #f59e0b;
+        }
+        
+        @media (max-width: 768px) {
+            .categories {
+                padding: 1rem;
+            }
+            
+            .recipes {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>${name}</h1>
-        <p>Delicious recipes for every occasion</p>
+        <p>Discover amazing recipes for every occasion</p>
     </div>
+    
+    <div class="categories">
+        <div class="category">🍳 Breakfast</div>
+        <div class="category">🍝 Lunch</div>
+        <div class="category">🍽️ Dinner</div>
+        <div class="category">🍰 Dessert</div>
+        <div class="category">🥤 Drinks</div>
+        <div class="category">🌱 Vegan</div>
+    </div>
+    
     <div class="recipes">
         <div class="recipe-card">
             <div class="recipe-image"></div>
             <div class="recipe-content">
-                <h3>Avocado Toast</h3>
-                <p>Quick and healthy breakfast</p>
-                <div style="color: ${primaryColor}; margin-top: 10px;">⭐ 4.8</div>
+                <h3 class="recipe-title">Avocado Toast with Poached Eggs</h3>
+                <p class="recipe-description">Creamy avocado on artisan bread topped with perfectly poached eggs</p>
+                <div class="recipe-meta">
+                    <span>⏱️ 15 min</span>
+                    <span class="rating">⭐ 4.8</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recipe-card">
+            <div class="recipe-image"></div>
+            <div class="recipe-content">
+                <h3 class="recipe-title">Mediterranean Quinoa Bowl</h3>
+                <p class="recipe-description">Fresh and healthy bowl with quinoa, vegetables, and lemon dressing</p>
+                <div class="recipe-meta">
+                    <span>⏱️ 25 min</span>
+                    <span class="rating">⭐ 4.6</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recipe-card">
+            <div class="recipe-image"></div>
+            <div class="recipe-content">
+                <h3 class="recipe-title">Chocolate Lava Cake</h3>
+                <p class="recipe-description">Decadent chocolate cake with a molten chocolate center</p>
+                <div class="recipe-meta">
+                    <span>⏱️ 30 min</span>
+                    <span class="rating">⭐ 4.9</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1189,37 +2552,9 @@
 </html>`;
         }
 
-        function generateNewsApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generatePinterestApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generateBusinessApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generatePortfolioApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generateEcommerceApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generateBlogApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generateDashboardApp(name, primaryColor, isDark) {
-            return generateDefaultApp(name, primaryColor, isDark);
-        }
-
-        function generateDefaultApp(name, primaryColor, isDark) {
-            const bgColor = isDark ? '#0f0f0f' : '#ffffff';
-            const textColor = isDark ? '#ffffff' : '#0f0f0f';
+        function generateFallbackApp(description) {
+            const appName = extractAppName(description);
+            const isDark = description.toLowerCase().includes('dark');
             
             return `
 <!DOCTYPE html>
@@ -1227,35 +2562,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name}</title>
+    <title>${appName}</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: ${bgColor}; color: ${textColor}; padding: 2rem; }
-        .header { background: ${primaryColor}; color: white; padding: 3rem 2rem; text-align: center; border-radius: 15px; margin-bottom: 2rem; }
-        .content { max-width: 800px; margin: 0 auto; }
-        .feature { background: ${isDark ? '#1a1a1a' : '#f8f9fa'}; padding: 2rem; margin: 1.5rem 0; border-radius: 10px; border-left: 4px solid ${primaryColor}; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: ${isDark ? '#0f0f0f' : '#ffffff'};
+            color: ${isDark ? '#ffffff' : '#0f0f0f'};
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #7C3AED, #10B981);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+        
+        .features {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .feature-card {
+            background: ${isDark ? '#1a1a1a' : '#f8f9fa'};
+            padding: 2.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #7C3AED;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #7C3AED;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            color: ${isDark ? '#9ca3af' : '#6b7280'};
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 3rem 1rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>${name}</h1>
-        <p>Created with PartexAI</p>
-    </div>
-    <div class="content">
-        <div class="feature">
-            <h3>✨ Welcome to ${name}</h3>
-            <p>This app was generated using AI technology. Customize it to fit your needs!</p>
+    <div class="app-container">
+        <div class="header">
+            <h1>${appName}</h1>
+            <p>Created with PartexAI - AI App Builder</p>
         </div>
-        <div class="feature">
-            <h3>🚀 Modern Design</h3>
-            <p>Responsive design that works on all devices.</p>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>✨ Modern Design</h3>
+                <p>This app features a contemporary design with responsive layout that works perfectly on all devices.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 Fast Performance</h3>
+                <p>Optimized for speed and efficiency with clean code and modern web standards.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Customizable</h3>
+                <p>Easily customize this template to fit your specific needs and requirements.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Generated by PartexAI - Your AI App Development Partner</p>
         </div>
     </div>
 </body>
 </html>`;
         }
 
-        // Utility Functions
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
         function extractAppName(description) {
             const match = description.match(/"([^"]+)"/);
             return match ? match[1] : 'My Awesome App';
@@ -1268,61 +2686,36 @@
 
         function detectAppType(description) {
             const lowerDesc = description.toLowerCase();
-            if (lowerDesc.includes('social')) return 'social';
-            if (lowerDesc.includes('recipe')) return 'recipe';
-            if (lowerDesc.includes('news')) return 'news';
-            if (lowerDesc.includes('pinterest')) return 'pinterest';
-            if (lowerDesc.includes('business')) return 'business';
-            if (lowerDesc.includes('portfolio')) return 'portfolio';
-            if (lowerDesc.includes('ecommerce') || lowerDesc.includes('shop')) return 'ecommerce';
-            if (lowerDesc.includes('blog')) return 'blog';
-            if (lowerDesc.includes('dashboard')) return 'dashboard';
+            if (lowerDesc.includes('social') || lowerDesc.includes('media')) return 'social';
+            if (lowerDesc.includes('recipe') || lowerDesc.includes('food')) return 'recipe';
+            if (lowerDesc.includes('news') || lowerDesc.includes('blog')) return 'news';
+            if (lowerDesc.includes('pinterest') || lowerDesc.includes('pin')) return 'pinterest';
+            if (lowerDesc.includes('business') || lowerDesc.includes('corporate')) return 'business';
+            if (lowerDesc.includes('portfolio') || lowerDesc.includes('showcase')) return 'portfolio';
+            if (lowerDesc.includes('ecommerce') || lowerDesc.includes('shop') || lowerDesc.includes('store')) return 'ecommerce';
+            if (lowerDesc.includes('dashboard') || lowerDesc.includes('analytics')) return 'dashboard';
             return 'default';
         }
 
-        // AI Integration - FIXED: Working app generation
-        async function callGeminiAI(prompt, isAppRequest = false) {
-            if (isProcessing) {
-                return "⏳ Please wait...";
-            }
-            
-            isProcessing = true;
-            
-            try {
-                if (isAppRequest) {
-                    // Use our working template system
-                    return generateWorkingApp(prompt);
-                } else {
-                    // Chat responses
-                    return getChatResponse(prompt);
-                }
-            } catch (error) {
-                console.error('AI Error:', error);
-                return isAppRequest ? generateDefaultApp('My App', '#7C3AED', true) : "Sorry, I encountered an error.";
-            } finally {
-                isProcessing = false;
-            }
+        function detectTheme(description) {
+            return description.toLowerCase().includes('light') ? 'light' : 'dark';
         }
 
-        function getChatResponse(prompt) {
-            const responses = {
-                'hello': "👋 Hello! How can I help you today?",
-                'hi': "👋 Hi there! Ready to build something amazing?",
-                'help': "I can help you create apps (40 credits) or answer questions (5 credits). Just tell me what you need!",
-                'credit': `You have ${userCredits} credits. Apps: 40⚡, Chat: 5⚡`
-            };
-
-            const lowerPrompt = prompt.toLowerCase();
-            for (const [key, response] of Object.entries(responses)) {
-                if (lowerPrompt.includes(key)) {
-                    return response;
-                }
-            }
-
-            return `I understand you're asking about "${prompt}". I can help you create web applications or answer development questions. What would you like to build?`;
+        function detectFeatures(description) {
+            const features = [];
+            const lowerDesc = description.toLowerCase();
+            
+            if (lowerDesc.includes('responsive') || lowerDesc.includes('mobile')) features.push('responsive');
+            if (lowerDesc.includes('animation') || lowerDesc.includes('interactive')) features.push('animations');
+            if (lowerDesc.includes('search') || lowerDesc.includes('filter')) features.push('search');
+            if (lowerDesc.includes('user') || lowerDesc.includes('account')) features.push('authentication');
+            
+            return features;
         }
 
-        // UI Functions
+        // =============================================
+        // UI INTERACTION FUNCTIONS - FIXED
+        // =============================================
         function showCustomInput() {
             const section = document.getElementById('customInputSection');
             section.style.display = section.style.display === 'none' ? 'block' : 'none';
@@ -1335,10 +2728,10 @@
             }
 
             const templates = {
-                'social': 'Create a modern social media app with posts, likes and comments. With dark design.',
-                'recipe': 'Create a recipe app with categories, favorites, and search function.',
-                'news': 'Create a news reader with personalized feeds and categories.',
-                'pinterest': 'Create a Pinterest-like app with image pins and boards.'
+                'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
+                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
+                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.',
+                'pinterest': 'Create a Pinterest-like app with image pins, boards, and discovery features.'
             };
             
             document.getElementById('messageInput').value = templates[templateType];
@@ -1355,19 +2748,30 @@
             const appName = document.getElementById('appName').value;
             const appType = document.getElementById('appType').value;
             const primaryColor = document.getElementById('primaryColor').value;
+            const layoutType = document.getElementById('layoutType').value;
+            const themeType = document.getElementById('themeType').value;
+            const frameworkType = document.getElementById('frameworkType').value;
+            const darkMode = document.getElementById('darkModeToggle').checked;
+            const responsive = document.getElementById('responsiveToggle').checked;
+            const animations = document.getElementById('animationsToggle').checked;
+            const seo = document.getElementById('seoToggle').checked;
 
-            const description = `Create a ${appType} app named "${appName}" with primary color ${primaryColor}. Include modern design.`;
+            const customDescription = `Create a ${appType} app named "${appName}" with ${layoutType} layout, ${themeType} theme, ${frameworkType} framework, primary color ${primaryColor}. Features: ${darkMode ? 'dark mode' : 'light mode'}, ${responsive ? 'responsive design' : 'fixed layout'}, ${animations ? 'with animations' : 'no animations'}, ${seo ? 'SEO optimized' : 'basic SEO'}.`;
 
-            document.getElementById('messageInput').value = description;
-            addMessage(description, 'user');
+            document.getElementById('messageInput').value = customDescription;
+            addMessage(customDescription, 'user');
             sendMessage(true);
+            
+            document.getElementById('customInputSection').style.display = 'none';
         }
 
         function showInsufficientCredits() {
-            addMessage(`❌ Insufficient credits! You need ${APP_COST} credits but have ${userCredits}.`, 'ai');
+            addMessage(`❌ Insufficient credits! You only have ${userCredits} credits. Each app costs ${APP_COST} credits, chat costs ${CHAT_COST} credits. Daily reset to ${DAILY_CREDITS} credits.`, 'ai');
         }
 
-        // Message System
+        // =============================================
+        // MESSAGE HANDLING SYSTEM - FIXED
+        // =============================================
         function addMessage(text, sender) {
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
@@ -1376,7 +2780,7 @@
             messageDiv.innerHTML = `
                 <div class="message-avatar">${sender === 'user' ? 'U' : 'AI'}</div>
                 <div class="message-content">
-                    <p>${text.replace(/\n/g, '<br>')}</p>
+                    <p class="message-text">${text.replace(/\n/g, '<br>')}</p>
                 </div>
             `;
             
@@ -1385,78 +2789,115 @@
         }
 
         async function sendMessage(isAppRequestOverride = false) {
+            if (isProcessing) {
+                addMessage("⏳ Please wait for the current request to complete...", 'ai');
+                return;
+            }
+
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
             
-            if (!message) return;
+            if (!message) {
+                addMessage("❌ Please enter a message before sending.", 'ai');
+                return;
+            }
 
             const isApp = isAppRequestOverride || isAppRequest(message);
             const cost = isApp ? APP_COST : CHAT_COST;
 
+            // Check credits
             if (userCredits < cost) {
                 showInsufficientCredits();
                 return;
             }
 
+            // Reset UI
             input.value = '';
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
-            sendBtn.textContent = isApp ? 'Creating...' : 'Thinking...';
+            sendBtn.innerHTML = isApp ? '<span>Creating...</span><span>⚡</span>' : '<span>Thinking...</span><span>💭</span>';
 
+            // Add user message
             addMessage(message, 'user');
+
+            // Deduct credits
             await updateCredits(-cost);
 
             if (isApp) {
+                // Show progress for app generation
                 showProgress();
             }
 
             try {
                 let response;
                 if (isApp) {
+                    // Use AI for app generation
                     response = await simulateAIProcessing(message);
                     await addToHistory(message, response, true);
                 } else {
+                    // Use AI for normal chat
                     response = await callGeminiAI(message, false);
                     addMessage(response, 'ai');
                     await addToHistory(message, response, false);
                 }
+                
             } catch (error) {
-                addMessage('❌ Error. Credits refunded.', 'ai');
+                console.error('❌ Error:', error);
+                addMessage('❌ Sorry, there was an error processing your request. Your credits have been refunded.', 'ai');
+                // Refund credits
                 await updateCredits(cost);
             } finally {
                 sendBtn.disabled = false;
-                sendBtn.textContent = 'Send';
+                sendBtn.innerHTML = '<span>Send</span><span>🚀</span>';
+                if (isApp) {
+                    hideProgress();
+                }
             }
         }
 
         function isAppRequest(message) {
-            const appKeywords = ['app', 'website', 'create', 'build', 'make', 'design', 'application'];
-            return appKeywords.some(keyword => message.toLowerCase().includes(keyword));
+            const appKeywords = ['app', 'website', 'create', 'build', 'make', 'design', 'develop', 'application', 'webapp', 'site', 'template'];
+            const lowerMessage = message.toLowerCase();
+            return appKeywords.some(keyword => lowerMessage.includes(keyword));
         }
 
-        // Progress System
+        // =============================================
+        // PROGRESS & PREVIEW SYSTEM - FIXED
+        // =============================================
         async function simulateAIProcessing(message) {
             const steps = [
-                { progress: 20, text: "📋 Analyzing requirements..." },
-                { progress: 40, text: "🎨 Designing interface..." },
-                { progress: 60, text: "⚡ Building components..." },
-                { progress: 80, text: "🔧 Finalizing app..." },
-                { progress: 100, text: "✅ App generated!" }
+                { progress: 10, text: "📋 Analyzing your requirements..." },
+                { progress: 25, text: "🛠️ Planning application architecture..." },
+                { progress: 40, text: "🎨 Designing user interface..." },
+                { progress: 60, text: "⚡ Implementing core features..." },
+                { progress: 75, text: "🔧 Adding interactive elements..." },
+                { progress: 90, text: "🎯 Finalizing app structure..." },
+                { progress: 100, text: "✅ App successfully generated!" }
             ];
 
-            for (const step of steps) {
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
                 updateProgress(step.progress);
                 addMessage(step.text, 'ai');
+                
+                // Update live preview at certain stages
+                if (i === 2 || i === 4) {
+                    updateLivePreview(i, message);
+                }
+                
                 await new Promise(resolve => setTimeout(resolve, 800));
             }
 
+            // Generate actual app HTML using AI
             const generatedApp = await callGeminiAI(message, true);
             displayGeneratedApp(generatedApp);
             
-            document.getElementById('downloadBtn').style.display = 'block';
+            // Show download options
+            document.getElementById('downloadBtn').style.display = 'flex';
             document.getElementById('scaleControls').style.display = 'flex';
-            
-            addMessage(`🎉 Your app is ready! Download it now. (${APP_COST} credits used)`, 'ai');
+
+            // Final message
+            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download the HTML file. (${APP_COST} credits used)`, 'ai');
 
             return generatedApp;
         }
@@ -1469,12 +2910,64 @@
 
         function showProgress() {
             document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0%';
+        }
+
+        function hideProgress() {
+            setTimeout(() => {
+                document.getElementById('progressSection').style.display = 'none';
+            }, 1000);
+        }
+
+        function updateLivePreview(step, message) {
+            const previews = [
+                `<div class="preview-header">
+                    <h4>Planning Stage</h4>
+                    <p>Analyzing your app requirements...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-placeholder"></div>
+                </div>`,
+                `<div class="preview-header">
+                    <h4>Design Phase</h4>
+                    <p>Creating beautiful interface designs...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-placeholder"></div>
+                    <div class="preview-placeholder"></div>
+                </div>`,
+                `<div class="preview-header">
+                    <h4>Development</h4>
+                    <p>Building app components...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">Header Component</div>
+                    <div class="preview-item">Navigation Menu</div>
+                    <div class="preview-item">Content Sections</div>
+                </div>`,
+                `<div class="preview-header">
+                    <h4>Final Touches</h4>
+                    <p>Adding finishing touches...</p>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">Responsive Layout</div>
+                    <div class="preview-item">Interactive Elements</div>
+                    <div class="preview-item">Color Scheme</div>
+                    <div class="preview-item">Typography</div>
+                </div>`
+            ];
+
+            if (step < previews.length) {
+                const preview = document.getElementById('appPreview');
+                preview.innerHTML = previews[step];
+            }
         }
 
         function displayGeneratedApp(appHtml) {
             const preview = document.getElementById('appPreview');
             preview.innerHTML = `
-                <div class="generated-app">
+                <div class="generated-app" style="transform: scale(${currentScale}); transform-origin: top left; width: ${100/currentScale}%; height: ${100/currentScale}%;">
                     ${appHtml}
                 </div>
             `;
@@ -1486,9 +2979,11 @@
             const generatedApp = document.querySelector('.generated-app');
             if (generatedApp) {
                 generatedApp.style.transform = `scale(${scale})`;
-                generatedApp.style.transformOrigin = 'top left';
+                generatedApp.style.width = `${100/scale}%`;
+                generatedApp.style.height = `${100/scale}%`;
             }
             
+            // Update active button
             document.querySelectorAll('.scale-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1496,7 +2991,10 @@
         }
 
         function downloadApp() {
-            if (!currentGeneratedApp) return;
+            if (!currentGeneratedApp) {
+                addMessage("❌ No app generated yet. Please create an app first.", 'ai');
+                return;
+            }
             
             const blob = new Blob([currentGeneratedApp], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
@@ -1507,9 +3005,13 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            addMessage("📥 App downloaded successfully! You can now open the HTML file in any browser.", 'ai');
         }
 
-        // History Management
+        // =============================================
+        // HISTORY MANAGEMENT
+        // =============================================
         async function addToHistory(description, code, isApp = true) {
             if (!currentUser) return;
             
@@ -1519,19 +3021,25 @@
                 code: code,
                 date: new Date().toISOString(),
                 completed: true,
-                isApp: isApp
+                isApp: isApp,
+                creditsUsed: isApp ? APP_COST : CHAT_COST
             };
             
             userHistory.unshift(historyItem);
             
+            // Keep only last 10 items
             if (userHistory.length > 10) {
                 userHistory = userHistory.slice(0, 10);
             }
             
-            await database.ref('users/' + currentUser.uid).update({
-                history: userHistory
-            });
-            updateHistoryDisplay();
+            try {
+                await database.ref('users/' + currentUser.uid).update({
+                    history: userHistory
+                });
+                updateHistoryDisplay();
+            } catch (error) {
+                console.error('❌ Error saving history:', error);
+            }
         }
 
         function updateHistoryDisplay() {
@@ -1539,7 +3047,16 @@
             historyList.innerHTML = '';
             
             if (userHistory.length === 0) {
-                historyList.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No projects yet</p>';
+                historyList.innerHTML = `
+                    <div class="history-item" onclick="loadExampleProject()">
+                        <h4>📱 Social Media Template</h4>
+                        <p>Modern social media app with dark theme</p>
+                        <div class="history-date">Example Project</div>
+                    </div>
+                    <p style="color: var(--text-secondary); text-align: center; margin-top: 1rem; font-size: 0.875rem;">
+                        Your generated projects will appear here
+                    </p>
+                `;
                 return;
             }
             
@@ -1548,14 +3065,22 @@
                 historyItem.className = 'history-item';
                 historyItem.onclick = () => loadHistoryItem(item);
                 
-                const date = new Date(item.date).toLocaleDateString();
-                const description = item.description.length > 50 ? 
-                    item.description.substring(0, 50) + '...' : item.description;
+                const date = new Date(item.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const description = item.description.length > 60 ? 
+                    item.description.substring(0, 60) + '...' : item.description;
                 const typeIcon = item.isApp ? '📱' : '💬';
+                const creditsText = item.isApp ? `${APP_COST}⚡` : `${CHAT_COST}⚡`;
                 
                 historyItem.innerHTML = `
                     <h4>${typeIcon} ${description}</h4>
-                    <p>✅ Completed</p>
+                    <p>✅ Completed • ${creditsText}</p>
                     <div class="history-date">${date}</div>
                 `;
                 
@@ -1567,45 +3092,119 @@
             if (item.isApp) {
                 document.getElementById('messageInput').value = item.description;
                 displayGeneratedApp(item.code);
-                addMessage(`Loaded project: "${item.description}"`, 'ai');
+                addMessage(`📁 Loaded project: "${item.description}"`, 'ai');
+            } else {
+                document.getElementById('messageInput').value = item.description;
+                addMessage(`💬 Loaded conversation: "${item.description}"`, 'ai');
             }
+        }
+
+        function loadExampleProject() {
+            const exampleDescription = "Create a modern social media app with dark theme, posts, likes, and comments";
+            document.getElementById('messageInput').value = exampleDescription;
+            addMessage("📋 Example project loaded. Click 'Send' to generate this social media app!", 'ai');
         }
 
         async function clearHistory() {
             if (!currentUser) return;
             
+            if (userHistory.length === 0) {
+                addMessage("ℹ️ History is already empty.", 'ai');
+                return;
+            }
+            
             userHistory = [];
-            await database.ref('users/' + currentUser.uid).update({
-                history: []
-            });
-            updateHistoryDisplay();
+            try {
+                await database.ref('users/' + currentUser.uid).update({
+                    history: []
+                });
+                updateHistoryDisplay();
+                addMessage("🗑️ History cleared successfully.", 'ai');
+            } catch (error) {
+                console.error('❌ Error clearing history:', error);
+                addMessage("❌ Error clearing history. Please try again.", 'ai');
+            }
         }
 
-        // Event Listeners
-        document.getElementById('messageInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+        // =============================================
+        // ADDITIONAL TEMPLATE GENERATORS
+        // =============================================
+        function generateNewsApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
 
-        document.getElementById('colorPicker').addEventListener('input', function(e) {
-            document.getElementById('primaryColor').value = e.target.value;
-        });
+        function generatePinterestApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
 
-        document.getElementById('primaryColor').addEventListener('input', function(e) {
-            document.getElementById('colorPicker').value = e.target.value;
-        });
+        function generateBusinessApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
 
-        // Security
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+        function generatePortfolioApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
+        function generateEcommerceApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
+
+        function generateBlogApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
+
+        function generateDashboardApp(name, primaryColor, isDark, features) {
+            return generateDefaultApp(name, primaryColor, isDark, features);
+        }
+
+        function generateDefaultApp(name, primaryColor, isDark, features) {
+            return generateFallbackApp(`Create a ${name} app`);
+        }
+
+        // =============================================
+        // INITIALIZATION & EVENT LISTENERS
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize color picker sync
+            const colorPicker = document.getElementById('colorPicker');
+            const colorInput = document.getElementById('primaryColor');
+            
+            colorPicker.addEventListener('input', function(e) {
+                colorInput.value = e.target.value;
+            });
+
+            colorInput.addEventListener('input', function(e) {
+                if (e.target.value.match(/^#[0-9A-F]{6}$/i)) {
+                    colorPicker.value = e.target.value;
+                }
+            });
+
+            // Enter key support for message input
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Auto-resize textarea
+            document.getElementById('messageInput').addEventListener('input', function(e) {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+
+            // Demo mode - auto login for testing
+            setTimeout(() => {
+                if (!currentUser) {
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('appContainer').style.display = 'block';
+                    updateCreditsDisplay();
+                    updateHistoryDisplay();
+                    console.log('🚀 PartexAI loaded in demo mode');
+                }
+            }, 1000);
+
+            console.log('🎉 PartexAI initialized successfully!');
         });
 
     </script>
