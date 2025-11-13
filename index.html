@@ -399,6 +399,21 @@
             z-index: 1;
         }
 
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            display: block;
+        }
+
         /* Chat Section */
         .chat-section {
             background: var(--surface);
@@ -819,6 +834,128 @@
 
         input:checked + .toggle-slider:before {
             transform: translateX(1.5rem);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        /* Documentation Section */
+        .docs-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .docs-sidebar {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .docs-nav {
+            list-style: none;
+        }
+
+        .docs-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            display: block;
+            transition: var(--transition);
+        }
+
+        .docs-nav a:hover,
+        .docs-nav a.active {
+            background: var(--surface-light);
+            color: var(--text-primary);
+        }
+
+        .docs-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            padding: 3rem;
+        }
+
+        .docs-section {
+            margin-bottom: 3rem;
+        }
+
+        .docs-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .docs-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
         }
 
         /* Phone Preview */
@@ -1276,6 +1413,14 @@
             .container {
                 padding: 0 1.5rem;
             }
+
+            .docs-container {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-sidebar {
+                position: static;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1301,6 +1446,14 @@
             .phone-device {
                 width: 18rem;
                 height: 38rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-content {
+                padding: 2rem;
             }
         }
 
@@ -1409,239 +1562,498 @@
 
         <!-- Main Content -->
         <div class="container">
-            <div class="main-content">
-                <!-- Chat Section -->
-                <section class="chat-section">
-                    <div class="chat-header">
-                        <h2>Ask PartexAI...</h2>
-                        <p>Describe your app or ask anything - AI builds it step by step</p>
-                    </div>
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="section dashboard-section active">
+                <div class="main-content">
+                    <!-- Chat Section -->
+                    <section class="chat-section">
+                        <div class="chat-header">
+                            <h2>Ask PartexAI...</h2>
+                            <p>Describe your app or ask anything - AI builds it step by step</p>
+                        </div>
 
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message">
-                            <div class="message-avatar">AI</div>
-                            <div class="message-content">
-                                <p class="message-text">👋 Hello! I'm PartexAI. What kind of app would you like to create today?</p>
-                                <p class="message-text"><strong>⚡ Cost: 40 Credits per app | 5 Credits for normal chat</strong></p>
-                                <div class="message-actions">
-                                    <button class="action-btn credits" onclick="selectTemplate('social')">
-                                        <span>📱</span>
-                                        <span>Social Media App</span>
-                                    </button>
-                                    <button class="action-btn credits" onclick="selectTemplate('recipe')">
-                                        <span>🍳</span>
-                                        <span>Recipe App</span>
-                                    </button>
-                                    <button class="action-btn credits" onclick="selectTemplate('news')">
-                                        <span>📰</span>
-                                        <span>News Reader</span>
-                                    </button>
-                                    <button class="action-btn credits" onclick="selectTemplate('weather')">
-                                        <span>🌤️</span>
-                                        <span>Weather App</span>
-                                    </button>
-                                    <button class="action-btn secondary" onclick="showCustomInput()">
-                                        <span>⚙️</span>
-                                        <span>Custom App</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Custom Input Section -->
-                    <div class="custom-input-section" id="customInputSection">
-                        <h4>🎨 Customize Your App</h4>
-                        <div class="custom-input-row">
-                            <div class="custom-input-group">
-                                <label class="custom-label">App Name</label>
-                                <input type="text" id="appName" class="custom-input" placeholder="My Awesome App" value="My Awesome App">
-                            </div>
-                            <div class="custom-input-group">
-                                <label class="custom-label">App Type</label>
-                                <select id="appType" class="custom-select">
-                                    <option value="social">Social Media</option>
-                                    <option value="business">Business</option>
-                                    <option value="portfolio">Portfolio</option>
-                                    <option value="ecommerce">E-commerce</option>
-                                    <option value="blog">Blog</option>
-                                    <option value="dashboard">Dashboard</option>
-                                    <option value="education">Education</option>
-                                    <option value="health">Health & Fitness</option>
-                                    <option value="weather">Weather</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="custom-input-row">
-                            <div class="custom-input-group">
-                                <label class="custom-label">Primary Color</label>
-                                <div class="color-input-group">
-                                    <input type="text" id="primaryColor" class="custom-input" placeholder="#7C3AED" value="#7C3AED">
-                                    <input type="color" id="colorPicker" class="color-picker" value="#7C3AED">
-                                </div>
-                            </div>
-                            <div class="custom-input-group">
-                                <label class="custom-label">Layout Type</label>
-                                <select id="layoutType" class="custom-select">
-                                    <option value="modern">Modern Layout</option>
-                                    <option value="minimal">Minimal Layout</option>
-                                    <option value="grid">Grid Layout</option>
-                                    <option value="card">Card Layout</option>
-                                    <option value="magazine">Magazine Layout</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="custom-input-row">
-                            <div class="custom-input-group">
-                                <label class="custom-label">Theme</label>
-                                <select id="themeType" class="custom-select">
-                                    <option value="light">Light Theme</option>
-                                    <option value="dark">Dark Theme</option>
-                                    <option value="gradient">Gradient Theme</option>
-                                    <option value="professional">Professional</option>
-                                </select>
-                            </div>
-                            <div class="custom-input-group">
-                                <label class="custom-label">Framework</label>
-                                <select id="frameworkType" class="custom-select">
-                                    <option value="vanilla">Vanilla HTML/CSS/JS</option>
-                                    <option value="bootstrap">Bootstrap</option>
-                                    <option value="tailwind">Tailwind CSS</option>
-                                    <option value="material">Material Design</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="feature-toggle">
-                            <div class="toggle-label">
-                                <span>🌙</span>
-                                <span>Dark Mode</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="darkModeToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="feature-toggle">
-                            <div class="toggle-label">
-                                <span>📱</span>
-                                <span>Responsive Design</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="responsiveToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="feature-toggle">
-                            <div class="toggle-label">
-                                <span>✨</span>
-                                <span>Animations</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="animationsToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="feature-toggle">
-                            <div class="toggle-label">
-                                <span>🔍</span>
-                                <span>SEO Optimized</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="seoToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <button class="action-btn credits" onclick="generateCustomApp()" style="width: 100%; margin-top: 1.5rem;">
-                            <span>🚀</span>
-                            <span>Generate Custom App (40⚡)</span>
-                        </button>
-                    </div>
-
-                    <div class="chat-input-container">
-                        <div class="chat-input">
-                            <textarea 
-                                class="input-field" 
-                                id="messageInput" 
-                                placeholder="Describe your app idea or ask anything... (40⚡ for apps, 5⚡ for chat)"
-                                rows="3"
-                            ></textarea>
-                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                                <span>Send</span>
-                                <span>🚀</span>
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Right Panel -->
-                <div class="right-panel">
-                    <!-- Phone Preview -->
-                    <section class="phone-preview">
-                        <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--text-primary);">📱 Live Preview</h3>
-                        <div class="phone-device">
-                            <div class="phone-screen">
-                                <div class="app-preview" id="appPreview">
-                                    <div class="generated-app" id="generatedApp">
-                                        <div class="preview-header">
-                                            <h4>Your App Preview</h4>
-                                            <p>App content will appear here once generated</p>
-                                        </div>
-                                        <div class="preview-content">
-                                            <div class="preview-placeholder"></div>
-                                            <div class="preview-placeholder"></div>
-                                            <div class="preview-placeholder"></div>
-                                            <div class="preview-placeholder"></div>
-                                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message">
+                                <div class="message-avatar">AI</div>
+                                <div class="message-content">
+                                    <p class="message-text">👋 Hello! I'm PartexAI. What kind of app would you like to create today?</p>
+                                    <p class="message-text"><strong>⚡ Cost: 40 Credits per app | 5 Credits for normal chat</strong></p>
+                                    <div class="message-actions">
+                                        <button class="action-btn credits" onclick="selectTemplate('social')">
+                                            <span>📱</span>
+                                            <span>Social Media App</span>
+                                        </button>
+                                        <button class="action-btn credits" onclick="selectTemplate('recipe')">
+                                            <span>🍳</span>
+                                            <span>Recipe App</span>
+                                        </button>
+                                        <button class="action-btn credits" onclick="selectTemplate('news')">
+                                            <span>📰</span>
+                                            <span>News Reader</span>
+                                        </button>
+                                        <button class="action-btn credits" onclick="selectTemplate('weather')">
+                                            <span>🌤️</span>
+                                            <span>Weather App</span>
+                                        </button>
+                                        <button class="action-btn secondary" onclick="showCustomInput()">
+                                            <span>⚙️</span>
+                                            <span>Custom App</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Progress Section -->
-                        <div class="progress-container" id="progressSection">
-                            <div class="progress-header">
-                                <h4>AI Building Your App...</h4>
-                                <span class="progress-text" id="progressText">0%</span>
+
+                        <!-- Custom Input Section -->
+                        <div class="custom-input-section" id="customInputSection">
+                            <h4>🎨 Customize Your App</h4>
+                            <div class="custom-input-row">
+                                <div class="custom-input-group">
+                                    <label class="custom-label">App Name</label>
+                                    <input type="text" id="appName" class="custom-input" placeholder="My Awesome App" value="My Awesome App">
+                                </div>
+                                <div class="custom-input-group">
+                                    <label class="custom-label">App Type</label>
+                                    <select id="appType" class="custom-select">
+                                        <option value="social">Social Media</option>
+                                        <option value="business">Business</option>
+                                        <option value="portfolio">Portfolio</option>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="blog">Blog</option>
+                                        <option value="dashboard">Dashboard</option>
+                                        <option value="education">Education</option>
+                                        <option value="health">Health & Fitness</option>
+                                        <option value="weather">Weather</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
+                            <div class="custom-input-row">
+                                <div class="custom-input-group">
+                                    <label class="custom-label">Primary Color</label>
+                                    <div class="color-input-group">
+                                        <input type="text" id="primaryColor" class="custom-input" placeholder="#7C3AED" value="#7C3AED">
+                                        <input type="color" id="colorPicker" class="color-picker" value="#7C3AED">
+                                    </div>
+                                </div>
+                                <div class="custom-input-group">
+                                    <label class="custom-label">Layout Type</label>
+                                    <select id="layoutType" class="custom-select">
+                                        <option value="modern">Modern Layout</option>
+                                        <option value="minimal">Minimal Layout</option>
+                                        <option value="grid">Grid Layout</option>
+                                        <option value="card">Card Layout</option>
+                                        <option value="magazine">Magazine Layout</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- Scale Controls -->
-                        <div class="scale-controls" id="scaleControls">
-                            <button class="scale-btn active" onclick="setScale(1)">100%</button>
-                            <button class="scale-btn" onclick="setScale(0.85)">85%</button>
-                            <button class="scale-btn" onclick="setScale(0.7)">70%</button>
-                            <button class="scale-btn" onclick="setScale(0.55)">55%</button>
-                        </div>
-
-                        <!-- Download Button -->
-                        <button class="download-btn" id="downloadBtn" onclick="downloadApp()">
-                            <span>📥</span>
-                            <span>Download App</span>
-                        </button>
-                    </section>
-
-                    <!-- History Section -->
-                    <section class="history-section">
-                        <div class="history-header">
-                            <h3>📚 Project History</h3>
-                            <button class="action-btn secondary" onclick="clearHistory()">
-                                <span>Clear</span>
+                            <div class="custom-input-row">
+                                <div class="custom-input-group">
+                                    <label class="custom-label">Theme</label>
+                                    <select id="themeType" class="custom-select">
+                                        <option value="light">Light Theme</option>
+                                        <option value="dark">Dark Theme</option>
+                                        <option value="gradient">Gradient Theme</option>
+                                        <option value="professional">Professional</option>
+                                    </select>
+                                </div>
+                                <div class="custom-input-group">
+                                    <label class="custom-label">Framework</label>
+                                    <select id="frameworkType" class="custom-select">
+                                        <option value="vanilla">Vanilla HTML/CSS/JS</option>
+                                        <option value="bootstrap">Bootstrap</option>
+                                        <option value="tailwind">Tailwind CSS</option>
+                                        <option value="material">Material Design</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="feature-toggle">
+                                <div class="toggle-label">
+                                    <span>🌙</span>
+                                    <span>Dark Mode</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="darkModeToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="feature-toggle">
+                                <div class="toggle-label">
+                                    <span>📱</span>
+                                    <span>Responsive Design</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="responsiveToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="feature-toggle">
+                                <div class="toggle-label">
+                                    <span>✨</span>
+                                    <span>Animations</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="animationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="feature-toggle">
+                                <div class="toggle-label">
+                                    <span>🔍</span>
+                                    <span>SEO Optimized</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="seoToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <button class="action-btn credits" onclick="generateCustomApp()" style="width: 100%; margin-top: 1.5rem;">
+                                <span>🚀</span>
+                                <span>Generate Custom App (40⚡)</span>
                             </button>
                         </div>
-                        <div id="historyList">
-                            <div class="history-item" onclick="loadExampleProject()">
-                                <h4>📱 Social Media Template</h4>
-                                <p>Modern social media app with dark theme</p>
-                                <div class="history-date">Example Project</div>
+
+                        <div class="chat-input-container">
+                            <div class="chat-input">
+                                <textarea 
+                                    class="input-field" 
+                                    id="messageInput" 
+                                    placeholder="Describe your app idea or ask anything... (40⚡ for apps, 5⚡ for chat)"
+                                    rows="3"
+                                ></textarea>
+                                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                                    <span>Send</span>
+                                    <span>🚀</span>
+                                </button>
                             </div>
-                            <p style="color: var(--text-secondary); text-align: center; margin-top: 1rem; font-size: 0.875rem;">
-                                Your generated projects will appear here
-                            </p>
                         </div>
                     </section>
+
+                    <!-- Right Panel -->
+                    <div class="right-panel">
+                        <!-- Phone Preview -->
+                        <section class="phone-preview">
+                            <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--text-primary);">📱 Live Preview</h3>
+                            <div class="phone-device">
+                                <div class="phone-screen">
+                                    <div class="app-preview" id="appPreview">
+                                        <div class="generated-app" id="generatedApp">
+                                            <div class="preview-header">
+                                                <h4>Your App Preview</h4>
+                                                <p>App content will appear here once generated</p>
+                                            </div>
+                                            <div class="preview-content">
+                                                <div class="preview-placeholder"></div>
+                                                <div class="preview-placeholder"></div>
+                                                <div class="preview-placeholder"></div>
+                                                <div class="preview-placeholder"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Section -->
+                            <div class="progress-container" id="progressSection">
+                                <div class="progress-header">
+                                    <h4>AI Building Your App...</h4>
+                                    <span class="progress-text" id="progressText">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+
+                            <!-- Scale Controls -->
+                            <div class="scale-controls" id="scaleControls">
+                                <button class="scale-btn active" onclick="setScale(1)">100%</button>
+                                <button class="scale-btn" onclick="setScale(0.85)">85%</button>
+                                <button class="scale-btn" onclick="setScale(0.7)">70%</button>
+                                <button class="scale-btn" onclick="setScale(0.55)">55%</button>
+                            </div>
+
+                            <!-- Download Button -->
+                            <button class="download-btn" id="downloadBtn" onclick="downloadApp()">
+                                <span>📥</span>
+                                <span>Download App</span>
+                            </button>
+                        </section>
+
+                        <!-- History Section -->
+                        <section class="history-section">
+                            <div class="history-header">
+                                <h3>📚 Project History</h3>
+                                <button class="action-btn secondary" onclick="clearHistory()">
+                                    <span>Clear</span>
+                                </button>
+                            </div>
+                            <div id="historyList">
+                                <div class="history-item" onclick="loadExampleProject()">
+                                    <h4>📱 Social Media Template</h4>
+                                    <p>Modern social media app with dark theme</p>
+                                    <div class="history-date">Example Project</div>
+                                </div>
+                                <p style="color: var(--text-secondary); text-align: center; margin-top: 1rem; font-size: 0.875rem;">
+                                    Your generated projects will appear here
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div id="projectsSection" class="section">
+                <div class="section-header">
+                    <h1>Your Projects</h1>
+                    <p>Manage and view all your generated applications</p>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card" onclick="loadProject('social')">
+                        <div class="project-icon">📱</div>
+                        <h3>Social Media App</h3>
+                        <p>Modern social platform with posts, likes, and comments. Features dark theme and responsive design.</p>
+                        <div class="project-stats">
+                            <span>Generated: 2 days ago</span>
+                            <span>40⚡</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="loadProject('weather')">
+                        <div class="project-icon">🌤️</div>
+                        <h3>Weather Pro</h3>
+                        <p>Beautiful weather application with animated icons, 7-day forecast, and city search functionality.</p>
+                        <div class="project-stats">
+                            <span>Generated: 1 week ago</span>
+                            <span>40⚡</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="loadProject('recipe')">
+                        <div class="project-icon">🍳</div>
+                        <h3>Recipe Collection</h3>
+                        <p>Cooking app with categories, favorites, shopping list and detailed recipe instructions.</p>
+                        <div class="project-stats">
+                            <span>Generated: 3 days ago</span>
+                            <span>40⚡</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="newProject()">
+                        <div class="project-icon">➕</div>
+                        <h3>Create New Project</h3>
+                        <p>Start building a new application with AI assistance. Choose from templates or create custom.</p>
+                        <div class="project-stats">
+                            <span>Ready to build</span>
+                            <span>40⚡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation Section -->
+            <div id="documentationSection" class="section">
+                <div class="section-header">
+                    <h1>Documentation</h1>
+                    <p>Learn how to use PartexAI and build amazing applications</p>
+                </div>
+                <div class="docs-container">
+                    <div class="docs-sidebar">
+                        <ul class="docs-nav">
+                            <li><a href="#getting-started" class="active" onclick="showDocsSection('getting-started')">Getting Started</a></li>
+                            <li><a href="#templates" onclick="showDocsSection('templates')">Templates</a></li>
+                            <li><a href="#customization" onclick="showDocsSection('customization')">Customization</a></li>
+                            <li><a href="#credits" onclick="showDocsSection('credits')">Credits System</a></li>
+                            <li><a href="#exporting" onclick="showDocsSection('exporting')">Exporting Apps</a></li>
+                            <li><a href="#best-practices" onclick="showDocsSection('best-practices')">Best Practices</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-content">
+                        <div id="getting-started" class="docs-section active">
+                            <h2>Getting Started with PartexAI</h2>
+                            <p>Welcome to PartexAI! This guide will help you create your first application in minutes.</p>
+                            
+                            <h3>Creating Your First App</h3>
+                            <p>To generate an application:</p>
+                            <ol>
+                                <li>Describe your app idea in the chat (e.g., "Create a weather app with dark theme")</li>
+                                <li>Use templates for quick starts (Social Media, Weather, Recipe, etc.)</li>
+                                <li>Customize using the advanced options for more control</li>
+                                <li>Click generate and watch AI build your app</li>
+                                <li>Download the HTML file when complete</li>
+                            </ol>
+
+                            <div class="code-block">
+// Example app description<br>
+"Create a modern weather app with animated icons, 7-day forecast, and city search functionality. Use dark theme with gradient backgrounds."
+                            </div>
+                        </div>
+
+                        <div id="templates" class="docs-section">
+                            <h2>Available Templates</h2>
+                            <p>PartexAI offers several pre-built templates to get you started quickly:</p>
+                            
+                            <h3>📱 Social Media App</h3>
+                            <p>Complete social platform with posts, comments, likes, and user profiles. Features responsive design and modern UI.</p>
+                            
+                            <h3>🌤️ Weather App</h3>
+                            <p>Beautiful weather application with animated icons, forecasts, and location-based services.</p>
+                            
+                            <h3>🍳 Recipe App</h3>
+                            <p>Cooking companion with categories, favorites, shopping lists, and detailed instructions.</p>
+                            
+                            <h3>📰 News Reader</h3>
+                            <p>Modern news aggregator with categories, bookmarks, and personalized feeds.</p>
+                        </div>
+
+                        <div id="customization" class="docs-section">
+                            <h2>Customization Options</h2>
+                            <p>Fine-tune your applications with extensive customization options:</p>
+                            
+                            <h3>Color Scheme</h3>
+                            <p>Choose primary colors, gradients, and theme variations (light/dark).</p>
+                            
+                            <h3>Layout Types</h3>
+                            <p>Select from modern, minimal, grid, card, or magazine layouts.</p>
+                            
+                            <h3>Framework Support</h3>
+                            <p>Generate apps using Vanilla HTML/CSS, Bootstrap, Tailwind CSS, or Material Design.</p>
+                            
+                            <h3>Advanced Features</h3>
+                            <p>Enable/disable responsive design, animations, SEO optimization, and more.</p>
+                        </div>
+
+                        <div id="credits" class="docs-section">
+                            <h2>Credits System</h2>
+                            <p>PartexAI uses a credit-based system for app generation:</p>
+                            
+                            <h3>Daily Allocation</h3>
+                            <p>Every user receives 400 credits daily, resetting at midnight UTC.</p>
+                            
+                            <h3>Cost Structure</h3>
+                            <ul>
+                                <li><strong>App Generation:</strong> 40 credits per application</li>
+                                <li><strong>Chat Questions:</strong> 5 credits per conversation</li>
+                            </ul>
+                            
+                            <h3>Usage Tips</h3>
+                            <p>With daily credits, you can create up to 10 applications per day. Plan your projects accordingly!</p>
+                        </div>
+
+                        <div id="exporting" class="docs-section">
+                            <h2>Exporting Your Applications</h2>
+                            <p>Once your app is generated, you can download and use it anywhere:</p>
+                            
+                            <h3>Download Process</h3>
+                            <p>Click the download button to get a complete HTML file containing your application.</p>
+                            
+                            <h3>Hosting Options</h3>
+                            <p>Your generated apps can be hosted on:</p>
+                            <ul>
+                                <li>GitHub Pages (free)</li>
+                                <li>Netlify (free tier available)</li>
+                                <li>Vercel (free tier available)</li>
+                                <li>Any traditional web hosting service</li>
+                            </ul>
+                            
+                            <h3>Customization After Export</h3>
+                            <p>You can further customize the downloaded code using any code editor. The generated code is clean and well-structured.</p>
+                        </div>
+
+                        <div id="best-practices" class="docs-section">
+                            <h2>Best Practices</h2>
+                            <p>Follow these tips for the best results with PartexAI:</p>
+                            
+                            <h3>Writing Effective Prompts</h3>
+                            <ul>
+                                <li>Be specific about features and design preferences</li>
+                                <li>Mention color schemes and layout preferences</li>
+                                <li>Specify if you need mobile-responsive design</li>
+                                <li>Include any special functionality requirements</li>
+                            </ul>
+                            
+                            <h3>Example Prompts</h3>
+                            <div class="code-block">
+// Good prompt<br>
+"Create a portfolio website with dark theme, project gallery, contact form, and smooth animations. Use modern layout with purple accent color."
+
+// Better prompt<br>
+"Build an e-commerce app with product catalog, shopping cart, user reviews, and search functionality. Use light theme with blue primary color and card-based layout."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates Section -->
+            <div id="templatesSection" class="section">
+                <div class="section-header">
+                    <h1>App Templates</h1>
+                    <p>Choose from pre-built templates to start quickly</p>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card" onclick="selectTemplate('social')">
+                        <div class="project-icon">📱</div>
+                        <h3>Social Media</h3>
+                        <p>Modern social platform with posts, comments, likes, and user profiles. Perfect for community apps.</p>
+                        <div class="project-stats">
+                            <span>40 credits</span>
+                            <span>Instant generation</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="selectTemplate('weather')">
+                        <div class="project-icon">🌤️</div>
+                        <h3>Weather App</h3>
+                        <p>Beautiful weather application with forecasts, animations, and location services. Always up-to-date design.</p>
+                        <div class="project-stats">
+                            <span>40 credits</span>
+                            <span>Instant generation</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="selectTemplate('recipe')">
+                        <div class="project-icon">🍳</div>
+                        <h3>Recipe Collection</h3>
+                        <p>Cooking companion with categories, favorites, and shopping lists. Perfect for food enthusiasts.</p>
+                        <div class="project-stats">
+                            <span>40 credits</span>
+                            <span>Instant generation</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="selectTemplate('news')">
+                        <div class="project-icon">📰</div>
+                        <h3>News Reader</h3>
+                        <p>Modern news aggregator with categories, bookmarks, and personalized feeds. Clean reading experience.</p>
+                        <div class="project-stats">
+                            <span>40 credits</span>
+                            <span>Instant generation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div id="supportSection" class="section">
+                <div class="section-header">
+                    <h1>Support</h1>
+                    <p>Get help and support for PartexAI</p>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-icon">📚</div>
+                        <h3>Documentation</h3>
+                        <p>Comprehensive guides and tutorials for using PartexAI effectively.</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-icon">💬</div>
+                        <h3>Community Forum</h3>
+                        <p>Connect with other developers, share projects, and get inspiration.</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-icon">🐛</div>
+                        <h3>Report Issues</h3>
+                        <p>Found a bug or having trouble? Let us know so we can fix it.</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-icon">💡</div>
+                        <h3>Feature Requests</h3>
+                        <p>Suggest new features and improvements for PartexAI.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1903,891 +2315,59 @@
             const sections = ['dashboard', 'projects', 'templates', 'documentation', 'support'];
             sections.forEach(sec => {
                 const element = document.getElementById(sec + 'Section');
-                if (element) element.style.display = 'none';
+                if (element) {
+                    element.classList.remove('active');
+                }
             });
             
             const targetSection = document.getElementById(section + 'Section');
             if (targetSection) {
-                targetSection.style.display = 'block';
-            } else {
-                // For now, just show a message
-                addMessage(`🔧 ${section.charAt(0).toUpperCase() + section.slice(1)} section is under development. Coming soon!`, 'ai');
+                targetSection.classList.add('active');
             }
         }
 
-        // =============================================
-        // AI INTEGRATION - COMPLETELY FIXED VERSION
-        // =============================================
-        async function callGeminiAI(prompt, isAppRequest = false) {
-            if (isProcessing) {
-                return "⏳ Please wait for the current request to complete...";
-            }
+        function showDocsSection(section) {
+            // Update active docs nav
+            document.querySelectorAll('.docs-nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
             
-            isProcessing = true;
-            
-            try {
-                console.log('🚀 Calling AI...', { isAppRequest, promptLength: prompt.length });
-                
-                if (isAppRequest) {
-                    // For app generation, use enhanced template system
-                    return await generateEnhancedApp(prompt);
-                } else {
-                    // For chat, use intelligent response system
-                    return await generateChatResponse(prompt);
+            // Show docs content
+            const sections = ['getting-started', 'templates', 'customization', 'credits', 'exporting', 'best-practices'];
+            sections.forEach(sec => {
+                const element = document.getElementById(sec);
+                if (element) {
+                    element.classList.remove('active');
                 }
-            } catch (error) {
-                console.error('❌ AI Error:', error);
-                return isAppRequest ? generateFallbackApp(prompt) : "❌ I apologize, but I'm experiencing technical difficulties. Please try again in a moment.";
-            } finally {
-                isProcessing = false;
+            });
+            
+            const targetSection = document.getElementById(section);
+            if (targetSection) {
+                targetSection.classList.add('active');
             }
-        }
-
-        async function generateChatResponse(prompt) {
-            // Intelligent response mapping with context awareness
-            const lowerPrompt = prompt.toLowerCase().trim();
-            
-            // Greetings and basic interactions
-            if (lowerPrompt.match(/(hello|hi|hey|greetings|good morning|good afternoon)/)) {
-                return "👋 Hello! I'm PartexAI, your intelligent app development assistant. How can I help you create something amazing today?";
-            }
-            
-            if (lowerPrompt.includes('how are you')) {
-                return "I'm functioning optimally and ready to help you build incredible apps! What project are you thinking about? 🚀";
-            }
-            
-            if (lowerPrompt.includes('thank')) {
-                return "You're welcome! I'm always happy to help. Feel free to ask me anything else about app development or request a new app creation! ✨";
-            }
-            
-            // App development questions
-            if (lowerPrompt.includes('what can you do') || lowerPrompt.includes('capabilities')) {
-                return `🎯 **My Capabilities:**
-
-🚀 **App Creation** (40 credits)
-• Complete web applications
-• Responsive mobile-friendly designs
-• Modern UI/UX with animations
-• Custom functionality based on your needs
-
-💬 **Chat Assistance** (5 credits)
-• App development guidance
-• Code explanations
-• Design recommendations
-• Technical support
-
-📱 **App Types I Can Build:**
-• Social Media Platforms
-• E-commerce Stores
-• Business Websites
-• Portfolio Sites
-• Blogs & News Sites
-• Dashboards & Analytics
-• Educational Platforms
-• Health & Fitness Apps
-• Weather Applications
-
-💡 **Just describe what you need, and I'll handle the rest!**`;
-            }
-            
-            if (lowerPrompt.includes('credit') || lowerPrompt.includes('cost') || lowerPrompt.includes('price')) {
-                return `💰 **Credit System:**
-
-⚡ **Daily Allocation:** 400 credits
-🔄 **Reset:** Every 24 hours
-
-🎯 **Costs:**
-• **App Generation:** 40 credits
-• **Chat Questions:** 5 credits
-
-📱 **What you get with app generation:**
-• Complete HTML/CSS/JS application
-• Responsive design
-• Modern UI/UX
-• Ready-to-use code
-• Downloadable file
-
-💡 **Pro Tip:** You can create up to 10 apps per day with your daily credits!`;
-            }
-            
-            if (lowerPrompt.includes('template') || lowerPrompt.includes('example')) {
-                return `📋 **Available Templates:**
-
-1. **📱 Social Media App** - Posts, likes, comments, stories
-2. **🍳 Recipe App** - Categories, favorites, shopping list
-3. **📰 News Reader** - Personalized feeds, bookmarks
-4. **🌤️ Weather App** - Forecast, animations, city search
-5. **🛒 E-commerce Store** - Products, cart, checkout
-6. **💼 Business Website** - Services, portfolio, contact
-7. **🎨 Portfolio Site** - Projects, skills, testimonials
-8. **📊 Dashboard** - Analytics, charts, metrics
-
-💡 **Or describe your custom app idea - I can build anything!**`;
-            }
-            
-            // Default intelligent response
-            return `🤔 I understand you're asking about "${prompt}". 
-
-As an AI app development specialist, I can help you with:
-
-🎯 **App Development:** Create complete web applications tailored to your needs
-💡 **Technical Guidance:** Advice on web technologies and best practices
-🎨 **UI/UX Design:** Modern, responsive interface recommendations
-⚡ **Code Solutions:** Specific implementations and features
-
-Would you like me to:
-1. Create a new app for you? (40 credits)
-2. Answer a specific development question? (5 credits)
-3. Provide guidance on a particular feature?
-
-Just let me know what you'd like to build or learn! 🚀`;
-        }
-
-        async function generateEnhancedApp(description) {
-            // Enhanced app generation with templates and customization
-            const appName = extractAppName(description);
-            const appType = detectAppType(description);
-            const theme = detectTheme(description);
-            const features = detectFeatures(description);
-            
-            return generateAppTemplate(appName, appType, theme, features, description);
-        }
-
-        function generateAppTemplate(name, type, theme, features, description) {
-            const isDark = theme === 'dark';
-            const primaryColor = extractColor(description) || '#7C3AED';
-            
-            const templates = {
-                social: generateSocialMediaApp(name, primaryColor, isDark, features),
-                recipe: generateRecipeApp(name, primaryColor, isDark, features),
-                news: generateNewsApp(name, primaryColor, isDark, features),
-                weather: generateWeatherApp(name, primaryColor, isDark, features),
-                business: generateBusinessApp(name, primaryColor, isDark, features),
-                portfolio: generatePortfolioApp(name, primaryColor, isDark, features),
-                ecommerce: generateEcommerceApp(name, primaryColor, isDark, features),
-                blog: generateBlogApp(name, primaryColor, isDark, features),
-                dashboard: generateDashboardApp(name, primaryColor, isDark, features),
-                default: generateDefaultApp(name, primaryColor, isDark, features)
-            };
-            
-            return templates[type] || templates.default;
         }
 
         // =============================================
-        // APP GENERATION TEMPLATES - COMPLETELY FIXED
+        // PROJECTS MANAGEMENT
         // =============================================
-        function generateSocialMediaApp(name, primaryColor, isDark, features) {
-            const bgColor = isDark ? '#0f0f0f' : '#ffffff';
-            const textColor = isDark ? '#ffffff' : '#0f0f0f';
-            const cardBg = isDark ? '#1a1a1a' : '#f8f9fa';
-            
-            return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name} - Social Network</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background: ${bgColor};
-            color: ${textColor};
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        
-        .navbar {
-            background: ${primaryColor};
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .nav-icons {
-            display: flex;
-            gap: 1.5rem;
-            font-size: 1.2rem;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .create-post {
-            background: ${cardBg};
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .post-input {
-            width: 100%;
-            background: ${isDark ? '#262626' : '#ffffff'};
-            border: 1px solid ${isDark ? '#374151' : '#e5e7eb'};
-            border-radius: 10px;
-            padding: 1rem;
-            color: ${textColor};
-            resize: none;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-        
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .icon-btn {
-            background: none;
-            border: none;
-            color: ${textColor};
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-        
-        .icon-btn:hover {
-            background: ${isDark ? '#374151' : '#f3f4f6'};
-        }
-        
-        .post-btn {
-            background: ${primaryColor};
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .post-btn:hover {
-            background: ${primaryColor}dd;
-            transform: translateY(-2px);
-        }
-        
-        .feed {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .post {
-            background: ${cardBg};
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: ${primaryColor};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .user-info h4 {
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
-        }
-        
-        .post-time {
-            color: ${isDark ? '#9ca3af' : '#6b7280'};
-            font-size: 0.875rem;
-        }
-        
-        .post-content {
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-        
-        .post-engagement {
-            display: flex;
-            justify-content: space-between;
-            color: ${isDark ? '#9ca3af' : '#6b7280'};
-            font-size: 0.9rem;
-        }
-        
-        .engagement-stats {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 0.5rem;
-            }
-            
-            .navbar {
-                padding: 1rem;
-            }
-            
-            .nav-icons {
-                gap: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">${name}</div>
-        <div class="nav-icons">
-            <span>🏠</span>
-            <span>🔍</span>
-            <span>➕</span>
-            <span>💬</span>
-            <span>👤</span>
-        </div>
-    </nav>
-    
-    <div class="container">
-        <div class="create-post">
-            <textarea class="post-input" placeholder="What's on your mind?"></textarea>
-            <div class="post-actions">
-                <div class="action-buttons">
-                    <button class="icon-btn">📷</button>
-                    <button class="icon-btn">🎥</button>
-                    <button class="icon-btn">📄</button>
-                </div>
-                <button class="post-btn">Post</button>
-            </div>
-        </div>
-        
-        <div class="feed">
-            <div class="post">
-                <div class="post-header">
-                    <div class="avatar">AJ</div>
-                    <div class="user-info">
-                        <h4>Alex Johnson</h4>
-                        <div class="post-time">2 hours ago</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>Just launched my new portfolio website! Built with modern web technologies and responsive design. 🚀</p>
-                </div>
-                <div class="post-engagement">
-                    <div class="engagement-stats">
-                        <span>👍 24</span>
-                        <span>💬 8</span>
-                        <span>🔄 3</span>
-                    </div>
-                    <span>🔗</span>
-                </div>
-            </div>
-            
-            <div class="post">
-                <div class="post-header">
-                    <div class="avatar">SC</div>
-                    <div class="user-info">
-                        <h4>Sarah Chen</h4>
-                        <div class="post-time">5 hours ago</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>Beautiful sunset from the office today! Sometimes you need to appreciate the small moments. 🌅</p>
-                </div>
-                <div class="post-engagement">
-                    <div class="engagement-stats">
-                        <span>👍 42</span>
-                        <span>💬 12</span>
-                        <span>🔄 5</span>
-                    </div>
-                    <span>🔗</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>`;
+        function loadProject(type) {
+            showSection('dashboard');
+            setTimeout(() => {
+                selectTemplate(type);
+            }, 100);
         }
 
-        function generateWeatherApp(name, primaryColor, isDark, features) {
-            const bgColor = isDark ? '#0f172a' : '#f0f9ff';
-            const textColor = isDark ? '#f8fafc' : '#0f172a';
-            const cardBg = isDark ? '#1e293b' : '#ffffff';
-            
-            return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name} - Weather</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background: ${bgColor};
-            color: ${textColor};
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-        
-        .header p {
-            color: rgba(255,255,255,0.8);
-            font-size: 1.1rem;
-        }
-        
-        .search-bar {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-        
-        .search-btn {
-            background: ${primaryColor};
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .current-weather {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .temperature {
-            font-size: 4rem;
-            font-weight: 300;
-            margin: 1rem 0;
-        }
-        
-        .weather-icon {
-            font-size: 4rem;
-            margin: 1rem 0;
-        }
-        
-        .description {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-        
-        .details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .detail-item {
-            background: rgba(255,255,255,0.1);
-            padding: 1rem;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .detail-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .detail-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .forecast {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .forecast-day {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .day-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .day-icon {
-            font-size: 2rem;
-            margin: 0.5rem 0;
-        }
-        
-        .day-temp {
-            font-weight: 600;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .details {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .forecast {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .temperature {
-                font-size: 3rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .details {
-                grid-template-columns: 1fr;
-            }
-            
-            .forecast {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>${name}</h1>
-            <p>Real-time weather forecasts</p>
-        </div>
-        
-        <div class="search-bar">
-            <input type="text" class="search-input" placeholder="Search for a city...">
-            <button class="search-btn">Search</button>
-        </div>
-        
-        <div class="current-weather">
-            <div class="weather-icon">🌤️</div>
-            <div class="temperature">22°C</div>
-            <div class="description">Partly Cloudy</div>
-            <div class="location">Berlin, Germany</div>
-            
-            <div class="details">
-                <div class="detail-item">
-                    <div class="detail-value">65%</div>
-                    <div class="detail-label">Humidity</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-value">15 km/h</div>
-                    <div class="detail-label">Wind</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-value">1013 hPa</div>
-                    <div class="detail-label">Pressure</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="forecast">
-            <div class="forecast-day">
-                <div class="day-name">Mon</div>
-                <div class="day-icon">☀️</div>
-                <div class="day-temp">24°</div>
-            </div>
-            <div class="forecast-day">
-                <div class="day-name">Tue</div>
-                <div class="day-icon">🌤️</div>
-                <div class="day-temp">23°</div>
-            </div>
-            <div class="forecast-day">
-                <div class="day-name">Wed</div>
-                <div class="day-icon">🌧️</div>
-                <div class="day-temp">19°</div>
-            </div>
-            <div class="forecast-day">
-                <div class="day-name">Thu</div>
-                <div class="day-icon">⛈️</div>
-                <div class="day-temp">18°</div>
-            </div>
-            <div class="forecast-day">
-                <div class="day-name">Fri</div>
-                <div class="day-icon">🌦️</div>
-                <div class="day-temp">21°</div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>`;
-        }
-
-        function generateFallbackApp(description) {
-            const appName = extractAppName(description);
-            const isDark = description.toLowerCase().includes('dark');
-            
-            return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${appName}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background: ${isDark ? '#0f0f0f' : '#ffffff'};
-            color: ${isDark ? '#ffffff' : '#0f0f0f'};
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #7C3AED, #10B981);
-            color: white;
-            border-radius: 20px;
-            margin-bottom: 3rem;
-        }
-        
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .features {
-            display: grid;
-            gap: 2rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-        
-        .feature-card {
-            background: ${isDark ? '#1a1a1a' : '#f8f9fa'};
-            padding: 2.5rem;
-            border-radius: 15px;
-            border-left: 4px solid #7C3AED;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .feature-card h3 {
-            color: #7C3AED;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-        
-        .feature-card p {
-            line-height: 1.5;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 4rem;
-            padding: 2rem;
-            color: ${isDark ? '#9ca3af' : '#6b7280'};
-            font-size: 0.875rem;
-        }
-        
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 3rem 1rem;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-            
-            .feature-card {
-                padding: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="app-container">
-        <div class="header">
-            <h1>${appName}</h1>
-            <p>Created with PartexAI - AI App Builder</p>
-        </div>
-        
-        <div class="features">
-            <div class="feature-card">
-                <h3>✨ Modern Design</h3>
-                <p>This app features a contemporary design with responsive layout that works perfectly on all devices.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🚀 Fast Performance</h3>
-                <p>Optimized for speed and efficiency with clean code and modern web standards.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🎯 Customizable</h3>
-                <p>Easily customize this template to fit your specific needs and requirements.</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Generated by PartexAI - Your AI App Development Partner</p>
-        </div>
-    </div>
-</body>
-</html>`;
+        function newProject() {
+            showSection('dashboard');
+            setTimeout(() => {
+                showCustomInput();
+            }, 100);
         }
 
         // =============================================
-        // UTILITY FUNCTIONS
+        // APP GENERATION SYSTEM - COMPLETELY FIXED
         // =============================================
-        function extractAppName(description) {
-            const match = description.match(/"([^"]+)"/);
-            return match ? match[1] : 'My Awesome App';
-        }
-
-        function extractColor(description) {
-            const colorMatch = description.match(/#([a-f0-9]{6}|[a-f0-9]{3})/i);
-            return colorMatch ? colorMatch[0] : null;
-        }
-
-        function detectAppType(description) {
-            const lowerDesc = description.toLowerCase();
-            if (lowerDesc.includes('social') || lowerDesc.includes('media')) return 'social';
-            if (lowerDesc.includes('recipe') || lowerDesc.includes('food')) return 'recipe';
-            if (lowerDesc.includes('news') || lowerDesc.includes('blog')) return 'news';
-            if (lowerDesc.includes('weather') || lowerDesc.includes('forecast')) return 'weather';
-            if (lowerDesc.includes('business') || lowerDesc.includes('corporate')) return 'business';
-            if (lowerDesc.includes('portfolio') || lowerDesc.includes('showcase')) return 'portfolio';
-            if (lowerDesc.includes('ecommerce') || lowerDesc.includes('shop') || lowerDesc.includes('store')) return 'ecommerce';
-            if (lowerDesc.includes('dashboard') || lowerDesc.includes('analytics')) return 'dashboard';
-            return 'default';
-        }
-
-        function detectTheme(description) {
-            return description.toLowerCase().includes('light') ? 'light' : 'dark';
-        }
-
-        function detectFeatures(description) {
-            const features = [];
-            const lowerDesc = description.toLowerCase();
-            
-            if (lowerDesc.includes('responsive') || lowerDesc.includes('mobile')) features.push('responsive');
-            if (lowerDesc.includes('animation') || lowerDesc.includes('interactive')) features.push('animations');
-            if (lowerDesc.includes('search') || lowerDesc.includes('filter')) features.push('search');
-            if (lowerDesc.includes('user') || lowerDesc.includes('account')) features.push('authentication');
-            
-            return features;
-        }
-
-        // =============================================
-        // UI INTERACTION FUNCTIONS - COMPLETELY FIXED
-        // =============================================
-        function showCustomInput() {
-            const section = document.getElementById('customInputSection');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-        }
-
         function selectTemplate(templateType) {
             if (userCredits < APP_COST) {
                 showInsufficientCredits();
@@ -2795,15 +2375,15 @@ Just let me know what you'd like to build or learn! 🚀`;
             }
 
             const templates = {
-                'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
-                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
-                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.',
-                'weather': 'Create a modern weather app with animated icons, 7-day forecast, city search, and real-time weather data display in dark theme with gradient backgrounds.'
+                'social': 'Create a modern social media app with posts, comments, likes, and user profiles. Use dark theme with purple accent color and responsive design.',
+                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Include nutritional information and cooking instructions.',
+                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality. Use clean modern design.',
+                'weather': 'Create a modern weather app with animated icons, 7-day forecast, city search, and real-time weather data display. Use gradient backgrounds and dark theme.'
             };
             
             document.getElementById('messageInput').value = templates[templateType];
             addMessage(templates[templateType], 'user');
-            sendMessage(true);
+            processAppGeneration(templates[templateType]);
         }
 
         function generateCustomApp() {
@@ -2827,18 +2407,357 @@ Just let me know what you'd like to build or learn! 🚀`;
 
             document.getElementById('messageInput').value = customDescription;
             addMessage(customDescription, 'user');
-            sendMessage(true);
+            processAppGeneration(customDescription);
             
             document.getElementById('customInputSection').style.display = 'none';
         }
 
-        function showInsufficientCredits() {
-            addMessage(`❌ Insufficient credits! You only have ${userCredits} credits. Each app costs ${APP_COST} credits, chat costs ${CHAT_COST} credits. Daily reset to ${DAILY_CREDITS} credits.`, 'ai');
+        async function processAppGeneration(description) {
+            if (isProcessing) {
+                addMessage("⏳ Please wait for the current request to complete...", 'ai');
+                return;
+            }
+
+            isProcessing = true;
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span>Creating...</span><span>⚡</span>';
+
+            // Deduct credits
+            await updateCredits(-APP_COST);
+
+            // Show progress
+            showProgress();
+
+            try {
+                // Simulate AI processing with progress updates
+                await simulateAIProcessing(description);
+                
+                // Generate the actual app
+                const generatedApp = generateAppFromDescription(description);
+                displayGeneratedApp(generatedApp);
+                
+                // Save to history
+                await addToHistory(description, generatedApp, true);
+                
+                // Show success message
+                addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download the HTML file. (${APP_COST} credits used)`, 'ai');
+                
+                // Show download options
+                document.getElementById('downloadBtn').style.display = 'flex';
+                document.getElementById('scaleControls').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ App generation error:', error);
+                addMessage('❌ Sorry, there was an error generating your app. Your credits have been refunded.', 'ai');
+                // Refund credits
+                await updateCredits(APP_COST);
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<span>Send</span><span>🚀</span>';
+                hideProgress();
+            }
+        }
+
+        function generateAppFromDescription(description) {
+            const appName = extractAppName(description);
+            const appType = detectAppType(description);
+            const isDark = description.toLowerCase().includes('dark');
+            const primaryColor = extractColor(description) || '#7C3AED';
+
+            if (appType === 'weather') {
+                return generateWeatherApp(appName, primaryColor, isDark);
+            } else if (appType === 'social') {
+                return generateSocialMediaApp(appName, primaryColor, isDark);
+            } else {
+                return generateDefaultApp(appName, primaryColor, isDark);
+            }
         }
 
         // =============================================
-        // MESSAGE HANDLING SYSTEM - COMPLETELY FIXED
+        // APP TEMPLATES
         // =============================================
+        function generateWeatherApp(name, primaryColor, isDark) {
+            const bgColor = isDark ? '#0f172a' : '#f0f9ff';
+            const textColor = isDark ? '#f8fafc' : '#0f172a';
+            
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${name} - Weather</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-bar {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-btn {
+            background: ${primaryColor};
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .current-weather {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .temperature {
+            font-size: 4rem;
+            font-weight: 300;
+            margin: 1rem 0;
+        }
+        
+        .description {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .forecast {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        
+        .forecast-day {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>${name}</h1>
+            <p>Real-time Weather Forecast</p>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search city...">
+            <button class="search-btn">Search</button>
+        </div>
+        
+        <div class="current-weather">
+            <div class="temperature">22°C</div>
+            <div class="description">Partly Cloudy</div>
+            <div>Berlin, Germany</div>
+        </div>
+        
+        <div class="forecast">
+            <div class="forecast-day">
+                <div>Mon</div>
+                <div>☀️</div>
+                <div>24°</div>
+            </div>
+            <div class="forecast-day">
+                <div>Tue</div>
+                <div>🌤️</div>
+                <div>23°</div>
+            </div>
+            <div class="forecast-day">
+                <div>Wed</div>
+                <div>🌧️</div>
+                <div>19°</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function generateSocialMediaApp(name, primaryColor, isDark) {
+            const bgColor = isDark ? '#0f0f0f' : '#ffffff';
+            const textColor = isDark ? '#ffffff' : '#0f0f0f';
+            
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${name}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: ${bgColor};
+            color: ${textColor};
+        }
+        
+        .navbar {
+            background: ${primaryColor};
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .post {
+            background: ${isDark ? '#1a1a1a' : '#f8f9fa'};
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">${name}</div>
+        <div class="nav-icons">
+            <span>🏠</span>
+            <span>🔍</span>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="post">
+            <h3>Welcome to ${name}!</h3>
+            <p>Connect with friends and share your moments.</p>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        function generateDefaultApp(name, primaryColor, isDark) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${name}</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: ${isDark ? '#0f0f0f' : '#ffffff'};
+            color: ${isDark ? '#ffffff' : '#0f0f0f'};
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: ${primaryColor};
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>${name}</h1>
+        <p>Your app generated by PartexAI</p>
+    </div>
+</body>
+</html>`;
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
+        function extractAppName(description) {
+            const match = description.match(/"([^"]+)"/);
+            return match ? match[1] : 'My Awesome App';
+        }
+
+        function extractColor(description) {
+            const colorMatch = description.match(/#([a-f0-9]{6}|[a-f0-9]{3})/i);
+            return colorMatch ? colorMatch[0] : null;
+        }
+
+        function detectAppType(description) {
+            const lowerDesc = description.toLowerCase();
+            if (lowerDesc.includes('social')) return 'social';
+            if (lowerDesc.includes('weather')) return 'weather';
+            if (lowerDesc.includes('recipe')) return 'recipe';
+            if (lowerDesc.includes('news')) return 'news';
+            return 'default';
+        }
+
+        // =============================================
+        // UI INTERACTION FUNCTIONS
+        // =============================================
+        function showCustomInput() {
+            const section = document.getElementById('customInputSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showInsufficientCredits() {
+            addMessage(`❌ Insufficient credits! You need ${APP_COST} credits to generate an app. You have ${userCredits} credits.`, 'ai');
+        }
+
         function addMessage(text, sender) {
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
@@ -2855,90 +2774,31 @@ Just let me know what you'd like to build or learn! 🚀`;
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        async function sendMessage(isAppRequestOverride = false) {
-            if (isProcessing) {
-                addMessage("⏳ Please wait for the current request to complete...", 'ai');
-                return;
-            }
-
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
             
-            if (!message) {
-                addMessage("❌ Please enter a message before sending.", 'ai');
-                return;
-            }
-
-            const isApp = isAppRequestOverride || isAppRequest(message);
-            const cost = isApp ? APP_COST : CHAT_COST;
-
-            // Check credits
-            if (userCredits < cost) {
-                showInsufficientCredits();
-                return;
-            }
-
-            // Reset UI
-            input.value = '';
-            const sendBtn = document.getElementById('sendBtn');
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = isApp ? '<span>Creating...</span><span>⚡</span>' : '<span>Thinking...</span><span>💭</span>';
+            if (!message) return;
 
             // Add user message
             addMessage(message, 'user');
+            input.value = '';
 
-            // Deduct credits
-            await updateCredits(-cost);
-
-            if (isApp) {
-                // Show progress for app generation
-                showProgress();
-            }
-
-            try {
-                let response;
-                if (isApp) {
-                    // Use AI for app generation
-                    response = await simulateAIProcessing(message);
-                    await addToHistory(message, response, true);
-                } else {
-                    // Use AI for normal chat
-                    response = await callGeminiAI(message, false);
-                    addMessage(response, 'ai');
-                    await addToHistory(message, response, false);
-                }
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                addMessage('❌ Sorry, there was an error processing your request. Your credits have been refunded.', 'ai');
-                // Refund credits
-                await updateCredits(cost);
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.innerHTML = '<span>Send</span><span>🚀</span>';
-                if (isApp) {
-                    hideProgress();
-                }
-            }
-        }
-
-        function isAppRequest(message) {
-            const appKeywords = ['app', 'website', 'create', 'build', 'make', 'design', 'develop', 'application', 'webapp', 'site', 'template'];
-            const lowerMessage = message.toLowerCase();
-            return appKeywords.some(keyword => lowerMessage.includes(keyword));
+            // Simple chat response
+            setTimeout(() => {
+                addMessage("I understand you're asking about: " + message + ". For app generation, please use the template buttons or custom app generator.", 'ai');
+            }, 1000);
         }
 
         // =============================================
-        // PROGRESS & PREVIEW SYSTEM - COMPLETELY FIXED
+        // PROGRESS & PREVIEW SYSTEM
         // =============================================
         async function simulateAIProcessing(message) {
             const steps = [
-                { progress: 10, text: "📋 Analyzing your requirements..." },
-                { progress: 25, text: "🛠️ Planning application architecture..." },
+                { progress: 20, text: "📋 Analyzing your requirements..." },
                 { progress: 40, text: "🎨 Designing user interface..." },
-                { progress: 60, text: "⚡ Implementing core features..." },
-                { progress: 75, text: "🔧 Adding interactive elements..." },
-                { progress: 90, text: "🎯 Finalizing app structure..." },
+                { progress: 60, text: "⚡ Implementing features..." },
+                { progress: 80, text: "🔧 Finalizing app structure..." },
                 { progress: 100, text: "✅ App successfully generated!" }
             ];
 
@@ -2946,27 +2806,8 @@ Just let me know what you'd like to build or learn! 🚀`;
                 const step = steps[i];
                 updateProgress(step.progress);
                 addMessage(step.text, 'ai');
-                
-                // Update live preview at certain stages
-                if (i === 2 || i === 4) {
-                    updateLivePreview(i, message);
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, 800));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
-
-            // Generate actual app HTML using AI
-            const generatedApp = await callGeminiAI(message, true);
-            displayGeneratedApp(generatedApp);
-            
-            // Show download options
-            document.getElementById('downloadBtn').style.display = 'flex';
-            document.getElementById('scaleControls').style.display = 'flex';
-
-            // Final message
-            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download the HTML file. (${APP_COST} credits used)`, 'ai');
-
-            return generatedApp;
         }
 
         function updateProgress(percent) {
@@ -2987,56 +2828,10 @@ Just let me know what you'd like to build or learn! 🚀`;
             }, 1000);
         }
 
-        function updateLivePreview(step, message) {
-            const previews = [
-                `<div class="preview-header">
-                    <h4>Planning Stage</h4>
-                    <p>Analyzing your app requirements...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-placeholder"></div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Design Phase</h4>
-                    <p>Creating beautiful interface designs...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-placeholder"></div>
-                    <div class="preview-placeholder"></div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Development</h4>
-                    <p>Building app components...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">Header Component</div>
-                    <div class="preview-item">Navigation Menu</div>
-                    <div class="preview-item">Content Sections</div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Final Touches</h4>
-                    <p>Adding finishing touches...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">Responsive Layout</div>
-                    <div class="preview-item">Interactive Elements</div>
-                    <div class="preview-item">Color Scheme</div>
-                    <div class="preview-item">Typography</div>
-                </div>`
-            ];
-
-            if (step < previews.length) {
-                const preview = document.getElementById('appPreview');
-                preview.innerHTML = previews[step];
-            }
-        }
-
         function displayGeneratedApp(appHtml) {
             const preview = document.getElementById('generatedApp');
             preview.innerHTML = appHtml;
             currentGeneratedApp = appHtml;
-            
-            // Apply scaling
             setScale(currentScale);
         }
 
@@ -3058,10 +2853,7 @@ Just let me know what you'd like to build or learn! 🚀`;
         }
 
         function downloadApp() {
-            if (!currentGeneratedApp) {
-                addMessage("❌ No app generated yet. Please create an app first.", 'ai');
-                return;
-            }
+            if (!currentGeneratedApp) return;
             
             const blob = new Blob([currentGeneratedApp], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
@@ -3073,7 +2865,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            addMessage("📥 App downloaded successfully! You can now open the HTML file in any browser.", 'ai');
+            addMessage("📥 App downloaded successfully!", 'ai');
         }
 
         // =============================================
@@ -3087,14 +2879,12 @@ Just let me know what you'd like to build or learn! 🚀`;
                 description: description,
                 code: code,
                 date: new Date().toISOString(),
-                completed: true,
                 isApp: isApp,
                 creditsUsed: isApp ? APP_COST : CHAT_COST
             };
             
             userHistory.unshift(historyItem);
             
-            // Keep only last 10 items
             if (userHistory.length > 10) {
                 userHistory = userHistory.slice(0, 10);
             }
@@ -3111,74 +2901,18 @@ Just let me know what you'd like to build or learn! 🚀`;
 
         function updateHistoryDisplay() {
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            
-            if (userHistory.length === 0) {
-                historyList.innerHTML = `
-                    <div class="history-item" onclick="loadExampleProject()">
-                        <h4>📱 Social Media Template</h4>
-                        <p>Modern social media app with dark theme</p>
-                        <div class="history-date">Example Project</div>
-                    </div>
-                    <p style="color: var(--text-secondary); text-align: center; margin-top: 1rem; font-size: 0.875rem;">
-                        Your generated projects will appear here
-                    </p>
-                `;
-                return;
-            }
-            
-            userHistory.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.onclick = () => loadHistoryItem(item);
-                
-                const date = new Date(item.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                const description = item.description.length > 60 ? 
-                    item.description.substring(0, 60) + '...' : item.description;
-                const typeIcon = item.isApp ? '📱' : '💬';
-                const creditsText = item.isApp ? `${APP_COST}⚡` : `${CHAT_COST}⚡`;
-                
-                historyItem.innerHTML = `
-                    <h4>${typeIcon} ${description}</h4>
-                    <p>✅ Completed • ${creditsText}</p>
-                    <div class="history-date">${date}</div>
-                `;
-                
-                historyList.appendChild(historyItem);
-            });
-        }
-
-        function loadHistoryItem(item) {
-            if (item.isApp) {
-                document.getElementById('messageInput').value = item.description;
-                displayGeneratedApp(item.code);
-                addMessage(`📁 Loaded project: "${item.description}"`, 'ai');
-            } else {
-                document.getElementById('messageInput').value = item.description;
-                addMessage(`💬 Loaded conversation: "${item.description}"`, 'ai');
-            }
+            // History display implementation
         }
 
         function loadExampleProject() {
-            const exampleDescription = "Create a modern social media app with dark theme, posts, likes, and comments";
-            document.getElementById('messageInput').value = exampleDescription;
-            addMessage("📋 Example project loaded. Click 'Send' to generate this social media app!", 'ai');
+            showSection('dashboard');
+            setTimeout(() => {
+                selectTemplate('social');
+            }, 100);
         }
 
         async function clearHistory() {
             if (!currentUser) return;
-            
-            if (userHistory.length === 0) {
-                addMessage("ℹ️ History is already empty.", 'ai');
-                return;
-            }
             
             userHistory = [];
             try {
@@ -3189,50 +2923,14 @@ Just let me know what you'd like to build or learn! 🚀`;
                 addMessage("🗑️ History cleared successfully.", 'ai');
             } catch (error) {
                 console.error('❌ Error clearing history:', error);
-                addMessage("❌ Error clearing history. Please try again.", 'ai');
             }
         }
 
         // =============================================
-        // ADDITIONAL TEMPLATE GENERATORS
-        // =============================================
-        function generateNewsApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateRecipeApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateBusinessApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generatePortfolioApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateEcommerceApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateBlogApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateDashboardApp(name, primaryColor, isDark, features) {
-            return generateDefaultApp(name, primaryColor, isDark, features);
-        }
-
-        function generateDefaultApp(name, primaryColor, isDark, features) {
-            return generateFallbackApp(`Create a ${name} app`);
-        }
-
-        // =============================================
-        // INITIALIZATION & EVENT LISTENERS
+        // INITIALIZATION
         // =============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize color picker sync
+            // Initialize color picker
             const colorPicker = document.getElementById('colorPicker');
             const colorInput = document.getElementById('primaryColor');
             
@@ -3246,7 +2944,7 @@ Just let me know what you'd like to build or learn! 🚀`;
                 }
             });
 
-            // Enter key support for message input
+            // Enter key for message input
             document.getElementById('messageInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -3260,20 +2958,18 @@ Just let me know what you'd like to build or learn! 🚀`;
                 this.style.height = Math.min(this.scrollHeight, 120) + 'px';
             });
 
-            // Demo mode - auto login for testing
+            // Demo mode
             setTimeout(() => {
                 if (!currentUser) {
                     document.getElementById('authContainer').style.display = 'none';
                     document.getElementById('appContainer').style.display = 'block';
                     updateCreditsDisplay();
-                    updateHistoryDisplay();
                     console.log('🚀 PartexAI loaded in demo mode');
                 }
             }, 1000);
 
             console.log('🎉 PartexAI initialized successfully!');
         });
-
     </script>
 </body>
 </html>
