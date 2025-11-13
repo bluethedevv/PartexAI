@@ -1327,74 +1327,6 @@
                 padding: 1rem;
             }
         }
-
-        /* Utility Classes */
-        .text-gradient {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .bg-gradient {
-            background: var(--gradient-primary);
-        }
-
-        .shadow-glow {
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-2px);
-        }
-
-        .smooth-transition {
-            transition: var(--transition);
-        }
-
-        /* Loading States */
-        .loading {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-
-        /* Focus States */
-        .focus-visible:focus {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        /* Selection */
-        ::selection {
-            background: rgba(124, 58, 237, 0.3);
-            color: white;
-        }
-
-        /* Print Styles */
-        @media print {
-            .header,
-            .chat-input-container,
-            .phone-preview,
-            .history-section {
-                display: none;
-            }
-            
-            .chat-section {
-                box-shadow: none;
-                border: none;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1458,11 +1390,11 @@
                 <nav class="nav">
                     <div class="logo">PartexAI</div>
                     <div class="nav-links">
-                        <a href="#" class="nav-link active">Dashboard</a>
-                        <a href="#" class="nav-link">Projects</a>
-                        <a href="#" class="nav-link">Templates</a>
-                        <a href="#" class="nav-link">Documentation</a>
-                        <a href="#" class="nav-link">Support</a>
+                        <a href="#" class="nav-link active" onclick="showSection('dashboard')">Dashboard</a>
+                        <a href="#" class="nav-link" onclick="showSection('projects')">Projects</a>
+                        <a href="#" class="nav-link" onclick="showSection('templates')">Templates</a>
+                        <a href="#" class="nav-link" onclick="showSection('documentation')">Documentation</a>
+                        <a href="#" class="nav-link" onclick="showSection('support')">Support</a>
                     </div>
                     <div class="user-section">
                         <div class="credits-badge" id="creditsDisplay">
@@ -1648,15 +1580,17 @@
                         <div class="phone-device">
                             <div class="phone-screen">
                                 <div class="app-preview" id="appPreview">
-                                    <div class="preview-header">
-                                        <h4>Your App Preview</h4>
-                                        <p>App content will appear here once generated</p>
-                                    </div>
-                                    <div class="preview-content">
-                                        <div class="preview-placeholder"></div>
-                                        <div class="preview-placeholder"></div>
-                                        <div class="preview-placeholder"></div>
-                                        <div class="preview-placeholder"></div>
+                                    <div class="generated-app" id="generatedApp">
+                                        <div class="preview-header">
+                                            <h4>Your App Preview</h4>
+                                            <p>App content will appear here once generated</p>
+                                        </div>
+                                        <div class="preview-content">
+                                            <div class="preview-placeholder"></div>
+                                            <div class="preview-placeholder"></div>
+                                            <div class="preview-placeholder"></div>
+                                            <div class="preview-placeholder"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1955,6 +1889,32 @@
         }
 
         // =============================================
+        // NAVIGATION SYSTEM
+        // =============================================
+        function showSection(section) {
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show section content
+            const sections = ['dashboard', 'projects', 'templates', 'documentation', 'support'];
+            sections.forEach(sec => {
+                const element = document.getElementById(sec + 'Section');
+                if (element) element.style.display = 'none';
+            });
+            
+            const targetSection = document.getElementById(section + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            } else {
+                // For now, just show a message
+                addMessage(`🔧 ${section.charAt(0).toUpperCase() + section.slice(1)} section is under development. Coming soon!`, 'ai');
+            }
+        }
+
+        // =============================================
         // AI INTEGRATION - FIXED VERSION
         // =============================================
         async function callGeminiAI(prompt, isAppRequest = false) {
@@ -2063,27 +2023,6 @@
 💡 **Or describe your custom app idea - I can build anything!**`;
             }
             
-            // Technical questions
-            if (lowerPrompt.includes('html') || lowerPrompt.includes('css') || lowerPrompt.includes('javascript')) {
-                return `💻 **Web Development Support:**
-
-I specialize in creating complete web applications using:
-• **HTML5** - Semantic structure and accessibility
-• **CSS3** - Modern styling with Flexbox/Grid
-• **JavaScript** - Interactive functionality
-• **Responsive Design** - Mobile-first approach
-• **Modern UI/UX** - Clean, professional interfaces
-
-🔧 **I can help with:**
-• Code structure and best practices
-• Responsive design techniques
-• Performance optimization
-• Cross-browser compatibility
-• Modern CSS features
-
-🚀 **Want me to build a specific component or feature?**`;
-            }
-            
             // Default intelligent response
             return `🤔 I understand you're asking about "${prompt}". 
 
@@ -2133,7 +2072,7 @@ Just let me know what you'd like to build or learn! 🚀`;
         }
 
         // =============================================
-        // APP GENERATION TEMPLATES - FIXED
+        // APP GENERATION TEMPLATES - FIXED & ENHANCED
         // =============================================
         function generateSocialMediaApp(name, primaryColor, isDark, features) {
             const bgColor = isDark ? '#0f0f0f' : '#ffffff';
@@ -2159,6 +2098,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             background: ${bgColor};
             color: ${textColor};
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         .navbar {
@@ -2179,6 +2119,7 @@ Just let me know what you'd like to build or learn! 🚀`;
         .nav-icons {
             display: flex;
             gap: 1.5rem;
+            font-size: 1.2rem;
         }
         
         .container {
@@ -2204,6 +2145,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             color: ${textColor};
             resize: none;
             margin-bottom: 1rem;
+            font-size: 1rem;
         }
         
         .post-actions {
@@ -2225,6 +2167,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             padding: 0.5rem;
             border-radius: 8px;
             transition: all 0.3s ease;
+            font-size: 1.2rem;
         }
         
         .icon-btn:hover {
@@ -2239,6 +2182,12 @@ Just let me know what you'd like to build or learn! 🚀`;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background: ${primaryColor}dd;
+            transform: translateY(-2px);
         }
         
         .feed {
@@ -2266,10 +2215,16 @@ Just let me know what you'd like to build or learn! 🚀`;
             height: 40px;
             border-radius: 50%;
             background: ${primaryColor};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
         
         .user-info h4 {
             margin-bottom: 0.25rem;
+            font-size: 1rem;
         }
         
         .post-time {
@@ -2279,12 +2234,15 @@ Just let me know what you'd like to build or learn! 🚀`;
         
         .post-content {
             margin-bottom: 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
         }
         
         .post-engagement {
             display: flex;
             justify-content: space-between;
             color: ${isDark ? '#9ca3af' : '#6b7280'};
+            font-size: 0.9rem;
         }
         
         .engagement-stats {
@@ -2299,6 +2257,10 @@ Just let me know what you'd like to build or learn! 🚀`;
             
             .navbar {
                 padding: 1rem;
+            }
+            
+            .nav-icons {
+                gap: 1rem;
             }
         }
     </style>
@@ -2331,7 +2293,7 @@ Just let me know what you'd like to build or learn! 🚀`;
         <div class="feed">
             <div class="post">
                 <div class="post-header">
-                    <div class="avatar"></div>
+                    <div class="avatar">AJ</div>
                     <div class="user-info">
                         <h4>Alex Johnson</h4>
                         <div class="post-time">2 hours ago</div>
@@ -2352,7 +2314,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             
             <div class="post">
                 <div class="post-header">
-                    <div class="avatar"></div>
+                    <div class="avatar">SC</div>
                     <div class="user-info">
                         <h4>Sarah Chen</h4>
                         <div class="post-time">5 hours ago</div>
@@ -2399,6 +2361,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             background: ${bgColor};
             color: ${textColor};
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         .header {
@@ -2406,6 +2369,11 @@ Just let me know what you'd like to build or learn! 🚀`;
             color: white;
             padding: 3rem 2rem;
             text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
         
         .categories {
@@ -2423,6 +2391,7 @@ Just let me know what you'd like to build or learn! 🚀`;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            font-weight: 500;
         }
         
         .category:hover {
@@ -2471,6 +2440,7 @@ Just let me know what you'd like to build or learn! 🚀`;
         .recipe-description {
             color: ${isDark ? '#9ca3af' : '#6b7280'};
             margin-bottom: 1rem;
+            line-height: 1.5;
         }
         
         .recipe-meta {
@@ -2492,6 +2462,14 @@ Just let me know what you'd like to build or learn! 🚀`;
             .recipes {
                 grid-template-columns: 1fr;
                 padding: 1rem;
+            }
+            
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -2593,6 +2571,11 @@ Just let me know what you'd like to build or learn! 🚀`;
             margin-bottom: 3rem;
         }
         
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
         .features {
             display: grid;
             gap: 2rem;
@@ -2618,6 +2601,10 @@ Just let me know what you'd like to build or learn! 🚀`;
             font-size: 1.25rem;
         }
         
+        .feature-card p {
+            line-height: 1.5;
+        }
+        
         .footer {
             text-align: center;
             margin-top: 4rem;
@@ -2635,8 +2622,16 @@ Just let me know what you'd like to build or learn! 🚀`;
                 padding: 3rem 1rem;
             }
             
+            .header h1 {
+                font-size: 2rem;
+            }
+            
             .features {
                 grid-template-columns: 1fr;
+            }
+            
+            .feature-card {
+                padding: 2rem;
             }
         }
     </style>
@@ -2965,20 +2960,20 @@ Just let me know what you'd like to build or learn! 🚀`;
         }
 
         function displayGeneratedApp(appHtml) {
-            const preview = document.getElementById('appPreview');
-            preview.innerHTML = `
-                <div class="generated-app" style="transform: scale(${currentScale}); transform-origin: top left; width: ${100/currentScale}%; height: ${100/currentScale}%;">
-                    ${appHtml}
-                </div>
-            `;
+            const preview = document.getElementById('generatedApp');
+            preview.innerHTML = appHtml;
             currentGeneratedApp = appHtml;
+            
+            // Apply scaling
+            setScale(currentScale);
         }
 
         function setScale(scale) {
             currentScale = scale;
-            const generatedApp = document.querySelector('.generated-app');
+            const generatedApp = document.getElementById('generatedApp');
             if (generatedApp) {
                 generatedApp.style.transform = `scale(${scale})`;
+                generatedApp.style.transformOrigin = 'top left';
                 generatedApp.style.width = `${100/scale}%`;
                 generatedApp.style.height = `${100/scale}%`;
             }
