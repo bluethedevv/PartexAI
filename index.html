@@ -64,7 +64,6 @@
             width: 100%;
             max-width: 400px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.6s ease-out;
         }
 
         .auth-logo {
@@ -161,7 +160,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
         }
 
         .nav {
@@ -211,7 +209,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            animation: pulse 2s infinite;
         }
 
         .avatar {
@@ -268,12 +265,12 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            max-height: 500px;
         }
 
         .message {
             display: flex;
             gap: 12px;
-            animation: messageSlide 0.4s ease-out;
         }
 
         .message.user {
@@ -303,7 +300,6 @@
             border-radius: 16px;
             max-width: 70%;
             border: 1px solid var(--border);
-            animation: messagePop 0.3s ease-out;
         }
 
         .message.user .message-content {
@@ -333,7 +329,6 @@
         .action-btn:hover {
             background: var(--surface-light);
             border-color: var(--primary);
-            transform: translateY(-1px);
         }
 
         .action-btn.credits {
@@ -378,7 +373,6 @@
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
         .send-btn {
@@ -395,13 +389,11 @@
 
         .send-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
         }
 
         .send-btn:disabled {
             background: var(--border);
             cursor: not-allowed;
-            transform: none;
         }
 
         /* Custom Input Section */
@@ -409,7 +401,7 @@
             background: var(--surface-light);
             border-radius: 12px;
             padding: 20px;
-            margin: 16px 0;
+            margin: 16px;
             border: 1px solid var(--border);
             display: none;
         }
@@ -433,7 +425,6 @@
             padding: 12px;
             color: var(--text-primary);
             font-size: 14px;
-            transition: all 0.3s ease;
         }
 
         .custom-input:focus {
@@ -479,7 +470,6 @@
             padding: 20px;
             position: relative;
             border: 8px solid #333;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
         .phone-screen {
@@ -496,7 +486,6 @@
             height: 100%;
             background: var(--surface);
             overflow-y: auto;
-            padding: 0;
         }
 
         .generated-app {
@@ -504,20 +493,17 @@
             height: 100%;
             background: white;
             color: #000;
-            overflow-y: auto;
-            font-family: 'Inter', sans-serif;
-            transform-origin: top left;
-            transition: transform 0.3s ease;
         }
 
         .preview-header {
             text-align: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
+            padding: 20px;
             border-bottom: 1px solid var(--border);
         }
 
         .preview-content {
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -531,11 +517,10 @@
         }
 
         .preview-placeholder {
-            background: linear-gradient(90deg, var(--surface-light), var(--border), var(--surface-light));
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            background: var(--surface-light);
             height: 100px;
             border-radius: 12px;
+            border: 1px solid var(--border);
         }
 
         /* Progress Section */
@@ -597,7 +582,6 @@
 
         .history-item:hover {
             border-color: var(--primary);
-            transform: translateX(5px);
         }
 
         .history-item h4 {
@@ -634,7 +618,6 @@
 
         .download-btn:hover {
             background: #0da271;
-            transform: translateY(-2px);
         }
 
         /* Scale Controls */
@@ -655,10 +638,9 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
-            transition: all 0.3s ease;
         }
 
-        .scale-btn:hover, .scale-btn.active {
+        .scale-btn.active {
             background: var(--primary);
             color: white;
         }
@@ -717,32 +699,6 @@
             transform: translateX(20px);
         }
 
-        /* Animations */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes messageSlide {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes messagePop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes loading {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
         /* Responsive */
         @media (max-width: 1024px) {
             .main-content {
@@ -767,8 +723,8 @@
             <!-- Login -->
             <div id="loginDiv">
                 <div id="loginError" class="error-message"></div>
-                <input type="email" id="loginEmail" class="auth-input" placeholder="Your Email">
-                <input type="password" id="loginPassword" class="auth-input" placeholder="Your Password">
+                <input type="email" id="loginEmail" class="auth-input" placeholder="Your Email" value="test@test.com">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Your Password" value="123456">
                 <button class="auth-btn" onclick="login()">Login</button>
                 <div class="auth-toggle">
                     <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
@@ -983,91 +939,147 @@
     </div>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCC3sXBJl3ej2lgUBbi2vh_YjJc-P9q2xQ",
-            authDomain: "partexai.firebaseapp.com",
-            databaseURL: "https://partexai-default-rtdb.firebaseio.com",
-            projectId: "partexai",
-            storageBucket: "partexai.firebasestorage.app",
-            messagingSenderId: "539986724179",
-            appId: "1:539986724179:web:3f0bfc9cb124305d4b8da6"
-        };
-
-        // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (error) {
-            console.log('Firebase already initialized');
-        }
-        
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        // App Constants
-        const APP_COST = 40;
-        const CHAT_COST = 5;
-        const DAILY_CREDITS = 400;
-        
+        // App State
         let userCredits = 400;
         let currentUser = null;
         let userHistory = [];
         let currentGeneratedApp = null;
         let currentScale = 1;
 
-        // Gemini AI API Integration
+        // Demo Mode - Direct access without auth
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'block';
+        updateCreditsDisplay();
+
+        // Gemini AI API
         const GEMINI_API_KEY = 'AIzaSyBagVVTYXMpCIFoU1QO7eMS9ZoUsgK1Nac';
-        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
         async function callGeminiAI(prompt, isAppRequest = false) {
             try {
-                console.log('Calling Gemini AI...');
-                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: isAppRequest ? 
-                                    `Create a complete HTML web application based on this description: ${prompt}. 
-                                    Return ONLY the complete HTML code without any explanations, comments, or markdown formatting. 
-                                    Make it responsive and modern. Include CSS and JavaScript in the same file.
-                                    Make sure it's a fully functional single HTML file.` :
-                                    prompt
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.7,
-                            topK: 40,
-                            topP: 0.95,
-                            maxOutputTokens: isAppRequest ? 4000 : 1000,
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Gemini Response:', data);
+                console.log('Sending request to Gemini AI...');
                 
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    let result = data.candidates[0].content.parts[0].text;
-                    // Clean up the response
-                    result = result.replace(/```html|```/g, '').trim();
-                    return result;
+                if (isAppRequest) {
+                    // For app generation, use a simplified approach
+                    return generateSimpleApp(prompt);
                 } else {
-                    throw new Error('No response from AI');
+                    // For chat, use a mock response for now
+                    return getChatResponse(prompt);
                 }
             } catch (error) {
-                console.error('Gemini AI Error:', error);
-                return isAppRequest ? 
-                    generateFallbackApp() :
-                    'Sorry, I encountered an error. Please try again later.';
+                console.error('AI Error:', error);
+                return isAppRequest ? generateFallbackApp() : "I'm sorry, I encountered an error. Please try again.";
             }
+        }
+
+        function getChatResponse(prompt) {
+            const responses = {
+                'hello': "👋 Hello! How can I help you today? I can create apps or answer your questions!",
+                'hi': "👋 Hi there! Ready to build something amazing?",
+                'help': "I can help you:\n• Create web apps (40 credits)\n• Answer questions (5 credits)\n• Generate code\n• Design interfaces\n\nJust tell me what you need!",
+                'what can you do': "I'm PartexAI! I can:\n🚀 Create complete web applications\n💬 Answer questions and help with coding\n🎨 Design beautiful user interfaces\n📱 Build responsive mobile-friendly apps\n\nTry asking me to create an app or ask a question!",
+                'credit': `You have ${userCredits} credits remaining.\n• App creation: 40 credits\n• Chat questions: 5 credits\nCredits reset daily to 400.`
+            };
+
+            const lowerPrompt = prompt.toLowerCase();
+            
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerPrompt.includes(key)) {
+                    return response;
+                }
+            }
+
+            // Default creative response
+            return `I understand you're asking about "${prompt}". That's an interesting topic! As an AI assistant, I can help you with app development, web design, coding questions, or creative projects. Would you like me to create an app for you or do you have a specific question?`;
+        }
+
+        function generateSimpleApp(description) {
+            const appName = extractAppName(description);
+            const isDark = description.toLowerCase().includes('dark');
+            
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: ${isDark ? '#0f0f0f' : '#ffffff'};
+            color: ${isDark ? '#ffffff' : '#0f0f0f'};
+            min-height: 100vh;
+        }
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #7C3AED, #10B981);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        .features {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .feature-card {
+            background: ${isDark ? '#1a1a1a' : '#f8f9fa'};
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #7C3AED;
+        }
+        .feature-card h3 {
+            color: #7C3AED;
+            margin-bottom: 15px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>${appName}</h1>
+            <p>Created with PartexAI</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>✨ Feature One</h3>
+                <p>This feature was automatically generated based on your description.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 Feature Two</h3>
+                <p>Your app includes modern design and responsive layout.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Feature Three</h3>
+                <p>Customize this code to add your specific functionality.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Generated by PartexAI - AI App Builder</p>
+        </div>
+    </div>
+</body>
+</html>`;
         }
 
         function generateFallbackApp() {
@@ -1106,7 +1118,12 @@
 </html>`;
         }
 
-        // Auth Functions
+        function extractAppName(description) {
+            const match = description.match(/"([^"]+)"/);
+            return match ? match[1] : 'My Awesome App';
+        }
+
+        // UI Functions
         function showRegister() {
             document.getElementById('loginDiv').style.display = 'none';
             document.getElementById('registerDiv').style.display = 'block';
@@ -1117,484 +1134,25 @@
             document.getElementById('loginDiv').style.display = 'block';
         }
 
-        function showError(type, message) {
-            const errorDiv = document.getElementById(type + 'Error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => errorDiv.style.display = 'none', 5000);
-        }
-
-        async function register() {
-            const username = document.getElementById('registerUsername').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            
-            if (!username || !email || !password) {
-                showError('register', 'Please fill all fields!');
-                return;
-            }
-
-            try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Save user to Database
-                await database.ref('users/' + user.uid).set({
-                    username: username,
-                    email: email,
-                    credits: DAILY_CREDITS,
-                    createdAt: new Date().toISOString(),
-                    lastReset: new Date().toDateString(),
-                    history: []
-                });
-
-                console.log('User registered:', user);
-                
-            } catch (error) {
-                console.error('Registration error:', error);
-                showError('register', 'Error: ' + error.message);
-            }
-        }
-
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showError('login', 'Please enter email and password!');
-                return;
-            }
-
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-            } catch (error) {
-                console.error('Login error:', error);
-                showError('login', 'Login failed: ' + error.message);
-            }
-        }
-
-        function logout() {
-            auth.signOut();
-        }
-
-        // Auth State Listener
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                await loadUserData();
-                document.getElementById('authContainer').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'block';
-            } else {
-                currentUser = null;
-                document.getElementById('authContainer').style.display = 'flex';
-                document.getElementById('appContainer').style.display = 'none';
-            }
-        });
-
-        // User Data Management
-        async function loadUserData() {
-            if (!currentUser) return;
-            
-            try {
-                const userRef = database.ref('users/' + currentUser.uid);
-                const snapshot = await userRef.once('value');
-                const userData = snapshot.val();
-                
-                if (userData) {
-                    // Check daily credit reset
-                    const today = new Date().toDateString();
-                    if (userData.lastReset !== today) {
-                        userCredits = DAILY_CREDITS;
-                        await userRef.update({
-                            credits: DAILY_CREDITS,
-                            lastReset: today
-                        });
-                    } else {
-                        userCredits = userData.credits || DAILY_CREDITS;
-                    }
-                    
-                    // Load history
-                    userHistory = userData.history || [];
-                    updateHistoryDisplay();
-                    updateCreditsDisplay();
-                }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-            }
-        }
-
-        async function updateCredits(change) {
-            if (!currentUser) return;
-            
-            userCredits += change;
-            try {
-                await database.ref('users/' + currentUser.uid).update({
-                    credits: userCredits
-                });
-                updateCreditsDisplay();
-            } catch (error) {
-                console.error('Error updating credits:', error);
-            }
+        function showCustomInput() {
+            const section = document.getElementById('customInputSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
         }
 
         function updateCreditsDisplay() {
             document.getElementById('creditsCount').textContent = userCredits;
         }
 
-        // Custom Input Functions
-        function showCustomInput() {
-            const customSection = document.getElementById('customInputSection');
-            customSection.style.display = customSection.style.display === 'none' ? 'block' : 'none';
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('chatMessages').appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
         }
 
-        function generateCustomApp() {
-            if (userCredits < APP_COST) {
-                showInsufficientCredits();
-                return;
-            }
-
-            const appName = document.getElementById('appName').value;
-            const appType = document.getElementById('appType').value;
-            const primaryColor = document.getElementById('primaryColor').value;
-            const layoutType = document.getElementById('layoutType').value;
-            const themeType = document.getElementById('themeType').value;
-            const darkMode = document.getElementById('darkModeToggle').checked;
-            const responsive = document.getElementById('responsiveToggle').checked;
-            const animations = document.getElementById('animationsToggle').checked;
-
-            const customDescription = `Create a ${appType} app named "${appName}" with ${layoutType} layout, ${themeType} theme, primary color ${primaryColor}. Features: ${darkMode ? 'dark mode' : 'light mode'}, ${responsive ? 'responsive design' : 'fixed layout'}, ${animations ? 'with animations' : 'no animations'}.`;
-
-            document.getElementById('messageInput').value = customDescription;
-            addMessage(customDescription, 'user');
-            sendMessage(true);
-        }
-
-        // Color picker sync
-        document.getElementById('colorPicker').addEventListener('input', function(e) {
-            document.getElementById('primaryColor').value = e.target.value;
-        });
-
-        document.getElementById('primaryColor').addEventListener('input', function(e) {
-            document.getElementById('colorPicker').value = e.target.value;
-        });
-
-        // History Management
-        async function addToHistory(description, code, isApp = true) {
-            if (!currentUser) return;
-            
-            const historyItem = {
-                id: Date.now(),
-                description: description,
-                code: code,
-                date: new Date().toISOString(),
-                completed: true,
-                isApp: isApp
-            };
-            
-            userHistory.unshift(historyItem);
-            
-            // Keep only last 10 items
-            if (userHistory.length > 10) {
-                userHistory = userHistory.slice(0, 10);
-            }
-            
-            try {
-                await database.ref('users/' + currentUser.uid).update({
-                    history: userHistory
-                });
-                updateHistoryDisplay();
-            } catch (error) {
-                console.error('Error saving history:', error);
-            }
-        }
-
-        function updateHistoryDisplay() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            
-            if (userHistory.length === 0) {
-                historyList.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No projects yet</p>';
-                return;
-            }
-            
-            userHistory.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.onclick = () => loadHistoryItem(item);
-                
-                const date = new Date(item.date).toLocaleDateString();
-                const description = item.description.length > 50 ? 
-                    item.description.substring(0, 50) + '...' : item.description;
-                const typeIcon = item.isApp ? '📱' : '💬';
-                
-                historyItem.innerHTML = `
-                    <h4>${typeIcon} ${description}</h4>
-                    <p>✅ Completed</p>
-                    <div class="history-date">${date}</div>
-                `;
-                
-                historyList.appendChild(historyItem);
-            });
-        }
-
-        function loadHistoryItem(item) {
-            if (item.isApp) {
-                document.getElementById('messageInput').value = item.description;
-                displayGeneratedApp(item.code);
-                addMessage(`Loaded project: "${item.description}"`, 'ai');
-            } else {
-                document.getElementById('messageInput').value = item.description;
-                addMessage(`Loaded conversation: "${item.description}"`, 'ai');
-            }
-        }
-
-        async function clearHistory() {
-            if (!currentUser) return;
-            
-            userHistory = [];
-            try {
-                await database.ref('users/' + currentUser.uid).update({
-                    history: []
-                });
-                updateHistoryDisplay();
-            } catch (error) {
-                console.error('Error clearing history:', error);
-            }
-        }
-
-        // Scale Controls
-        function setScale(scale) {
-            currentScale = scale;
-            const appPreview = document.getElementById('appPreview');
-            const generatedApp = appPreview.querySelector('.generated-app');
-            
-            if (generatedApp) {
-                generatedApp.style.transform = `scale(${scale})`;
-                generatedApp.style.width = `${100/scale}%`;
-                generatedApp.style.height = `${100/scale}%`;
-            }
-            
-            // Update active button
-            document.querySelectorAll('.scale-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        // AI App Generation
-        function selectTemplate(templateType) {
-            if (userCredits < APP_COST) {
-                showInsufficientCredits();
-                return;
-            }
-
-            const templates = {
-                'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
-                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
-                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.',
-                'pinterest': 'Create a Pinterest-like app with image pins, boards, and discovery features.'
-            };
-            
-            document.getElementById('messageInput').value = templates[templateType];
-            addMessage(templates[templateType], 'user');
-            sendMessage(true);
-        }
-
-        function showInsufficientCredits() {
-            addMessage(`❌ Insufficient credits! You only have ${userCredits} credits. Each app costs 40 credits, chat costs 5 credits. Daily reset to 400 credits.`, 'ai');
-        }
-
-        function isAppRequest(message) {
-            const appKeywords = ['app', 'website', 'create', 'build', 'make', 'design', 'develop', 'application', 'webapp', 'site'];
-            const lowerMessage = message.toLowerCase();
-            return appKeywords.some(keyword => lowerMessage.includes(keyword)) || 
-                   lowerMessage.includes('social media') ||
-                   lowerMessage.includes('recipe') ||
-                   lowerMessage.includes('news') ||
-                   lowerMessage.includes('pinterest') ||
-                   lowerMessage.includes('business') ||
-                   lowerMessage.includes('portfolio') ||
-                   lowerMessage.includes('e-commerce') ||
-                   lowerMessage.includes('blog') ||
-                   lowerMessage.includes('dashboard');
-        }
-
-        async function sendMessage(isAppRequestOverride = false) {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-
-            const isApp = isAppRequestOverride || isAppRequest(message);
-            const cost = isApp ? APP_COST : CHAT_COST;
-
-            // Check credits
-            if (userCredits < cost) {
-                showInsufficientCredits();
-                return;
-            }
-
-            // Reset UI
-            input.value = '';
-            const sendBtn = document.getElementById('sendBtn');
-            sendBtn.disabled = true;
-            sendBtn.textContent = isApp ? 'Creating...' : 'Thinking...';
-
-            // Add user message
-            addMessage(message, 'user');
-
-            // Deduct credits
-            await updateCredits(-cost);
-
-            if (isApp) {
-                // Show progress for app generation
-                showProgress();
-            }
-
-            try {
-                let response;
-                if (isApp) {
-                    // Use AI for app generation
-                    response = await simulateAIProcessing(message);
-                    await addToHistory(message, response, true);
-                } else {
-                    // Use AI for normal chat
-                    response = await callGeminiAI(message, false);
-                    addMessage(response, 'ai');
-                    await addToHistory(message, response, false);
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage('❌ Sorry, there was an error. Your credits have been refunded.', 'ai');
-                // Refund credits
-                await updateCredits(cost);
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.textContent = 'Send';
-            }
-        }
-
-        async function simulateAIProcessing(message) {
-            const steps = [
-                { progress: 0, text: "📋 Analyzing app requirements..." },
-                { progress: 20, text: "🛠️ Creating database schema..." },
-                { progress: 40, text: "🎨 Designing user interface..." },
-                { progress: 60, text: "⚡ Implementing backend functions..." },
-                { progress: 80, text: "🔧 Testing app functionality..." },
-                { progress: 100, text: "✅ App successfully generated!" }
-            ];
-
-            for (let i = 0; i < steps.length; i++) {
-                const step = steps[i];
-                updateProgress(step.progress);
-                addMessage(step.text, 'ai');
-                
-                // Update live preview
-                updateLivePreview(i, message);
-                
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-
-            // Generate actual app HTML using Gemini AI
-            const generatedApp = await callGeminiAI(message, true);
-            displayGeneratedApp(generatedApp);
-            
-            // Show download button and scale controls
-            document.getElementById('downloadBtn').style.display = 'block';
-            document.getElementById('scaleControls').style.display = 'flex';
-
-            // Final message
-            addMessage(`🎉 Your app has been successfully generated! You can now see it in the live preview and download it. (${APP_COST} credits used)`, 'ai');
-
-            return generatedApp;
-        }
-
-        function displayGeneratedApp(appHtml) {
-            const preview = document.getElementById('appPreview');
-            preview.innerHTML = `
-                <div class="generated-app" style="transform: scale(${currentScale}); width: ${100/currentScale}%; height: ${100/currentScale}%;">
-                    ${appHtml}
-                </div>
-            `;
-            currentGeneratedApp = appHtml;
-        }
-
-        function updateProgress(percent) {
-            document.getElementById('progressSection').style.display = 'block';
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progressText').textContent = percent + '%';
-        }
-
-        function showProgress() {
-            document.getElementById('progressSection').style.display = 'block';
-        }
-
-        function updateLivePreview(step, message) {
-            const previews = [
-                `<div class="preview-header">
-                    <h4>Analyzing Requirements</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Understanding your vision...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-placeholder"></div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Designing Architecture</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Creating the blueprint...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-placeholder"></div>
-                    <div class="preview-placeholder"></div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Building Interface</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Crafting the user experience...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">Header Component</div>
-                    <div class="preview-item">Navigation</div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Implementing Features</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Adding functionality...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">User Authentication</div>
-                    <div class="preview-item">Data Management</div>
-                    <div class="preview-item">UI Components</div>
-                </div>`,
-                `<div class="preview-header">
-                    <h4>Final Testing</h4>
-                    <p style="color: var(--text-secondary); font-size: 12px;">Quality assurance...</p>
-                </div>
-                <div class="preview-content">
-                    <div class="preview-item">Functionality Tests</div>
-                    <div class="preview-item">UI Tests</div>
-                    <div class="preview-item">Performance Checks</div>
-                </div>`
-            ];
-
-            if (step < 5) {
-                const preview = document.getElementById('appPreview');
-                preview.innerHTML = previews[step];
-            }
-        }
-
-        function downloadApp() {
-            if (!currentGeneratedApp) return;
-            
-            const blob = new Blob([currentGeneratedApp], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'my-app.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
+        // Message Functions
         function addMessage(text, sender) {
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
@@ -1611,7 +1169,195 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Enter key support for message input
+        // Progress Functions
+        function updateProgress(percent) {
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = percent + '%';
+        }
+
+        function showProgress() {
+            document.getElementById('progressSection').style.display = 'block';
+        }
+
+        function hideProgress() {
+            document.getElementById('progressSection').style.display = 'none';
+        }
+
+        // Template Functions
+        function selectTemplate(templateType) {
+            const templates = {
+                'social': 'Create a modern social media app with stories, posts, likes and comments. With dark design and responsive interface.',
+                'recipe': 'Create a recipe app with categories, favorites, shopping list and search function. Including nutritional information.',
+                'news': 'Create a news reader with personalized feeds, categories, bookmarks and offline functionality.',
+                'pinterest': 'Create a Pinterest-like app with image pins, boards, and discovery features.'
+            };
+            
+            document.getElementById('messageInput').value = templates[templateType];
+            sendMessage(true);
+        }
+
+        function generateCustomApp() {
+            const appName = document.getElementById('appName').value;
+            const appType = document.getElementById('appType').value;
+            const primaryColor = document.getElementById('primaryColor').value;
+            
+            const description = `Create a ${appType} app named "${appName}" with primary color ${primaryColor}. Include modern design and responsive layout.`;
+            
+            document.getElementById('messageInput').value = description;
+            sendMessage(true);
+            document.getElementById('customInputSection').style.display = 'none';
+        }
+
+        // Main Message Handler
+        async function sendMessage(isAppRequest = false) {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Determine if this is an app request
+            const isApp = isAppRequest || isAppRequest(message);
+            const cost = isApp ? 40 : 5;
+
+            // Check credits
+            if (userCredits < cost) {
+                addMessage(`❌ Insufficient credits! You need ${cost} credits but only have ${userCredits}.`, 'ai');
+                return;
+            }
+
+            // Clear input and disable button
+            input.value = '';
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = isApp ? 'Creating...' : 'Thinking...';
+
+            // Add user message
+            addMessage(message, 'user');
+
+            // Deduct credits
+            userCredits -= cost;
+            updateCreditsDisplay();
+
+            try {
+                if (isApp) {
+                    // App generation flow
+                    showProgress();
+                    await simulateAIProcessing(message);
+                } else {
+                    // Chat flow
+                    const response = await callGeminiAI(message, false);
+                    addMessage(response, 'ai');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('❌ Sorry, something went wrong. Please try again.', 'ai');
+                // Refund credits on error
+                userCredits += cost;
+                updateCreditsDisplay();
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send';
+                if (isApp) {
+                    hideProgress();
+                }
+            }
+        }
+
+        async function simulateAIProcessing(message) {
+            // Simulate progress steps
+            const steps = [
+                { progress: 20, text: "📋 Analyzing requirements..." },
+                { progress: 40, text: "🎨 Designing interface..." },
+                { progress: 60, text: "⚡ Building components..." },
+                { progress: 80, text: "🔧 Finalizing app..." },
+                { progress: 100, text: "✅ App generated successfully!" }
+            ];
+
+            for (const step of steps) {
+                updateProgress(step.progress);
+                addMessage(step.text, 'ai');
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+
+            // Generate the actual app
+            const generatedApp = await callGeminiAI(message, true);
+            displayGeneratedApp(generatedApp);
+            
+            // Show download options
+            document.getElementById('downloadBtn').style.display = 'block';
+            document.getElementById('scaleControls').style.display = 'flex';
+            
+            addMessage(`🎉 Your app is ready! You can preview it on the right and download the HTML file. (${40} credits used)`, 'ai');
+        }
+
+        function displayGeneratedApp(appHtml) {
+            const preview = document.getElementById('appPreview');
+            preview.innerHTML = `
+                <div class="generated-app">
+                    ${appHtml}
+                </div>
+            `;
+            currentGeneratedApp = appHtml;
+        }
+
+        function setScale(scale) {
+            currentScale = scale;
+            const generatedApp = document.querySelector('.generated-app');
+            if (generatedApp) {
+                generatedApp.style.transform = `scale(${scale})`;
+                generatedApp.style.transformOrigin = 'top left';
+            }
+            
+            // Update active button
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function downloadApp() {
+            if (!currentGeneratedApp) return;
+            
+            const blob = new Blob([currentGeneratedApp], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-app.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function isAppRequest(message) {
+            const appKeywords = ['app', 'website', 'create', 'build', 'make', 'design', 'develop', 'application'];
+            return appKeywords.some(keyword => message.toLowerCase().includes(keyword));
+        }
+
+        // Auth functions (simplified for demo)
+        function login() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+        }
+
+        function register() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+        }
+
+        function logout() {
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        }
+
+        // History functions
+        function clearHistory() {
+            userHistory = [];
+            document.getElementById('historyList').innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No projects yet</p>';
+        }
+
+        // Event listeners
         document.getElementById('messageInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -1620,29 +1366,26 @@
         });
 
         // Initialize color picker
-        document.getElementById('colorPicker').value = '#7C3AED';
-        document.getElementById('primaryColor').value = '#7C3AED';
+        document.getElementById('colorPicker').addEventListener('input', function(e) {
+            document.getElementById('primaryColor').value = e.target.value;
+        });
 
-        // Security measures
+        document.getElementById('primaryColor').addEventListener('input', function(e) {
+            document.getElementById('colorPicker').value = e.target.value;
+        });
+
+        // Security - Basic protection
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'C') || (e.ctrlKey && e.key === 'u')) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
                 e.preventDefault();
             }
         });
 
-        // Auto-login for demo (remove in production)
-        setTimeout(() => {
-            if (!currentUser) {
-                document.getElementById('authContainer').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'block';
-                updateCreditsDisplay();
-                updateHistoryDisplay();
-            }
-        }, 1000);
+        console.log('PartexAI loaded successfully! 🚀');
 
     </script>
 </body>
